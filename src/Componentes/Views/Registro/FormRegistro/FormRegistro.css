@@ -1,0 +1,263 @@
+@import '../../../../estilos/forms.css';
+
+/**
+ * Estilos específicos del formulario de Registro
+ * Los estilos base están en: src/estilos/forms.css
+ */
+
+.contenedor-formulario {
+  font-family: "Montserrat", sans-serif;
+  border: 2px solid #d0d0d0;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  background: #ffffff !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 12px;
+  position: relative;
+  overflow: hidden;
+  padding: 2rem !important;
+}
+
+.contenedor-formulario::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 15px;
+  padding: 2px;
+  background: linear-gradient(135deg,
+      rgba(212, 175, 55, 0.3) 0%,
+      rgba(212, 175, 55, 0.1) 50%,
+      rgba(212, 175, 55, 0.3) 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.texto-dorado {
+  color: #d4af37 !important;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.entrada-personalizada {
+  background: #f8f8f8 !important;
+  border: 2px solid #d0d0d0 !important;
+  color: #2c2c2c !important;
+  border-radius: 8px !important;
+  padding: 0.75rem 1rem !important;
+  font-family: "Montserrat", sans-serif !important;
+  font-size: 1rem !important;
+  width: 100% !important;
+  transition: all 0.3s ease !important;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.entrada-personalizada:focus {
+  background: #ffffff !important;
+  border: 2px solid #c89b2b !important;
+  color: #2c2c2c !important;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05),
+    0 0 0 3px rgba(200, 155, 43, 0.1) !important;
+  transform: translateY(-1px);
+}
+
+.entrada-personalizada::placeholder {
+  color: rgba(44, 44, 44, 0.5) !important;
+  font-size: 0.9rem;
+}
+
+.boton-personalizado {
+  font-family: "Montserrat", sans-serif !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1.5px !important;
+  border-radius: 8px !important;
+  transition: all 0.3s ease !important;
+  font-size: 0.9rem !important;
+  border: 1px solid transparent !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  padding: 0.95rem 1.8rem !important;
+  min-height: 50px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  line-height: 1.4 !important;
+  width: 100% !important;
+}
+
+.boton-enviar {
+  background: linear-gradient(135deg,
+      rgba(212, 175, 55, 0.9) 0%,
+      rgba(184, 148, 31, 0.9) 100%) !important;
+  border: 1px solid rgba(212, 175, 55, 0.5) !important;
+  color: #1a1a1a !important;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.3);
+  width: 100%;
+}
+
+.boton-enviar:hover {
+  background: linear-gradient(135deg,
+      rgba(224, 184, 69, 0.95) 0%,
+      rgba(201, 160, 40, 0.95) 100%) !important;
+  border: 1px solid rgba(212, 175, 55, 0.7) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+}
+
+.boton-cancelar {
+  background: #f0f0f0 !important;
+  border: 2px solid #d0d0d0 !important;
+  color: #2c2c2c !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  width: 100%;
+}
+
+.boton-cancelar:hover {
+  background: #e0e0e0 !important;
+  border: 2px solid #999 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+  color: #2c2c2c !important;
+}
+
+.texto-blanco {
+  color: #666666 !important;
+  font-size: 0.8rem;
+  text-shadow: none;
+}
+
+
+h4.texto-dorado {
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  background: linear-gradient(45deg, #2c2c2c, #c89b2b, #2c2c2c);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: none;
+  position: relative;
+}
+
+h4.texto-dorado::after {
+  content: "";
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #d4af37, transparent);
+}
+
+
+.feedback-invalido {
+  font-size: 0.8rem;
+  margin-top: 0.5rem;
+  color: #c89b2b !important;
+  text-shadow: none;
+  font-weight: 500;
+  background: rgba(200, 155, 43, 0.08);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+
+input[type="date"].entrada-personalizada {
+  color-scheme: light;
+}
+
+@media (max-width: 768px) {
+  .contenedor-formulario {
+    padding: 1.5rem !important;
+    border-radius: 10px;
+  }
+
+  .entrada-personalizada {
+    padding: 0.7rem 1rem !important;
+    font-size: 0.95rem !important;
+  }
+
+  .boton-personalizado {
+    padding: 0.95rem 1.6rem !important;
+    font-size: 1rem !important;
+    min-height: 56px !important;
+  }
+
+  .form-label {
+    font-size: 0.9rem;
+    margin-bottom: 0.6rem;
+  }
+
+  h4.texto-dorado {
+    font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .contenedor-formulario {
+    padding: 1.2rem !important;
+    border-radius: 10px;
+  }
+
+  .entrada-personalizada {
+    padding: 0.65rem 0.9rem !important;
+    font-size: 0.9rem !important;
+  }
+
+  .boton-personalizado {
+    padding: 0.85rem 1.5rem !important;
+    font-size: 0.85rem !important;
+    min-height: 48px !important;
+  }
+
+  .form-label {
+    font-size: 0.85rem;
+    margin-bottom: 0.5rem;
+  }
+
+  h4.texto-dorado {
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+  }
+
+  .texto-blanco {
+    font-size: 0.75rem;
+  }
+
+  .feedback-invalido {
+    font-size: 0.75rem;
+  }
+}
+
+@supports (-webkit-backdrop-filter: none) or (backdrop-filter: none) {
+  .contenedor-formulario {
+    backdrop-filter: blur(15px) saturate(180%);
+    -webkit-backdrop-filter: blur(15px) saturate(180%);
+  }
+
+  .entrada-personalizada {
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  .boton-personalizado {
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+}

@@ -1,0 +1,326 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&display=swap");
+
+/* ================= PAGINA PRODUCTOS MODERNA ================= */
+
+.pagina-productos {
+  min-height: 100vh;
+  background: var(--color-fondo-primario);
+  font-family: 'Montserrat', sans-serif;
+  color: var(--color-texto-oscuro);
+  padding-top: 80px;
+}
+
+/* ================= CONTENIDO PRINCIPAL ================= */
+
+.contenido-principal {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+/* ================= SECCIONES ================= */
+
+.seccion-buscador,
+.seccion-lista-productos {
+  margin-bottom: 3rem;
+}
+
+.encabezado-buscador,
+.encabezado-lista {
+  background: var(--color-fondo-secundario);
+  border-radius: 16px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  text-align: center;
+  box-shadow: var(--sombra-fuerte);
+  border: 1px solid rgba(200, 155, 43, 0.1);
+  position: relative;
+}
+
+.encabezado-buscador::before,
+.encabezado-lista::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-dorado), var(--color-rojo));
+  border-radius: 16px 16px 0 0;
+}
+
+.titulo-seccion {
+  font-size: clamp(1.8rem, 4vw, 2.4rem);
+  font-weight: 800;
+  color: var(--color-texto-oscuro);
+  letter-spacing: -0.5px;
+  margin-bottom: 1rem;
+  background: linear-gradient(45deg, var(--color-texto-oscuro), var(--color-dorado));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.descripcion-seccion {
+  font-size: 1.1rem;
+  color: var(--color-texto-secundario);
+  line-height: 1.6;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.icono-titulo {
+  margin-right: 0.5rem;
+  font-size: 1.2em;
+}
+
+/* ================= BADGE CATEGORIA ================= */
+
+.categoria-actual-badge {
+  margin-top: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.categoria-actual-badge .badge {
+  background: linear-gradient(45deg, var(--color-dorado), var(--color-rojo)) !important;
+  color: white;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: 50px;
+  font-size: 0.9rem;
+  letter-spacing: 0.5px;
+}
+
+/* ================= TARJETA INFORMATIVA ================= */
+
+.informacion-adicional {
+  max-width: 1200px;
+  margin: 4rem auto 0;
+  padding: 0 1.5rem;
+}
+
+.tarjeta-informativa {
+  background: linear-gradient(135deg, var(--color-texto-oscuro), #1a1a1a);
+  border-radius: 20px;
+  padding: 3rem 2rem;
+  text-align: center;
+  box-shadow: var(--sombra-fuerte), 0 20px 40px rgba(0, 0, 0, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.tarjeta-informativa::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-dorado), var(--color-rojo));
+}
+
+.tarjeta-informativa::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(200, 155, 43, 0.1) 0%, transparent 70%);
+  animation: rotate 20s linear infinite;
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.icono-tarjeta {
+  font-size: 3rem;
+  margin-bottom: 1.5rem;
+  position: relative;
+  z-index: 2;
+}
+
+.tarjeta-informativa h3 {
+  font-size: clamp(1.6rem, 3vw, 2rem);
+  font-weight: 800;
+  color: var(--color-fondo-secundario);
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  position: relative;
+  z-index: 2;
+}
+
+.texto-tarjeta {
+  max-width: 600px;
+  margin: 0 auto 2rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1.1rem;
+  line-height: 1.7;
+  position: relative;
+  z-index: 2;
+}
+
+/* ================= BOTON CONTACTO ================= */
+
+.boton-contacto {
+  background: linear-gradient(45deg, var(--color-dorado), var(--color-rojo));
+  color: white;
+  padding: 1rem 2.5rem;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  cursor: pointer;
+  border: none;
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 2;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.boton-contacto::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.boton-contacto:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--sombra-dorada), 0 10px 25px rgba(200, 155, 43, 0.3);
+}
+
+.boton-contacto:hover::before {
+  left: 100%;
+}
+
+.texto-boton {
+  position: relative;
+  z-index: 1;
+}
+
+.icono-boton {
+  font-size: 1.2rem;
+  transition: transform 0.3s ease;
+}
+
+.boton-contacto:hover .icono-boton {
+  transform: translateX(5px);
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 768px) {
+  .contenido-principal {
+    padding: 1.5rem 1rem;
+  }
+
+  .encabezado-buscador,
+  .encabezado-lista {
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .titulo-seccion {
+    font-size: 1.8rem;
+  }
+
+  .descripcion-seccion {
+    font-size: 1rem;
+  }
+
+  .tarjeta-informativa {
+    padding: 2rem 1.5rem;
+    margin-top: 2rem;
+  }
+
+  .icono-tarjeta {
+    font-size: 2.5rem;
+  }
+
+  .categoria-actual-badge {
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .pagina-productos {
+    padding-top: 70px;
+  }
+
+  .contenido-principal {
+    padding: 1rem 0.5rem;
+  }
+
+  .encabezado-buscador,
+  .encabezado-lista {
+    padding: 1.2rem;
+    border-radius: 12px;
+  }
+
+  .titulo-seccion {
+    font-size: 1.5rem;
+  }
+
+  .descripcion-seccion {
+    font-size: 0.95rem;
+  }
+
+  .tarjeta-informativa {
+    padding: 1.5rem 1rem;
+    border-radius: 16px;
+  }
+
+  .boton-contacto {
+    padding: 0.8rem 2rem;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 320px) {
+  .titulo-seccion {
+    font-size: 1.3rem;
+  }
+
+  .descripcion-seccion {
+    font-size: 0.9rem;
+  }
+
+  .tarjeta-informativa h3 {
+    font-size: 1.4rem;
+  }
+
+  .texto-tarjeta {
+    font-size: 1rem;
+  }
+}
+
+/* ================= REDUCED MOTION ================= */
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .tarjeta-informativa::after {
+    animation: none;
+  }
+}

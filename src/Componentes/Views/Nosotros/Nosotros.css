@@ -1,0 +1,155 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap");
+
+/* ================= CONTENEDOR ================= */
+
+.nosotros-contenedor {
+  padding: 80px 24px;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top, #ffffff, #f1f1f1);
+  font-family: "Montserrat", sans-serif;
+}
+
+/* ================= TITULO ================= */
+
+.titulo-nosotros {
+  text-align: center;
+  font-size: 2.6rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 60px;
+  color: #1c1c1c;
+}
+
+/* ================= GRID ================= */
+
+.grid-integrantes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 35px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 10px;
+}
+
+/* ================= TARJETA ================= */
+
+.tarjeta-integrante {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 22px;
+  padding: 30px 24px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+
+  box-shadow:
+    0 15px 35px rgba(0, 0, 0, 0.08),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.04);
+
+  transition:
+    transform 0.35s ease,
+    box-shadow 0.35s ease;
+}
+
+.tarjeta-integrante::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg,
+      rgba(0, 0, 0, 0.03),
+      transparent);
+  pointer-events: none;
+}
+
+.tarjeta-integrante:hover {
+  transform: translateY(-10px);
+  box-shadow:
+    0 25px 50px rgba(0, 0, 0, 0.15),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.05);
+}
+
+/* ================= FOTO ================= */
+
+.foto-integrante {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 18px;
+
+  border: 4px solid white;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+
+  transition: transform 0.35s ease;
+}
+
+.tarjeta-integrante:hover .foto-integrante {
+  transform: scale(1.05);
+}
+
+/* ================= TEXTO ================= */
+
+.nombre-integrante {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #1e1e1e;
+  margin-bottom: 4px;
+}
+
+.rol-integrante {
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: #777;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+}
+
+.descripcion-integrante {
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: #666;
+  margin-bottom: 22px;
+}
+
+/* ================= LINK GITHUB ================= */
+
+.link-github {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 10px 18px;
+  border-radius: 999px;
+
+  background: linear-gradient(135deg, #333333, #555555);
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+
+  text-decoration: none;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease,
+    background 0.3s ease;
+}
+
+.link-github:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, #555555, #777777);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.3);
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 768px) {
+  .titulo-nosotros {
+    font-size: 2.2rem;
+    margin-bottom: 45px;
+  }
+
+  .tarjeta-integrante {
+    padding: 26px 20px;
+  }
+}

@@ -1,0 +1,166 @@
+.card-moto {
+  background: #ffffff;
+  border: 2px solid #d0d0d0;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  color: #2c2c2c;
+}
+
+.card-moto.destacada {
+  border-color: var(--color-dorado);
+}
+
+.card-moto.sin-stock {
+  opacity: 0.7;
+}
+
+.barra-superior-color {
+  height: 4px;
+  background: var(--color-dorado);
+}
+
+.contenedor-imagen-moto {
+  position: relative;
+  padding: 1rem;
+}
+
+.imagen-moto {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.etiqueta-año {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  background: var(--color-dorado);
+  color: var(--color-oscuro);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+.contenido-card {
+  padding: 1rem;
+}
+
+.marca-modelo {
+  margin-bottom: 1rem;
+}
+
+.nombre-marca {
+  color: var(--color-metal);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.nombre-modelo {
+  color: var(--color-dorado);
+  margin: 0.25rem 0;
+  font-size: 1.4rem;
+}
+
+.lista-especificaciones {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.item-especificacion {
+  flex: 1;
+}
+
+.nombre-caracteristica {
+  color: var(--color-metal);
+  font-size: 0.8rem;
+  margin-bottom: 0.25rem;
+}
+
+.valor-caracteristica {
+  color: var(--color-crema);
+  font-weight: bold;
+}
+
+.descripcion-moto {
+  color: var(--color-metal);
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  line-height: 1.4;
+}
+
+.contenedor-precio {
+  background: #f0f0f0;
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  text-align: center;
+  border: 1px solid #d0d0d0;
+}
+
+.texto-precio-desde {
+  color: var(--color-metal);
+  font-size: 0.8rem;
+  margin-bottom: 0.25rem;
+}
+
+.valor-precio {
+  color: var(--color-crema);
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-bottom: 0.25rem;
+}
+
+.texto-precio-final {
+  color: var(--color-dorado);
+  font-size: 0.8rem;
+}
+
+.contenedor-botones {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.boton-contactar,
+.boton-carrito {
+  flex: 1;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.boton-contactar {
+  background: var(--color-dorado);
+  color: var(--color-oscuro);
+}
+
+.boton-carrito {
+  background: transparent;
+  color: var(--color-dorado);
+  border: 1px solid var(--color-dorado);
+}
+
+.boton-contactar:hover {
+  background: #b8962e;
+}
+
+.boton-carrito:hover {
+  background: var(--color-dorado);
+  color: var(--color-oscuro);
+}
+
+.boton-deshabilitado {
+  opacity: 0.5;
+  cursor: not-allowed !important;
+}
+
+.boton-deshabilitado:hover {
+  background: initial !important;
+  color: initial !important;
+}

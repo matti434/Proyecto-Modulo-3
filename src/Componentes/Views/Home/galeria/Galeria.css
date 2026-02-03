@@ -1,0 +1,172 @@
+/* ================= GALERIA HOME MODERNA ================= */
+
+.galeria-container {
+  text-align: center;
+  margin-top: 100px;
+  padding: 60px 24px;
+  background-color: #f8f8f8;
+}
+
+/* ================= TITULO ================= */
+
+.galeria-titulo {
+  font-size: 30px;
+  font-weight: 500;
+  color: #2c2c2c;
+  letter-spacing: 2px;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+}
+
+/* ================= WRAPPER ================= */
+
+.galeria-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  position: relative;
+}
+
+/* ================= GALERIA CENTRAL ================= */
+
+.galeria-central {
+  position: relative;
+  width: 640px;
+  height: 360px;
+  overflow: hidden;
+  border-radius: 18px;
+  background: #ffffff;
+  border: 2px solid #d0d0d0;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.35s ease;
+}
+
+.galeria-central:hover {
+  transform: scale(1.015);
+}
+
+.galeria-central img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.galeria-central:hover img {
+  transform: scale(1.05);
+}
+
+/* overlay moderno */
+.galeria-central::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom,
+      rgba(0, 0, 0, 0) 60%,
+      rgba(0, 0, 0, 0.65) 100%);
+  pointer-events: none;
+}
+
+/* ================= TEXTO ================= */
+
+.galeria-texto {
+  position: absolute;
+  bottom: 16px;
+  width: 100%;
+  text-align: center;
+  color: #ffffff;
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  z-index: 2;
+}
+
+/* ================= BOTONES ================= */
+
+.galeria-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(44, 44, 44, 0.85);
+  border: 2px solid rgba(44, 44, 44, 0.3);
+  color: #ffffff;
+  font-size: 20px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s ease;
+}
+
+.galeria-btn:hover {
+  background: rgba(44, 44, 44, 1);
+  transform: translateY(-50%) scale(1.12);
+}
+
+.galeria-btn.left {
+  left: 14px;
+}
+
+.galeria-btn.right {
+  right: 14px;
+}
+
+/* ================= LATERALES ================= */
+
+.galeria-lateral {
+  width: 220px;
+  height: 150px;
+  opacity: 0.35;
+  filter: blur(2px);
+  overflow: hidden;
+  border-radius: 14px;
+  transition: all 0.35s ease;
+}
+
+.galeria-lateral img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.galeria-lateral.izquierda {
+  transform: translateX(20px) scale(0.9);
+}
+
+.galeria-lateral.derecha {
+  transform: translateX(-20px) scale(0.9);
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 992px) {
+  .galeria-lateral {
+    display: none;
+  }
+
+  .galeria-central {
+    width: 100%;
+    height: 300px;
+  }
+}
+
+@media (max-width: 768px) {
+  .galeria-titulo {
+    font-size: 24px;
+  }
+
+  .galeria-central {
+    height: 260px;
+    border-radius: 14px;
+  }
+
+  .galeria-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+  }
+}

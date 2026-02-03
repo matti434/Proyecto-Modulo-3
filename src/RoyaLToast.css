@@ -1,0 +1,34 @@
+
+.react-hot-toast {
+  font-family: 'Montserrat', sans-serif;
+}
+
+.rht-toast {
+  animation: royalFadeIn 0.4s ease-out;
+}
+
+@keyframes royalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.toast-support-btn {
+  color: #d4af37;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.toast-support-btn:hover {
+  opacity: 0.8;
+}
+
+.rht-container > div {
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.25);
+}
