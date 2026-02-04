@@ -1,0 +1,157 @@
+.recuperar-container {
+  min-height: 100vh;
+  background: radial-gradient(circle at top, #191E2C, #0F1419);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+
+.recuperar-card {
+  background-color: #181D2B;
+  width: 100%;
+  max-width: 420px;
+  padding: 3rem 2.5rem;
+  border-radius: 14px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+}
+
+
+.recuperar-card h1 {
+  color: #FF8D57;
+  text-align: center;
+  font-size: 1.9rem;
+  margin-bottom: 0.8rem;
+  letter-spacing: 1px;
+}
+
+.recuperar-descripcion {
+  color: #F5F5F5;
+  text-align: center;
+  font-size: 0.95rem;
+  opacity: 0.85;
+  margin-bottom: 2rem;
+}
+
+
+.recuperar-card form {
+  display: flex;
+  flex-direction: column;
+}
+
+.recuperar-card label {
+  font-size: 0.85rem;
+  color: #F5F5F5;
+  margin-bottom: 0.4rem;
+}
+
+
+.recuperar-card input {
+  background-color: #FFFFFF;
+  color: #212529;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  border: none;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.recuperar-card input::placeholder {
+  color: #999;
+}
+
+.recuperar-card input:focus {
+  outline: 2px solid #FF8657;
+}
+
+
+.input-error {
+  outline: 2px solid #FF7562;
+}
+
+.error-text {
+  font-size: 0.8rem;
+  color: #FF7562;
+  margin-bottom: 1rem;
+}
+
+
+.recuperar-card button {
+  margin-top: 1.2rem;
+  background-color: #FF8657;
+  color: #FFFFFF;
+  border: none;
+  padding: 0.8rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.recuperar-card button:hover {
+  background-color: #FF8D57;
+}
+
+.recuperar-card button:disabled {
+  background-color: #FF865780;
+  cursor: not-allowed;
+}
+
+
+.recuperar-footer {
+  margin-top: 1.8rem;
+  text-align: center;
+  font-size: 0.85rem;
+  color: #F5F5F5;
+}
+
+.recuperar-footer a {
+  color: #FF8D57;
+  margin-left: 0.3rem;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.recuperar-footer a:hover {
+  text-decoration: underline;
+}
+
+
+.recuperar-exito {
+  text-align: center;
+}
+
+.recuperar-exito h1 {
+  color: #FF8D57;
+  margin-bottom: 1rem;
+}
+
+.recuperar-exito p {
+  color: #F5F5F5;
+  font-size: 0.95rem;
+  opacity: 0.9;
+  margin-bottom: 1.5rem;
+}
+
+.recuperar-home {
+  color: #FF8D57;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.recuperar-home:hover {
+  text-decoration: underline;
+}
+
+
+@media (max-width: 480px) {
+  .recuperar-card {
+    padding: 2.2rem 1.5rem;
+  }
+
+  .recuperar-card h1 {
+    font-size: 1.6rem;
+  }
+}
