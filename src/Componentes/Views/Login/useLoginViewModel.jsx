@@ -175,6 +175,7 @@ export const useLoginViewModel = ({ onClose }) => {
                 id: 'admin-toast',
               }
             );
+            setTimeout(() => toast.dismiss('admin-toast'), 10000);
           }, 800);
         } else {
           setTimeout(() => {

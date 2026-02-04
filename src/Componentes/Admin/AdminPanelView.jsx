@@ -4,7 +4,6 @@ import "./AdminPanel.css";
 import { AdminUsuariosView } from './AdminUsuariosView';
 import { AdminSuspendidosView } from './AdminSuspendidosView';
 import { AdminProductosView } from './AdminProductosView';
-import { AdminRecomendacionesView } from './AdminRecomendacionesView';
 import { AdminPedidosView } from './AdminPedidosView';
 import { AdminFormularioView } from './AdminFormularioView';
 import { ModalEditarUsuarioView } from './ModalEditarUsuarioView';
@@ -30,9 +29,6 @@ export const AdminPanelView = ({
   productoEditando,
   mostrarFormProducto,
   modoFormularioProducto,
-  recomendaciones,
-  nuevoComentario,
-  modoEdicion,
   pedidos,
   pedidoActual,
   modoPedido,
@@ -65,11 +61,6 @@ export const AdminPanelView = ({
   onCancelarFormularioProducto,
   onCambioCampoFormulario,
   onErrorImagen,
-  onNuevoComentarioChange,
-  onAgregarRecomendacion,
-  onEditarRecomendacion,
-  onEliminarRecomendacion,
-  onCancelarEdicionRecomendacion,
   onPedidoActualChange,
   onGuardarPedido,
   onEditarPedido,
@@ -131,12 +122,10 @@ export const AdminPanelView = ({
           >
             🌍 Mapa
           </button>
-          
-          <button onClick={() => onCambiarVista("recomendaciones")}>
-            💬 Recomendaciones
-          </button>
-          
-          <button onClick={() => onCambiarVista("pedidos")}>
+          <button
+            className={vistaActiva === "pedidos" ? "btn-activo" : ""}
+            onClick={() => onCambiarVista("pedidos")}
+          >
             📦 Pedidos
           </button>
         </nav>
@@ -178,19 +167,6 @@ export const AdminPanelView = ({
           onAbrirFormulario={onAbrirFormularioProducto}
           onEditarProducto={onEditarProducto}
           onEliminarProducto={onEliminarProducto}
-        />
-      )}
-
-      {vistaActiva === "recomendaciones" && (
-        <AdminRecomendacionesView
-          recomendaciones={recomendaciones}
-          nuevoComentario={nuevoComentario}
-          modoEdicion={modoEdicion}
-          onNuevoComentarioChange={onNuevoComentarioChange}
-          onAgregarRecomendacion={onAgregarRecomendacion}
-          onEditarRecomendacion={onEditarRecomendacion}
-          onEliminarRecomendacion={onEliminarRecomendacion}
-          onCancelarEdicionRecomendacion={onCancelarEdicionRecomendacion}
         />
       )}
 
