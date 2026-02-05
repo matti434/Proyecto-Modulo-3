@@ -39,7 +39,18 @@ const CardProducto = ({
 
   const handleFavoritoClick = (e) => {
     e.stopPropagation();
+    const eraFavorito = isFavorito;
     toggleFavorito(id);
+    
+    if (eraFavorito) {
+      toast.error(`${marca} ${modelo} eliminado de favoritos`, {
+        icon: '💔',
+      });
+    } else {
+      toast.success(`${marca} ${modelo} agregado a favoritos`, {
+        icon: '❤️',
+      });
+    }
   };
 
   const handleComprarClick = (e) => {
