@@ -15,8 +15,6 @@ import Categorias from "./Componentes/Views/Productos/ComponenteProducto/Categor
 import DetalleProducto from "./Componentes/Views/Productos/ComponenteProducto/PaginaProductos/Detalle-Producto/DetalleProducto";
 import CarritoContainer from "./Componentes/Views/Productos/componenteCarrito/CarritoContainer";
 import Footer from "./Componentes/Shared/Footer/Footer";
-import RecuperarContrasena from "./Componentes/Views/RecuperarContrasena/RecuperarContrasena";
-
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
@@ -48,8 +46,6 @@ function App() {
               <Route path="/detalle-producto" element={<DetalleProducto />} />
                   <Route path="/carrito" element={<CarritoContainer />} />
               <Route path="*" element={<Pagina404 />} />
-              <Route path="/" element={<Home />} />
-              <Route path="/recuperar-contrasena" element={<RecuperarContrasena />} />
               <Route
                 path="/admin"
                 element={
