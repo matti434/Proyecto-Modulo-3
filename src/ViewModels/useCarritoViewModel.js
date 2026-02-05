@@ -2,6 +2,7 @@ import { useState, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCarrito } from '../Componentes/Context/ContextoCarrito';
 import { CarritoItem } from '../Models';
+import toast from 'react-hot-toast';
 
 export const useCarritoViewModel = () => {
   const navigate = useNavigate();
@@ -77,10 +78,10 @@ export const useCarritoViewModel = () => {
 
   const handleProcederPago = useCallback(() => {
     if (itemsCarrito.length === 0) {
-      alert("El carrito está vacío");
+      toast.warning("El carrito está vacío");
       return;
     }
-    alert("Redirigiendo al proceso de pago...");
+    toast("Redirigiendo al proceso de pago...");
   }, [itemsCarrito.length]);
 
   return {

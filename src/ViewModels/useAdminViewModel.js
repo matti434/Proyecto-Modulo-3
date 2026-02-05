@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useUser } from '../Componentes/Context/ContextoUsuario';
 import { useProductos } from '../Componentes/Context/ContextoProducto';
+import toast from 'react-hot-toast';
 
 /**
  * ViewModel para AdminPanel
@@ -147,7 +148,7 @@ export const useAdminViewModel = () => {
   // ========== FUNCIONES (useCallback) ==========
   const manejarSincronizacion = useCallback(async () => {
     const resultado = await sincronizarConAPI();
-    alert(resultado.mensaje);
+    toast.success(resultado.mensaje);
   }, [sincronizarConAPI]);
 
   const manejarEditarProducto = useCallback((producto) => {
@@ -160,9 +161,9 @@ export const useAdminViewModel = () => {
     if (window.confirm("¿Estás seguro de eliminar este producto? Esta acción no se puede deshacer.")) {
       const resultado = await eliminarProducto(id);
       if (resultado.exito) {
-        alert("✅ Producto eliminado correctamente");
+        toast.success("Producto eliminado correctamente");
       } else {
-        alert("❌ Error: " + resultado.mensaje);
+        toast.error(" Error: " + resultado.mensaje);
       }
     }
   }, [eliminarProducto]);
@@ -218,22 +219,22 @@ export const useAdminViewModel = () => {
       if (modoFormularioProducto === "editar" && productoEditando) {
         const resultado = await editarProducto(productoEditando.id, datosFormularioProducto);
         if (resultado.exito) {
-          alert("✅ Producto actualizado correctamente");
+          toast.success("Producto actualizado correctamente");
           manejarCerrarFormularioProducto();
         } else {
-          alert("❌ Error: " + resultado.mensaje);
+          toast.error(" Error: " + resultado.mensaje);
         }
       } else {
         const resultado = await agregarProducto(datosFormularioProducto);
         if (resultado.exito) {
-          alert("✅ Producto agregado correctamente");
+          toast.success("Producto agregado correctamente");
           manejarCerrarFormularioProducto();
         } else {
-          alert("❌ Error: " + resultado.mensaje);
+          toast.error(" Error: " + resultado.mensaje);
         }
       }
     } catch (error) {
-      alert("❌ Error inesperado: " + error.message);
+      toast.error(" Error inesperado: " + error.message);
     } finally {
       setEnviandoFormularioProducto(false);
     }

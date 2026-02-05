@@ -13,6 +13,7 @@ import { useCarrito } from "../../../Context/ContextoCarrito";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../../../../estilos/variables.css";
 import "./Carrito.css";
+import toast from "react-hot-toast";
 
 const Carrito = () => {
   const navigate = useNavigate();
@@ -57,15 +58,15 @@ const Carrito = () => {
 
   const handleProcederPago = () => {
     if (itemsCarrito.length === 0) {
-      alert("El carrito está vacío");
+      toast("El carrito está vacío");
       return;
     }
-    alert("Redirigiendo al proceso de pago...");
+    toast("Redirigiendo al proceso de pago...");
   };
 
   const handleAplicarCodigo = () => {
     if (!codigo.trim()) {
-      alert("Ingresa un código de descuento");
+      toast("Ingresa un código de descuento");
       return;
     }
 
