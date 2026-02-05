@@ -165,7 +165,7 @@ export const useLoginViewModel = ({ onClose }) => {
                     textAlign: 'right',
                     fontStyle: 'italic'
                   }}>
-                    Este mensaje se cerrará en 10 segundos
+                    
                   </div>
                 </div>
               ),
