@@ -47,6 +47,35 @@
   background-color: var(--color-oscuro);
 }
 
+.boton-favorito {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 18px;
+  transition: all 0.3s ease;
+  z-index: 2;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.boton-favorito:hover {
+  transform: scale(1.1);
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.boton-favorito:active {
+  transform: scale(0.95);
+}
+
 .imagen-moto {
   width: 100%;
   height: 100%;
@@ -74,7 +103,7 @@
 .etiqueta-destacado {
   position: absolute;
   top: 8px;
-  left: 8px;
+  left: 52px;
   background: linear-gradient(135deg, var(--color-dorado), #b8941f);
   color: var(--color-oscuro);
   padding: 4px 8px;

@@ -4,32 +4,44 @@ import "./Nosotros.css";
 const integrantes = [
   {
     id: 1,
-    nombre: "Tomas Gomez",
-    rol: "FullStack Developer",
-    descripcion:
-      "Doy vida visual al proyecto, pero mi visión abarca todo el flujo del usuario. Cada elemento que diseño responde a una necesidad del negocio.",
-    foto: "/imagenes/integrante1.jpg",
-    github: "https://github.com/tomasgomez18",
-  },
-  {
-    id: 2,
     nombre: "Matias Lazarte",
-    rol: "FullStack Developer",
+    rol: "Lider Tecnico",
     descripcion:
       "Construyo la infraestructura técnica sólida que soporta cada función, siempre pensando en cómo cada línea de código mejora la experiencia global.",
-    foto: "/imagenes/integrante2.jpg",
     github: "https://github.com/matti434",
   },
   {
+    id: 2,
+    nombre: "Romina Danelutto",
+    rol: "Scrum Master",
+    descripcion:
+      "Coordino al equipo, organizo y facilito el cumplimiento de cada sprint. Colaboro en el desarrollo de nuevas funcionalidades para mejorar la experiencia del usuario",
+    github: "https://github.com/rominadanelutto",
+  },
+  {
     id: 3,
-    nombre: "Juan Pablo Vergara",
+    nombre: "Alvaro Morillo",
     rol: "Fullstack Developer",
     descripcion:
-      "Conecto cada pieza del proyecto, asegurando que diseño, tecnología y estrategia trabajen en armonía hacia un objetivo común.",
-    foto: "/imagenes/integrante3.jpg",
-    github: "https://github.com/juampa926",
+      "Conecto cada pieza del proyecto, asegurando que diseño, tecnología y estrategia trabajen en armonía hacia un objetivo común. Trabajo en equipo para integrar mejoras continuas",
+    github: "https://github.com/alvaro-morillo",
   },
-
+    {
+    id: 4,
+    nombre: "Miguel Zambrano",
+    rol: "Fullstack Developer",
+    descripcion:
+      "Participo tanto en frontend como backend, integrando componentes visuales con la lógica del sistema. Apoyo en nuevas funcionalidades y optimización general del proyecto. Aporte constante a la evolución técnica y funcional del proyecto",
+    github: "https://github.com/mizambran",
+  },
+    {
+    id: 5,
+    nombre: "Patricio Romero",
+    rol: "Fullstack Developer",
+    descripcion:
+      "Colaboro en el desarrollo de nuevas funcionalidades, conectando diseño y código para mejorar la experiencia del usuario. Aporte constante a la evolución técnica y funcional",
+    github: "https://github.com/pato1404",
+  },
 ];
 
  const Nosotros = () => {
@@ -40,11 +52,6 @@ const integrantes = [
       <div className="grid-integrantes">
         {integrantes.map((persona) => (
           <div className="tarjeta-integrante" key={persona.id}>
-            <img
-              src={persona.foto}
-              alt={persona.nombre}
-              className="foto-integrante"
-            />
 
             <h3>{persona.nombre}</h3>
             <p className="rol-integrante">{persona.rol}</p>
