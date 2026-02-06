@@ -36,12 +36,6 @@ export const useAdminViewModel = () => {
   const [mostrarFormProducto, setMostrarFormProducto] = useState(false);
   const [modoFormularioProducto, setModoFormularioProducto] = useState("agregar");
   
-  // Estado para recomendaciones
-  const [recomendaciones, setRecomendaciones] = useState([]);
-  const [nuevoComentario, setNuevoComentario] = useState("");
-  const [modoEdicion, setModoEdicion] = useState(false);
-  const [notaEditando, setNotaEditando] = useState(null);
-  
   // Estado para pedidos
   const [pedidos, setPedidos] = useState([]);
   const [pedidoActual, setPedidoActual] = useState({
@@ -266,45 +260,6 @@ export const useAdminViewModel = () => {
     setUsuarioEditando(null);
   }, []);
 
-  // Funciones de recomendaciones
-  const manejarAgregarRecomendacion = useCallback(() => {
-    if (!nuevoComentario.trim()) return;
-
-    if (modoEdicion && notaEditando) {
-      setRecomendaciones(
-        recomendaciones.map((nota) =>
-          nota.id === notaEditando.id
-            ? { ...nota, texto: nuevoComentario }
-            : nota
-        )
-      );
-      setModoEdicion(false);
-      setNotaEditando(null);
-    } else {
-      setRecomendaciones([
-        ...recomendaciones,
-        { id: Date.now(), texto: nuevoComentario },
-      ]);
-    }
-    setNuevoComentario("");
-  }, [nuevoComentario, modoEdicion, notaEditando, recomendaciones]);
-
-  const manejarEditarRecomendacion = useCallback((recomendacion) => {
-    setModoEdicion(true);
-    setNotaEditando(recomendacion);
-    setNuevoComentario(recomendacion.texto);
-  }, []);
-
-  const manejarEliminarRecomendacion = useCallback((id) => {
-    setRecomendaciones(recomendaciones.filter((x) => x.id !== id));
-  }, [recomendaciones]);
-
-  const manejarCancelarEdicionRecomendacion = useCallback(() => {
-    setModoEdicion(false);
-    setNotaEditando(null);
-    setNuevoComentario("");
-  }, []);
-
   // Funciones de pedidos
   const manejarGuardarPedido = useCallback(() => {
     if (modoPedido === "agregar") {
@@ -352,10 +307,6 @@ export const useAdminViewModel = () => {
     productoEditando,
     mostrarFormProducto,
     modoFormularioProducto,
-    recomendaciones,
-    nuevoComentario,
-    modoEdicion,
-    notaEditando,
     pedidos,
     pedidoActual,
     modoPedido,
@@ -394,13 +345,6 @@ export const useAdminViewModel = () => {
     onCancelarFormularioProducto: manejarCerrarFormularioProducto,
     onCambioCampoFormulario: manejarCambioCampoFormulario,
     onErrorImagen: manejarErrorImagen,
-
-    // Funciones de recomendaciones
-    onNuevoComentarioChange: setNuevoComentario,
-    onAgregarRecomendacion: manejarAgregarRecomendacion,
-    onEditarRecomendacion: manejarEditarRecomendacion,
-    onEliminarRecomendacion: manejarEliminarRecomendacion,
-    onCancelarEdicionRecomendacion: manejarCancelarEdicionRecomendacion,
 
     // Funciones de pedidos
     onPedidoActualChange: setPedidoActual,
