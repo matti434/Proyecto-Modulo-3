@@ -36,6 +36,8 @@ export const AdminPanelView = ({
   datosFormularioProducto,
   errorImagenProducto,
   enviandoFormularioProducto,
+  erroresFormularioProducto,
+  erroresPedido,
 
   // Valores calculados
   totalAdmins,
@@ -62,6 +64,7 @@ export const AdminPanelView = ({
   onCambioCampoFormulario,
   onErrorImagen,
   onPedidoActualChange,
+  onPedidoCampoChange,
   onGuardarPedido,
   onEditarPedido,
   onEliminarPedido,
@@ -175,7 +178,8 @@ export const AdminPanelView = ({
           pedidos={pedidos}
           pedidoActual={pedidoActual}
           modoPedido={modoPedido}
-          onPedidoActualChange={onPedidoActualChange}
+          errores={erroresPedido}
+          onPedidoCampoChange={onPedidoCampoChange}
           onGuardarPedido={onGuardarPedido}
           onEditarPedido={onEditarPedido}
           onEliminarPedido={onEliminarPedido}
@@ -199,6 +203,7 @@ export const AdminPanelView = ({
           datosFormulario={datosFormularioProducto}
           errorImagen={errorImagenProducto}
           enviando={enviandoFormularioProducto}
+          errores={erroresFormularioProducto}
           onGuardar={onGuardarProducto}
           onCancelar={onCancelarFormularioProducto}
           onCambioCampo={onCambioCampoFormulario}

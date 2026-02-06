@@ -1,7 +1,23 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useUser } from '../Componentes/Context/ContextoUsuario';
 import { useProductos } from '../Componentes/Context/ContextoProducto';
+
+import { productoSchema, pedidoSchema, LIMITES } from '../Componentes/Utils/ValidacionesForm';
+
+/** Convierte errores de Zod a { campo: mensaje } para los formularios. */
+function erroresZodAObjeto(errorZod) {
+  const flat = typeof errorZod.flatten === "function" ? errorZod.flatten() : { fieldErrors: {} };
+  const fieldErrors = flat.fieldErrors || {};
+  const resultado = {};
+  for (const [campo, mensajes] of Object.entries(fieldErrors)) {
+    const msg = Array.isArray(mensajes) ? mensajes[0] : mensajes;
+    if (msg) resultado[campo] = msg;
+  }
+  return resultado;
+}
+
 import { productoSchema, pedidoSchema } from '../Componentes/Utils/ValidacionesForm';
+
 
 /**
  * ViewModel para AdminPanel
@@ -73,20 +89,22 @@ export const useAdminViewModel = () => {
     }
   }, [vistaActiva, cargarProductos]);
 
-  // Inicializar formulario cuando cambia productoEditando
+  // Inicializar formulario al editar producto (trunca con LIMITES de ValidacionesForm)
   useEffect(() => {
+    const limites = LIMITES.producto;
     if (modoFormularioProducto === "editar" && productoEditando) {
+      const s = (val, max) => (val || "").slice(0, max);
       setDatosFormularioProducto({
-        nombre: productoEditando.nombre || "",
-        precio: productoEditando.precio || "",
-        descripcion: productoEditando.descripcion || "",
+        nombre: s(productoEditando.nombre, limites.nombre),
+        precio: productoEditando.precio ?? "",
+        descripcion: s(productoEditando.descripcion, limites.descripcion),
         categoria: productoEditando.categoria || "",
-        marca: productoEditando.marca || "",
-        modelo: productoEditando.modelo || "",
-        año: productoEditando.año || "",
-        kilometros: productoEditando.kilometros || "",
-        ubicacion: productoEditando.ubicacion || "",
-        imagen: productoEditando.imagen || "",
+        marca: s(productoEditando.marca, limites.marca),
+        modelo: s(productoEditando.modelo, limites.modelo),
+        año: s(productoEditando.año, limites.año),
+        kilometros: s(productoEditando.kilometros, limites.kilometros),
+        ubicacion: s(productoEditando.ubicacion, limites.ubicacion),
+        imagen: s(productoEditando.imagen, limites.imagen),
         destacado: productoEditando.destacado || false,
         stock: productoEditando.stock !== undefined ? productoEditando.stock : true,
       });
@@ -107,6 +125,7 @@ export const useAdminViewModel = () => {
       });
     }
     setErrorImagenProducto(false);
+    setErroresFormularioProducto({});
   }, [productoEditando, modoFormularioProducto]);
 
   // ========== CÁLCULOS (useMemo) ==========
@@ -184,6 +203,7 @@ export const useAdminViewModel = () => {
       stock: true,
     });
     setErrorImagenProducto(false);
+    setErroresFormularioProducto({});
   }, []);
 
   const manejarCerrarFormularioProducto = useCallback(() => {
@@ -206,10 +226,18 @@ export const useAdminViewModel = () => {
       stock: true,
     });
     setErrorImagenProducto(false);
+    setErroresFormularioProducto({});
   }, []);
 
   const manejarGuardarProducto = useCallback(async (e) => {
     e.preventDefault();
+
+    const datos = { ...datosFormularioProducto };
+    if (datos.precio === "") datos.precio = "";
+    const resultado = productoSchema.safeParse(datos);
+    if (!resultado.success) {
+      setErroresFormularioProducto(erroresZodAObjeto(resultado.error));
+
     const datosParaValidar = {
       ...datosFormularioProducto,
       precio: datosFormularioProducto.precio === "" ? "" : datosFormularioProducto.precio,
@@ -226,11 +254,21 @@ export const useAdminViewModel = () => {
         }
       }
       setErroresFormularioProducto(erroresPorCampo);
+
       return;
     }
     setErroresFormularioProducto({});
     setEnviandoFormularioProducto(true);
     try {
+
+      const payload = {
+        ...datosFormularioProducto,
+        precio: typeof resultado.data.precio === "number" ? String(resultado.data.precio) : datosFormularioProducto.precio,
+      };
+      if (modoFormularioProducto === "editar" && productoEditando) {
+        const res = await editarProducto(productoEditando.id, payload);
+        if (res.exito) {
+
       const datosValidos = resultadoValidacion.data;
       const payload = {
         ...datosFormularioProducto,
@@ -239,18 +277,24 @@ export const useAdminViewModel = () => {
       if (modoFormularioProducto === "editar" && productoEditando) {
         const resultado = await editarProducto(productoEditando.id, payload);
         if (resultado.exito) {
+
           alert("✅ Producto actualizado correctamente");
           manejarCerrarFormularioProducto();
         } else {
-          alert("❌ Error: " + resultado.mensaje);
+          alert("❌ Error: " + res.mensaje);
         }
       } else {
+
+        const res = await agregarProducto(payload);
+        if (res.exito) {
+
         const resultado = await agregarProducto(payload);
         if (resultado.exito) {
+
           alert("✅ Producto agregado correctamente");
           manejarCerrarFormularioProducto();
         } else {
-          alert("❌ Error: " + resultado.mensaje);
+          alert("❌ Error: " + res.mensaje);
         }
       }
     } catch (error) {
@@ -262,12 +306,17 @@ export const useAdminViewModel = () => {
 
   // Funciones para actualizar campos del formulario
   const manejarCambioCampoFormulario = useCallback((campo, valor) => {
+    setDatosFormularioProducto(prev => ({ ...prev, [campo]: valor }));
+    setErroresFormularioProducto(prev => {
+      const next = { ...prev };
+
     setDatosFormularioProducto(prev => ({
       ...prev,
       [campo]: valor
     }));
     setErroresFormularioProducto(prev => {
       const next = {...prev};
+
       delete next[campo];
       return next;
     });
@@ -294,29 +343,42 @@ export const useAdminViewModel = () => {
 
   // Funciones de pedidos
   const manejarGuardarPedido = useCallback(() => {
+    const resultado = pedidoSchema.safeParse(pedidoActual);
+    if (!resultado.success) {
+      setErroresPedido(erroresZodAObjeto(resultado.error));
+      return;
+    }
+    setErroresPedido({});
     if (modoPedido === "agregar") {
       setPedidos([
         ...pedidos,
-        {
-          id: Date.now(),
-          titulo: pedidoActual.titulo,
-          descripcion: pedidoActual.descripcion,
-        },
+        { id: Date.now(), titulo: pedidoActual.titulo, descripcion: pedidoActual.descripcion },
       ]);
     } else {
-      setPedidos(
-        pedidos.map((p) =>
-          p.id === pedidoActual.id ? pedidoActual : p
-        )
-      );
+      setPedidos(pedidos.map((p) => (p.id === pedidoActual.id ? pedidoActual : p)));
     }
     setPedidoActual({ id: null, titulo: "", descripcion: "" });
     setModoPedido("agregar");
   }, [modoPedido, pedidoActual, pedidos]);
 
+  const manejarPedidoCampoChange = useCallback((campo, valor) => {
+    setPedidoActual(prev => ({ ...prev, [campo]: valor }));
+    setErroresPedido(prev => {
+      const next = { ...prev };
+      delete next[campo];
+      return next;
+    });
+  }, []);
+
   const manejarEditarPedido = useCallback((pedido) => {
-    setPedidoActual(pedido);
+    const D = LIMITES.pedido;
+    setPedidoActual({
+      ...pedido,
+      titulo: (pedido.titulo || "").slice(0, D.titulo),
+      descripcion: (pedido.descripcion || "").slice(0, D.descripcion),
+    });
     setModoPedido("editar");
+    setErroresPedido({});
   }, []);
 
   const manejarEliminarPedido = useCallback((id) => {
@@ -346,6 +408,8 @@ export const useAdminViewModel = () => {
     datosFormularioProducto,
     errorImagenProducto,
     enviandoFormularioProducto,
+    erroresFormularioProducto,
+    erroresPedido,
 
     // Valores calculados
     totalAdmins,
@@ -380,6 +444,7 @@ export const useAdminViewModel = () => {
 
     // Funciones de pedidos
     onPedidoActualChange: setPedidoActual,
+    onPedidoCampoChange: manejarPedidoCampoChange,
     onGuardarPedido: manejarGuardarPedido,
     onEditarPedido: manejarEditarPedido,
     onEliminarPedido: manejarEliminarPedido,
