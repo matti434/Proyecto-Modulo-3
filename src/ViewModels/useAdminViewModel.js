@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useUser } from '../Componentes/Context/ContextoUsuario';
 import { useProductos } from '../Componentes/Context/ContextoProducto';
+import { productoSchema, pedidoSchema } from '../Componentes/Utils/ValidacionesForm';
 
 /**
  * ViewModel para AdminPanel
@@ -35,7 +36,7 @@ export const useAdminViewModel = () => {
   const [productoEditando, setProductoEditando] = useState(null);
   const [mostrarFormProducto, setMostrarFormProducto] = useState(false);
   const [modoFormularioProducto, setModoFormularioProducto] = useState("agregar");
-  
+
   // Estado para pedidos
   const [pedidos, setPedidos] = useState([]);
   const [pedidoActual, setPedidoActual] = useState({
@@ -62,6 +63,8 @@ export const useAdminViewModel = () => {
   });
   const [errorImagenProducto, setErrorImagenProducto] = useState(false);
   const [enviandoFormularioProducto, setEnviandoFormularioProducto] = useState(false);
+  const [erroresFormularioProducto, setErroresFormularioProducto] = useState({});
+  const [erroresPedido, setErroresPedido] = useState({});
 
   // ========== EFECTOS ==========
   useEffect(() => {
@@ -110,12 +113,12 @@ export const useAdminViewModel = () => {
   const estadisticas = useMemo(() => obtenerEstadisticas(), [obtenerEstadisticas, productos]);
 
   // Cálculos de usuarios
-  const totalAdmins = useMemo(() => 
+  const totalAdmins = useMemo(() =>
     usuarios.filter((u) => u.role === "admin").length,
     [usuarios]
   );
 
-  const totalNormales = useMemo(() => 
+  const totalNormales = useMemo(() =>
     usuarios.filter((u) => u.role === "user").length,
     [usuarios]
   );
@@ -207,10 +210,34 @@ export const useAdminViewModel = () => {
 
   const manejarGuardarProducto = useCallback(async (e) => {
     e.preventDefault();
+    const datosParaValidar = {
+      ...datosFormularioProducto,
+      precio: datosFormularioProducto.precio === "" ? "" : datosFormularioProducto.precio,
+    };
+    const resultadoValidacion = productoSchema.safeParse(datosParaValidar);
+    if (!resultadoValidacion.success) {
+      const fieldErrors = resultadoValidacion.error.flatten().fieldErrors;
+      const erroresPorCampo = {};
+      for (const [key, messages] of Object.entries(fieldErrors)) {
+        if (Array.isArray(messages) && messages[0]) {
+          erroresPorCampo[key] = messages[0];
+        } else if (typeof messages === "string") {
+          erroresPorCampo[key] = messages;
+        }
+      }
+      setErroresFormularioProducto(erroresPorCampo);
+      return;
+    }
+    setErroresFormularioProducto({});
     setEnviandoFormularioProducto(true);
     try {
+      const datosValidos = resultadoValidacion.data;
+      const payload = {
+        ...datosFormularioProducto,
+        precio: typeof datosValidos.precio === "number" ? String(datosValidos.precio) : datosFormularioProducto.precio,
+      };
       if (modoFormularioProducto === "editar" && productoEditando) {
-        const resultado = await editarProducto(productoEditando.id, datosFormularioProducto);
+        const resultado = await editarProducto(productoEditando.id, payload);
         if (resultado.exito) {
           alert("✅ Producto actualizado correctamente");
           manejarCerrarFormularioProducto();
@@ -218,7 +245,7 @@ export const useAdminViewModel = () => {
           alert("❌ Error: " + resultado.mensaje);
         }
       } else {
-        const resultado = await agregarProducto(datosFormularioProducto);
+        const resultado = await agregarProducto(payload);
         if (resultado.exito) {
           alert("✅ Producto agregado correctamente");
           manejarCerrarFormularioProducto();
@@ -239,6 +266,11 @@ export const useAdminViewModel = () => {
       ...prev,
       [campo]: valor
     }));
+    setErroresFormularioProducto(prev => {
+      const next = {...prev};
+      delete next[campo];
+      return next;
+    });
   }, []);
 
   const manejarErrorImagen = useCallback((error) => {
