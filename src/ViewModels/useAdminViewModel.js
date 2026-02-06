@@ -1,7 +1,6 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useUser } from '../Componentes/Context/ContextoUsuario';
 import { useProductos } from '../Componentes/Context/ContextoProducto';
-
 import { productoSchema, pedidoSchema, LIMITES } from '../Componentes/Utils/ValidacionesForm';
 
 /** Convierte errores de Zod a { campo: mensaje } para los formularios. */
@@ -15,9 +14,6 @@ function erroresZodAObjeto(errorZod) {
   }
   return resultado;
 }
-
-import { productoSchema, pedidoSchema } from '../Componentes/Utils/ValidacionesForm';
-
 
 /**
  * ViewModel para AdminPanel
@@ -52,7 +48,7 @@ export const useAdminViewModel = () => {
   const [productoEditando, setProductoEditando] = useState(null);
   const [mostrarFormProducto, setMostrarFormProducto] = useState(false);
   const [modoFormularioProducto, setModoFormularioProducto] = useState("agregar");
-
+  
   // Estado para pedidos
   const [pedidos, setPedidos] = useState([]);
   const [pedidoActual, setPedidoActual] = useState({
@@ -132,12 +128,12 @@ export const useAdminViewModel = () => {
   const estadisticas = useMemo(() => obtenerEstadisticas(), [obtenerEstadisticas, productos]);
 
   // Cálculos de usuarios
-  const totalAdmins = useMemo(() =>
+  const totalAdmins = useMemo(() => 
     usuarios.filter((u) => u.role === "admin").length,
     [usuarios]
   );
 
-  const totalNormales = useMemo(() =>
+  const totalNormales = useMemo(() => 
     usuarios.filter((u) => u.role === "user").length,
     [usuarios]
   );
@@ -231,36 +227,16 @@ export const useAdminViewModel = () => {
 
   const manejarGuardarProducto = useCallback(async (e) => {
     e.preventDefault();
-
     const datos = { ...datosFormularioProducto };
     if (datos.precio === "") datos.precio = "";
     const resultado = productoSchema.safeParse(datos);
     if (!resultado.success) {
       setErroresFormularioProducto(erroresZodAObjeto(resultado.error));
-
-    const datosParaValidar = {
-      ...datosFormularioProducto,
-      precio: datosFormularioProducto.precio === "" ? "" : datosFormularioProducto.precio,
-    };
-    const resultadoValidacion = productoSchema.safeParse(datosParaValidar);
-    if (!resultadoValidacion.success) {
-      const fieldErrors = resultadoValidacion.error.flatten().fieldErrors;
-      const erroresPorCampo = {};
-      for (const [key, messages] of Object.entries(fieldErrors)) {
-        if (Array.isArray(messages) && messages[0]) {
-          erroresPorCampo[key] = messages[0];
-        } else if (typeof messages === "string") {
-          erroresPorCampo[key] = messages;
-        }
-      }
-      setErroresFormularioProducto(erroresPorCampo);
-
       return;
     }
     setErroresFormularioProducto({});
     setEnviandoFormularioProducto(true);
     try {
-
       const payload = {
         ...datosFormularioProducto,
         precio: typeof resultado.data.precio === "number" ? String(resultado.data.precio) : datosFormularioProducto.precio,
@@ -268,29 +244,14 @@ export const useAdminViewModel = () => {
       if (modoFormularioProducto === "editar" && productoEditando) {
         const res = await editarProducto(productoEditando.id, payload);
         if (res.exito) {
-
-      const datosValidos = resultadoValidacion.data;
-      const payload = {
-        ...datosFormularioProducto,
-        precio: typeof datosValidos.precio === "number" ? String(datosValidos.precio) : datosFormularioProducto.precio,
-      };
-      if (modoFormularioProducto === "editar" && productoEditando) {
-        const resultado = await editarProducto(productoEditando.id, payload);
-        if (resultado.exito) {
-
           alert("✅ Producto actualizado correctamente");
           manejarCerrarFormularioProducto();
         } else {
           alert("❌ Error: " + res.mensaje);
         }
       } else {
-
         const res = await agregarProducto(payload);
         if (res.exito) {
-
-        const resultado = await agregarProducto(payload);
-        if (resultado.exito) {
-
           alert("✅ Producto agregado correctamente");
           manejarCerrarFormularioProducto();
         } else {
@@ -309,14 +270,6 @@ export const useAdminViewModel = () => {
     setDatosFormularioProducto(prev => ({ ...prev, [campo]: valor }));
     setErroresFormularioProducto(prev => {
       const next = { ...prev };
-
-    setDatosFormularioProducto(prev => ({
-      ...prev,
-      [campo]: valor
-    }));
-    setErroresFormularioProducto(prev => {
-      const next = {...prev};
-
       delete next[campo];
       return next;
     });
