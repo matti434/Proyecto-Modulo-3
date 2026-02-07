@@ -165,7 +165,7 @@ export const useLoginViewModel = ({ onClose }) => {
                     textAlign: 'right',
                     fontStyle: 'italic'
                   }}>
-                    Este mensaje se cerrará en 10 segundos
+                    
                   </div>
                 </div>
               ),
@@ -175,6 +175,7 @@ export const useLoginViewModel = ({ onClose }) => {
                 id: 'admin-toast',
               }
             );
+            setTimeout(() => toast.dismiss('admin-toast'), 10000);
           }, 800);
         } else {
           setTimeout(() => {

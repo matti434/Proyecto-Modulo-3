@@ -802,6 +802,32 @@ button:disabled {
   min-height: 100px;
 }
 
+/* Mensajes de error de validación (Producto, Usuario, Pedidos) */
+.mensaje-error-formulario {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.85rem;
+  color: var(--admin-error);
+  font-weight: 500;
+}
+
+.input-invalido,
+.campo-formulario input.input-invalido,
+.campo-formulario textarea.input-invalido,
+.campo-formulario select.input-invalido,
+.input-textarea.input-invalido {
+  border-color: var(--admin-error) !important;
+  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.15);
+}
+
+.input-invalido:focus,
+.campo-formulario input.input-invalido:focus,
+.campo-formulario textarea.input-invalido:focus,
+.campo-formulario select.input-invalido:focus {
+  border-color: var(--admin-error) !important;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+}
+
 .grid-campos {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -938,6 +964,20 @@ button:disabled {
 .input-textarea:disabled {
   background: var(--admin-bg-hover);
   cursor: not-allowed;
+}
+
+/* Placeholder blanco (Gestión de Pedidos) */
+.placeholder-blanco::placeholder {
+  color: #fff !important;
+  opacity: 0.95;
+}
+.placeholder-blanco::-webkit-input-placeholder {
+  color: #fff !important;
+  opacity: 0.95;
+}
+.placeholder-blanco::-ms-input-placeholder {
+  color: #fff !important;
+  opacity: 0.95;
 }
 
 /* =============================================
