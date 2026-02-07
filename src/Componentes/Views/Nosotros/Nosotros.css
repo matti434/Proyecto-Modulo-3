@@ -1,6 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap");
 
-/* ================= CONTENEDOR ================= */
+
 
 .nosotros-contenedor {
   padding: 80px 24px;
@@ -10,7 +10,6 @@
   font-family: "Montserrat", sans-serif;
 }
 
-/* ================= TITULO ================= */
 
 .titulo-nosotros {
   text-align: center;
@@ -21,18 +20,18 @@
   color: #1c1c1c;
 }
 
-/* ================= GRID ================= */
+
 
 .grid-integrantes {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: repeat(5, 1fr); /* 👈 las 5 juntas */
   gap: 35px;
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 0 10px;
 }
 
-/* ================= TARJETA ================= */
+
+
 
 .tarjeta-integrante {
   background: rgba(255, 255, 255, 0.9);
@@ -68,26 +67,7 @@
     inset 0 0 0 1px rgba(0, 0, 0, 0.05);
 }
 
-/* ================= FOTO ================= */
 
-.foto-integrante {
-  width: 130px;
-  height: 130px;
-  border-radius: 50%;
-  object-fit: cover;
-  margin-bottom: 18px;
-
-  border: 4px solid white;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-
-  transition: transform 0.35s ease;
-}
-
-.tarjeta-integrante:hover .foto-integrante {
-  transform: scale(1.05);
-}
-
-/* ================= TEXTO ================= */
 
 .nombre-integrante {
   font-size: 1.2rem;
@@ -112,7 +92,7 @@
   margin-bottom: 22px;
 }
 
-/* ================= LINK GITHUB ================= */
+
 
 .link-github {
   display: inline-flex;
@@ -141,7 +121,7 @@
   box-shadow: 0 8px 18px rgba(0, 0, 0, 0.3);
 }
 
-/* ================= RESPONSIVE ================= */
+
 
 @media (max-width: 768px) {
   .titulo-nosotros {
@@ -151,5 +131,17 @@
 
   .tarjeta-integrante {
     padding: 26px 20px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .grid-integrantes {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .grid-integrantes {
+    grid-template-columns: repeat(1, 1fr);
   }
 }

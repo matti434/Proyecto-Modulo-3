@@ -13,6 +13,7 @@ export class Producto {
     this.ubicacion = data.ubicacion;
     this.stock = data.stock !== undefined ? data.stock : true;
     this.destacado = data.destacado || false;
+    this.esFavorito = data.esFavorito || false;
     this.fechaCreacion = data.fechaCreacion;
     this.fechaModificacion = data.fechaModificacion;
   }
@@ -36,6 +37,7 @@ export class Producto {
       ubicacion: this.ubicacion,
       stock: this.stock,
       destacado: this.destacado,
+      esFavorito: this.esFavorito,
       fechaCreacion: this.fechaCreacion,
       fechaModificacion: this.fechaModificacion
     };
