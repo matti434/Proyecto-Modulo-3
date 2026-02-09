@@ -1,16 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Form, Card, Button, InputGroup } from 'react-bootstrap';
-import { Toaster, toast } from 'react-hot-toast';
-import { useProductos } from '../../../../../Context/ContextoProducto';
+import { useState, useEffect } from "react";
+import { Container, Row, Col, Form, Card, Button, InputGroup } from "react-bootstrap";
+import { toast, Toaster } from "react-hot-toast";
+
+import { useProductos } from "../../../../../Context/ContextoProducto";
 import {
-  validarTerminoBusqueda,
-  validarCampoNumerico,
-  prevenirCaracteresInvalidos,
-  validarTodosLosFiltros,
+  configuracionValidaciones,
   limpiarTodosLosFiltros,
-  configuracionValidaciones
-} from '../../../../../Utils/ValidacionesBuscador';
-import './BuscadorProductos.css';
+  prevenirCaracteresInvalidos,
+  validarCampoNumerico,
+  validarTerminoBusqueda,
+  validarTodosLosFiltros,
+} from "../../../../../Utils/ValidacionesBuscador";
+
+import "./BuscadorProductos.css";
 
 const BuscadorProducto = () => {
   const { productos, filtros, actualizarFiltros, limpiarFiltros, obtenerCategoriasUnicas } = useProductos();

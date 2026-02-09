@@ -1,6 +1,7 @@
 import { Form, Button, Row, Col } from "react-bootstrap";
 import { FaEye, FaEyeSlash, FaUser, FaLock } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
+
 import "./FormLogin.css";
 
 const FormLoginView = ({

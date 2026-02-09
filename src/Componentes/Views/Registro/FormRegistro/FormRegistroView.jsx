@@ -1,7 +1,9 @@
 import { Form, Button, Row, Col } from "react-bootstrap";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
+
 import { PAISES_VALIDOS } from "../../../Utils/ValidacionesForm";
+
 import "./FormRegistro.css";
 
 const FormRegistroView = ({
