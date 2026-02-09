@@ -1,4 +1,3 @@
-import React from "react";
 import { LIMITES } from "../Utils/ValidacionesForm";
 
 const L = LIMITES.pedido;

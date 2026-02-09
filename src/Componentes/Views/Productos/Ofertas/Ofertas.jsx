@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import '../../../../estilos/variables.css';
-import './Ofertas.css';
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+import "../../../../estilos/variables.css";
+import "./Ofertas.css";
 
 const Ofertas = ({
     marca = "Royal Enfield",
