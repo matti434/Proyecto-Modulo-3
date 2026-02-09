@@ -1,14 +1,15 @@
-import React from 'react';
 import "../../estilos/variables.css";
+
+import { AdminFormularioView } from "./AdminFormularioView";
+import { AdminPedidosView } from "./AdminPedidosView";
+import { AdminProductosView } from "./AdminProductosView";
+import { AdminRecomendacionesView } from "./AdminRecomendacionesView";
+import { AdminSuspendidosView } from "./AdminSuspendidosView";
+import { AdminUsuariosView } from "./AdminUsuariosView";
+import MapaUsuarios from "./MapaUsuarios";
+import { ModalEditarUsuarioView } from "./ModalEditarUsuarioView";
+
 import "./AdminPanel.css";
-import { AdminUsuariosView } from './AdminUsuariosView';
-import { AdminSuspendidosView } from './AdminSuspendidosView';
-import { AdminProductosView } from './AdminProductosView';
-import { AdminRecomendacionesView } from './AdminRecomendacionesView';
-import { AdminPedidosView } from './AdminPedidosView';
-import { AdminFormularioView } from './AdminFormularioView';
-import { ModalEditarUsuarioView } from './ModalEditarUsuarioView';
-import MapaUsuarios from './MapaUsuarios';
 
 /**
  View pura principal del AdminPanel
@@ -30,9 +31,6 @@ export const AdminPanelView = ({
   productoEditando,
   mostrarFormProducto,
   modoFormularioProducto,
-  recomendaciones,
-  nuevoComentario,
-  modoEdicion,
   pedidos,
   pedidoActual,
   modoPedido,
@@ -40,6 +38,8 @@ export const AdminPanelView = ({
   datosFormularioProducto,
   errorImagenProducto,
   enviandoFormularioProducto,
+  erroresFormularioProducto,
+  erroresPedido,
 
   // Valores calculados
   totalAdmins,
@@ -65,12 +65,8 @@ export const AdminPanelView = ({
   onCancelarFormularioProducto,
   onCambioCampoFormulario,
   onErrorImagen,
-  onNuevoComentarioChange,
-  onAgregarRecomendacion,
-  onEditarRecomendacion,
-  onEliminarRecomendacion,
-  onCancelarEdicionRecomendacion,
   onPedidoActualChange,
+  onPedidoCampoChange,
   onGuardarPedido,
   onEditarPedido,
   onEliminarPedido,
@@ -131,12 +127,10 @@ export const AdminPanelView = ({
           >
             🌍 Mapa
           </button>
-          
-          <button onClick={() => onCambiarVista("recomendaciones")}>
-            💬 Recomendaciones
-          </button>
-          
-          <button onClick={() => onCambiarVista("pedidos")}>
+          <button
+            className={vistaActiva === "pedidos" ? "btn-activo" : ""}
+            onClick={() => onCambiarVista("pedidos")}
+          >
             📦 Pedidos
           </button>
         </nav>
@@ -181,25 +175,13 @@ export const AdminPanelView = ({
         />
       )}
 
-      {vistaActiva === "recomendaciones" && (
-        <AdminRecomendacionesView
-          recomendaciones={recomendaciones}
-          nuevoComentario={nuevoComentario}
-          modoEdicion={modoEdicion}
-          onNuevoComentarioChange={onNuevoComentarioChange}
-          onAgregarRecomendacion={onAgregarRecomendacion}
-          onEditarRecomendacion={onEditarRecomendacion}
-          onEliminarRecomendacion={onEliminarRecomendacion}
-          onCancelarEdicionRecomendacion={onCancelarEdicionRecomendacion}
-        />
-      )}
-
       {vistaActiva === "pedidos" && (
         <AdminPedidosView
           pedidos={pedidos}
           pedidoActual={pedidoActual}
           modoPedido={modoPedido}
-          onPedidoActualChange={onPedidoActualChange}
+          errores={erroresPedido}
+          onPedidoCampoChange={onPedidoCampoChange}
           onGuardarPedido={onGuardarPedido}
           onEditarPedido={onEditarPedido}
           onEliminarPedido={onEliminarPedido}
@@ -223,6 +205,7 @@ export const AdminPanelView = ({
           datosFormulario={datosFormularioProducto}
           errorImagen={errorImagenProducto}
           enviando={enviandoFormularioProducto}
+          errores={erroresFormularioProducto}
           onGuardar={onGuardarProducto}
           onCancelar={onCancelarFormularioProducto}
           onCambioCampo={onCambioCampoFormulario}

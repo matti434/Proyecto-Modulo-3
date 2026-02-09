@@ -3,6 +3,19 @@ import { useUser } from "../Componentes/Context/ContextoUsuario";
 import { useProductos } from "../Componentes/Context/ContextoProducto";
 import toast from "react-hot-toast";
 import { confirmarAccion } from "../Componentes/Utils/confirmacion";
+import { productoSchema, pedidoSchema, LIMITES } from "../Componentes/Utils/ValidacionesForm";
+
+/** Convierte errores de Zod a { campo: mensaje } para los formularios. */
+function erroresZodAObjeto(errorZod) {
+  const flat = typeof errorZod.flatten === "function" ? errorZod.flatten() : { fieldErrors: {} };
+  const fieldErrors = flat.fieldErrors || {};
+  const resultado = {};
+  for (const [campo, mensajes] of Object.entries(fieldErrors)) {
+    const msg = Array.isArray(mensajes) ? mensajes[0] : mensajes;
+    if (msg) resultado[campo] = msg;
+  }
+  return resultado;
+}
 
 /**
  * ViewModel para AdminPanel
@@ -36,8 +49,7 @@ export const useAdminViewModel = () => {
   const [usuarioEditando, setUsuarioEditando] = useState(null);
   const [productoEditando, setProductoEditando] = useState(null);
   const [mostrarFormProducto, setMostrarFormProducto] = useState(false);
-  const [modoFormularioProducto, setModoFormularioProducto] =
-    useState("agregar");
+  const [modoFormularioProducto, setModoFormularioProducto] = useState("agregar");
 
   // Estado para recomendaciones
   const [recomendaciones, setRecomendaciones] = useState([]);
@@ -70,8 +82,9 @@ export const useAdminViewModel = () => {
     stock: true,
   });
   const [errorImagenProducto, setErrorImagenProducto] = useState(false);
-  const [enviandoFormularioProducto, setEnviandoFormularioProducto] =
-    useState(false);
+  const [enviandoFormularioProducto, setEnviandoFormularioProducto] = useState(false);
+  const [erroresFormularioProducto, setErroresFormularioProducto] = useState({});
+  const [erroresPedido, setErroresPedido] = useState({});
 
   // ========== EFECTOS ==========
   useEffect(() => {
@@ -80,20 +93,22 @@ export const useAdminViewModel = () => {
     }
   }, [vistaActiva, cargarProductos]);
 
-  // Inicializar formulario cuando cambia productoEditando
+  // Inicializar formulario al editar producto (trunca con LIMITES de ValidacionesForm)
   useEffect(() => {
+    const limites = LIMITES.producto;
     if (modoFormularioProducto === "editar" && productoEditando) {
+      const s = (val, max) => (val || "").slice(0, max);
       setDatosFormularioProducto({
-        nombre: productoEditando.nombre || "",
-        precio: productoEditando.precio || "",
-        descripcion: productoEditando.descripcion || "",
+        nombre: s(productoEditando.nombre, limites.nombre),
+        precio: productoEditando.precio ?? "",
+        descripcion: s(productoEditando.descripcion, limites.descripcion),
         categoria: productoEditando.categoria || "",
-        marca: productoEditando.marca || "",
-        modelo: productoEditando.modelo || "",
-        año: productoEditando.año || "",
-        kilometros: productoEditando.kilometros || "",
-        ubicacion: productoEditando.ubicacion || "",
-        imagen: productoEditando.imagen || "",
+        marca: s(productoEditando.marca, limites.marca),
+        modelo: s(productoEditando.modelo, limites.modelo),
+        año: s(productoEditando.año, limites.año),
+        kilometros: s(productoEditando.kilometros, limites.kilometros),
+        ubicacion: s(productoEditando.ubicacion, limites.ubicacion),
+        imagen: s(productoEditando.imagen, limites.imagen),
         destacado: productoEditando.destacado || false,
         stock:
           productoEditando.stock !== undefined ? productoEditando.stock : true,
@@ -115,6 +130,7 @@ export const useAdminViewModel = () => {
       });
     }
     setErrorImagenProducto(false);
+    setErroresFormularioProducto({});
   }, [productoEditando, modoFormularioProducto]);
 
   // ========== CÁLCULOS (useMemo) ==========
@@ -123,7 +139,6 @@ export const useAdminViewModel = () => {
     [obtenerEstadisticas, productos],
   );
 
-  // Cálculos de usuarios
   const totalAdmins = useMemo(
     () => usuarios.filter((u) => u.role === "admin").length,
     [usuarios],
@@ -152,7 +167,6 @@ export const useAdminViewModel = () => {
     }).length;
   }, [usuariosSuspendidos]);
 
-  // Cálculo de valor total de productos
   const valorTotalProductos = useMemo(() => {
     return productos
       .reduce((total, p) => total + (parseFloat(p.precio) || 0), 0)
@@ -179,7 +193,6 @@ export const useAdminViewModel = () => {
       );
       if (confirmado) {
         const resultado = await eliminarProducto(id);
-
         if (resultado.exito) {
           toast.success("Producto eliminado correctamente");
         } else {
@@ -187,14 +200,13 @@ export const useAdminViewModel = () => {
         }
       }
     },
-    [eliminarProducto, confirmarAccion],
+    [eliminarProducto],
   );
 
   const manejarAbrirFormularioProducto = useCallback(() => {
     setModoFormularioProducto("agregar");
     setProductoEditando(null);
     setMostrarFormProducto(true);
-    // Resetear formulario
     setDatosFormularioProducto({
       nombre: "",
       precio: "",
@@ -210,13 +222,13 @@ export const useAdminViewModel = () => {
       stock: true,
     });
     setErrorImagenProducto(false);
+    setErroresFormularioProducto({});
   }, []);
 
   const manejarCerrarFormularioProducto = useCallback(() => {
     setMostrarFormProducto(false);
     setProductoEditando(null);
     setModoFormularioProducto("agregar");
-    // Resetear formulario
     setDatosFormularioProducto({
       nombre: "",
       precio: "",
@@ -232,35 +244,48 @@ export const useAdminViewModel = () => {
       stock: true,
     });
     setErrorImagenProducto(false);
+    setErroresFormularioProducto({});
   }, []);
 
   const manejarGuardarProducto = useCallback(
     async (e) => {
       e.preventDefault();
+      const datos = { ...datosFormularioProducto };
+      if (datos.precio === "") datos.precio = "";
+      const resultado = productoSchema.safeParse(datos);
+      if (!resultado.success) {
+        setErroresFormularioProducto(erroresZodAObjeto(resultado.error));
+        return;
+      }
+      setErroresFormularioProducto({});
       setEnviandoFormularioProducto(true);
       try {
+        const payload = {
+          ...datosFormularioProducto,
+          precio:
+            typeof resultado.data.precio === "number"
+              ? String(resultado.data.precio)
+              : datosFormularioProducto.precio,
+        };
         if (modoFormularioProducto === "editar" && productoEditando) {
-          const resultado = await editarProducto(
-            productoEditando.id,
-            datosFormularioProducto,
-          );
-          if (resultado.exito) {
+          const res = await editarProducto(productoEditando.id, payload);
+          if (res.exito) {
             toast.success("Producto actualizado correctamente");
             manejarCerrarFormularioProducto();
           } else {
-            toast.error(" Error: " + resultado.mensaje);
+            toast.error("Error: " + res.mensaje);
           }
         } else {
-          const resultado = await agregarProducto(datosFormularioProducto);
-          if (resultado.exito) {
+          const res = await agregarProducto(payload);
+          if (res.exito) {
             toast.success("Producto agregado correctamente");
             manejarCerrarFormularioProducto();
           } else {
-            toast.error(" Error: " + resultado.mensaje);
+            toast.error("Error: " + res.mensaje);
           }
         }
       } catch (error) {
-        toast.error(" Error inesperado: " + error.message);
+        toast.error("Error inesperado: " + error.message);
       } finally {
         setEnviandoFormularioProducto(false);
       }
@@ -275,12 +300,13 @@ export const useAdminViewModel = () => {
     ],
   );
 
-  // Funciones para actualizar campos del formulario
   const manejarCambioCampoFormulario = useCallback((campo, valor) => {
-    setDatosFormularioProducto((prev) => ({
-      ...prev,
-      [campo]: valor,
-    }));
+    setDatosFormularioProducto((prev) => ({ ...prev, [campo]: valor }));
+    setErroresFormularioProducto((prev) => {
+      const next = { ...prev };
+      delete next[campo];
+      return next;
+    });
   }, []);
 
   const manejarErrorImagen = useCallback((error) => {
@@ -308,10 +334,9 @@ export const useAdminViewModel = () => {
   // Funciones de recomendaciones
   const manejarAgregarRecomendacion = useCallback(() => {
     if (!nuevoComentario.trim()) return;
-
     if (modoEdicion && notaEditando) {
-      setRecomendaciones(
-        recomendaciones.map((nota) =>
+      setRecomendaciones((prev) =>
+        prev.map((nota) =>
           nota.id === notaEditando.id
             ? { ...nota, texto: nuevoComentario }
             : nota,
@@ -320,13 +345,13 @@ export const useAdminViewModel = () => {
       setModoEdicion(false);
       setNotaEditando(null);
     } else {
-      setRecomendaciones([
-        ...recomendaciones,
+      setRecomendaciones((prev) => [
+        ...prev,
         { id: Date.now(), texto: nuevoComentario },
       ]);
     }
     setNuevoComentario("");
-  }, [nuevoComentario, modoEdicion, notaEditando, recomendaciones]);
+  }, [nuevoComentario, modoEdicion, notaEditando]);
 
   const manejarEditarRecomendacion = useCallback((recomendacion) => {
     setModoEdicion(true);
@@ -334,12 +359,9 @@ export const useAdminViewModel = () => {
     setNuevoComentario(recomendacion.texto);
   }, []);
 
-  const manejarEliminarRecomendacion = useCallback(
-    (id) => {
-      setRecomendaciones(recomendaciones.filter((x) => x.id !== id));
-    },
-    [recomendaciones],
-  );
+  const manejarEliminarRecomendacion = useCallback((id) => {
+    setRecomendaciones((prev) => prev.filter((x) => x.id !== id));
+  }, []);
 
   const manejarCancelarEdicionRecomendacion = useCallback(() => {
     setModoEdicion(false);
@@ -349,6 +371,12 @@ export const useAdminViewModel = () => {
 
   // Funciones de pedidos
   const manejarGuardarPedido = useCallback(() => {
+    const resultado = pedidoSchema.safeParse(pedidoActual);
+    if (!resultado.success) {
+      setErroresPedido(erroresZodAObjeto(resultado.error));
+      return;
+    }
+    setErroresPedido({});
     if (modoPedido === "agregar") {
       setPedidos([
         ...pedidos,
@@ -359,29 +387,40 @@ export const useAdminViewModel = () => {
         },
       ]);
     } else {
-      setPedidos(
-        pedidos.map((p) => (p.id === pedidoActual.id ? pedidoActual : p)),
+      setPedidos((prev) =>
+        prev.map((p) => (p.id === pedidoActual.id ? pedidoActual : p)),
       );
     }
     setPedidoActual({ id: null, titulo: "", descripcion: "" });
     setModoPedido("agregar");
   }, [modoPedido, pedidoActual, pedidos]);
 
-  const manejarEditarPedido = useCallback((pedido) => {
-    setPedidoActual(pedido);
-    setModoPedido("editar");
+  const manejarPedidoCampoChange = useCallback((campo, valor) => {
+    setPedidoActual((prev) => ({ ...prev, [campo]: valor }));
+    setErroresPedido((prev) => {
+      const next = { ...prev };
+      delete next[campo];
+      return next;
+    });
   }, []);
 
-  const manejarEliminarPedido = useCallback(
-    (id) => {
-      setPedidos(pedidos.filter((x) => x.id !== id));
-    },
-    [pedidos],
-  );
+  const manejarEditarPedido = useCallback((pedido) => {
+    const D = LIMITES.pedido;
+    setPedidoActual({
+      ...pedido,
+      titulo: (pedido.titulo || "").slice(0, D.titulo),
+      descripcion: (pedido.descripcion || "").slice(0, D.descripcion),
+    });
+    setModoPedido("editar");
+    setErroresPedido({});
+  }, []);
+
+  const manejarEliminarPedido = useCallback((id) => {
+    setPedidos((prev) => prev.filter((x) => x.id !== id));
+  }, []);
 
   // ========== RETORNO ==========
   return {
-    // Datos del Context
     usuarios,
     usuariosSuspendidos,
     productos,
@@ -389,25 +428,26 @@ export const useAdminViewModel = () => {
     cargando,
     estadisticas,
 
-    // Estado local
     vistaActiva,
     usuarioEditando,
     productoEditando,
     mostrarFormProducto,
     modoFormularioProducto,
+    pedidos,
+    pedidoActual,
+    modoPedido,
+
+    datosFormularioProducto,
+    errorImagenProducto,
+    enviandoFormularioProducto,
+    erroresFormularioProducto,
+    erroresPedido,
+
     recomendaciones,
     nuevoComentario,
     modoEdicion,
     notaEditando,
-    pedidos,
-    pedidoActual,
-    modoPedido,
-    // Estado del formulario de producto
-    datosFormularioProducto,
-    errorImagenProducto,
-    enviandoFormularioProducto,
 
-    // Valores calculados
     totalAdmins,
     totalNormales,
     totalUsuarios,
@@ -415,13 +455,9 @@ export const useAdminViewModel = () => {
     suspendidosMas30Dias,
     valorTotalProductos,
 
-    // Funciones de navegación
     onCambiarVista: setVistaActiva,
-
-    // Funciones de sincronización
     onSincronizar: manejarSincronizacion,
 
-    // Funciones de usuarios
     onEditarUsuario: manejarEditarUsuario,
     onSuspenderUsuario: suspenderUsuario,
     onReactivarUsuario: reactivarUsuario,
@@ -429,7 +465,6 @@ export const useAdminViewModel = () => {
     onGuardarUsuario: manejarGuardarUsuario,
     onCancelarEdicionUsuario: manejarCancelarEdicionUsuario,
 
-    // Funciones de productos
     onAbrirFormularioProducto: manejarAbrirFormularioProducto,
     onEditarProducto: manejarEditarProducto,
     onEliminarProducto: manejarEliminarProducto,
@@ -438,15 +473,14 @@ export const useAdminViewModel = () => {
     onCambioCampoFormulario: manejarCambioCampoFormulario,
     onErrorImagen: manejarErrorImagen,
 
-    // Funciones de recomendaciones
     onNuevoComentarioChange: setNuevoComentario,
     onAgregarRecomendacion: manejarAgregarRecomendacion,
     onEditarRecomendacion: manejarEditarRecomendacion,
     onEliminarRecomendacion: manejarEliminarRecomendacion,
     onCancelarEdicionRecomendacion: manejarCancelarEdicionRecomendacion,
 
-    // Funciones de pedidos
     onPedidoActualChange: setPedidoActual,
+    onPedidoCampoChange: manejarPedidoCampoChange,
     onGuardarPedido: manejarGuardarPedido,
     onEditarPedido: manejarEditarPedido,
     onEliminarPedido: manejarEliminarPedido,
