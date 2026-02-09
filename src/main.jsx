@@ -1,12 +1,13 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { Toaster } from "react-hot-toast";
-import "./Componentes/Utils/I18next.js";
-import "./estilos/variables.css";
+
 import App from "./App.jsx";
-import "./RoyaLToast.css";
+import "./Componentes/Utils/I18next.js";
 import { inicializarLocalStorage } from "./Componentes/Utils/inicializarLocalStorage.js";
 import { initializeAdminUser } from "./db.js";
+import "./estilos/variables.css";
+import "./RoyalToast.css";
 
 inicializarLocalStorage();
 initializeAdminUser();
