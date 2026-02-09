@@ -1,11 +1,13 @@
-import React, { useEffect } from 'react';
-import { Container } from 'react-bootstrap';
-import { useLocation } from 'react-router-dom';
-import { useProductos } from '../../../../Context/ContextoProducto';
-import BuscadorProducto from './componenteBuscarProducto/BuscadorProducto';
-import ListaProductosContainer from './Lista-Productos/ListaProductosContainer';
-import '../../../../../estilos/variables.css';
-import './PaginaProductos.css';
+import { useEffect } from "react";
+import { Container } from "react-bootstrap";
+import { useLocation } from "react-router-dom";
+
+import { useProductos } from "../../../../Context/ContextoProducto";
+import BuscadorProducto from "./componenteBuscarProducto/BuscadorProducto";
+import ListaProductosContainer from "./Lista-Productos/ListaProductosContainer";
+
+import "../../../../../estilos/variables.css";
+import "./PaginaProductos.css";
 
 const PaginaProductos = () => {
   const location = useLocation();

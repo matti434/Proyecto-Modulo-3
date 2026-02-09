@@ -1,5 +1,3 @@
-import React from "react";
-
 /**
  * View pura para la sección de Usuarios Activos
  * Solo recibe props y renderiza UI

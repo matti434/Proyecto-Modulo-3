@@ -1,13 +1,15 @@
-import React from 'react';
 import "../../estilos/variables.css";
+
+import { AdminFormularioView } from "./AdminFormularioView";
+import { AdminPedidosView } from "./AdminPedidosView";
+import { AdminProductosView } from "./AdminProductosView";
+import { AdminRecomendacionesView } from "./AdminRecomendacionesView";
+import { AdminSuspendidosView } from "./AdminSuspendidosView";
+import { AdminUsuariosView } from "./AdminUsuariosView";
+import MapaUsuarios from "./MapaUsuarios";
+import { ModalEditarUsuarioView } from "./ModalEditarUsuarioView";
+
 import "./AdminPanel.css";
-import { AdminUsuariosView } from './AdminUsuariosView';
-import { AdminSuspendidosView } from './AdminSuspendidosView';
-import { AdminProductosView } from './AdminProductosView';
-import { AdminPedidosView } from './AdminPedidosView';
-import { AdminFormularioView } from './AdminFormularioView';
-import { ModalEditarUsuarioView } from './ModalEditarUsuarioView';
-import MapaUsuarios from './MapaUsuarios';
 
 /**
  View pura principal del AdminPanel

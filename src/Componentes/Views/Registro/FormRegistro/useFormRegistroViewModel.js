@@ -33,12 +33,9 @@ export const useFormRegistroViewModel = ({ onSubmit, onClose }) => {
   const contrasena = watch("contrasena");
   const confirmarContrasena = watch("confirmarContrasena");
 
-  // Limpiar error general cuando cambian los campos
   useEffect(() => {
-    if (errorGeneral) {
-      setErrorGeneral(null);
-    }
-  }, [nombreDeUsuario, email, contrasena, confirmarContrasena, errorGeneral]);
+    setErrorGeneral(null);
+  }, [nombreDeUsuario, email, contrasena, confirmarContrasena]);
 
   const procesarEnvio = useCallback(async (data) => {
     setEstaEnviando(true);
