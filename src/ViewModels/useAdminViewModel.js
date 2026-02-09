@@ -7,7 +7,10 @@ import { productoSchema, pedidoSchema, LIMITES } from "../Componentes/Utils/Vali
 
 /** Convierte errores de Zod a { campo: mensaje } para los formularios. */
 function erroresZodAObjeto(errorZod) {
-  const flat = typeof errorZod.flatten === "function" ? errorZod.flatten() : { fieldErrors: {} };
+  const flat =
+    typeof errorZod.flatten === "function"
+      ? errorZod.flatten()
+      : { fieldErrors: {} };
   const fieldErrors = flat.fieldErrors || {};
   const resultado = {};
   for (const [campo, mensajes] of Object.entries(fieldErrors)) {
