@@ -1,6 +1,7 @@
 import { useCallback } from "react";
 import toast from "react-hot-toast";
 import { usuarioService } from "../../../Services";
+import { confirmarAccion } from "../../Utils/confirmacion";
 
 export const useUsuariosManagement = (
   usuarios,
@@ -41,23 +42,27 @@ export const useUsuariosManagement = (
     }
   }, [usuariosSuspendidos, setUsuarios, setUsuariosSuspendidos]);
 
-  const eliminarUsuarioSuspendido = useCallback((id) => {
+  const eliminarUsuarioSuspendido = useCallback(async (id) => {
     const usuario = usuariosSuspendidos.find(u => u.id === id);
     if (!usuario) return;
 
     if (usuario.role === "admin") return toast.error("El administrador no puede ser eliminado");
 
-    const confirmar = window.confirm(`¿Eliminar permanentemente a "${usuario.nombreDeUsuario}"? Esta acción no se puede deshacer.`);
-    if (!confirmar) return toast.info("Eliminación cancelada");
-
-    const respuesta = usuarioService.eliminarSuspendido(id);
-    if (respuesta.exito) {
-      setUsuariosSuspendidos(prev => prev.filter(u => u.id !== id));
-      toast.success(`Usuario ${usuario.nombreDeUsuario} eliminado permanentemente`);
-    } else {
-      toast.error("Error al eliminar usuario");
+    const confirmar = await confirmarAccion(
+        "¿Eliminar permanentemente?",
+        `¿Estás seguro de eliminar a "${usuario.nombreDeUsuario}"? Esta acción no se puede deshacer.`
+    );
+    if (!confirmar) {
+        return toast.info("Eliminación cancelada");
     }
-  }, [usuariosSuspendidos, setUsuariosSuspendidos]);
+    const respuesta = await usuarioService.eliminarSuspendido(id);
+    if (respuesta.exito) {
+        setUsuariosSuspendidos(prev => prev.filter(u => u.id !== id));
+        toast.success(`Usuario ${usuario.nombreDeUsuario} eliminado permanentemente`);
+    } else {
+        toast.error("Error al eliminar usuario");
+    }
+}, [usuariosSuspendidos, setUsuariosSuspendidos, confirmarAccion]);
 
   const editarUsuario = useCallback((id, nuevosDatos) => {
     const respuesta = usuarioService.actualizar(id, nuevosDatos);
