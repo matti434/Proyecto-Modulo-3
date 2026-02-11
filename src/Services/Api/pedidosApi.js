@@ -18,6 +18,6 @@ export const pedidosApi = {
     },
 
     actualizarEstado: async (id , estado) =>{
-        await apiPut(`pedidos/${id}/estado`, {estado});
+        return await apiPut(`/pedidos/${id}/estado`, {estado});
     }
 }
