@@ -7,7 +7,7 @@ import "./Componentes/Utils/I18next.js";
 import { inicializarLocalStorage } from "./Componentes/Utils/inicializarLocalStorage.js";
 import { initializeAdminUser } from "./db.js";
 import "./estilos/variables.css";
-import "./RoyalToast.css";
+import "./RoyaLToast.css";
 
 inicializarLocalStorage();
 initializeAdminUser();
