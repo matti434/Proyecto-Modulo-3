@@ -1,4 +1,4 @@
-import { apiGet, apiPost, apiPut, apiDelete } from './apiService';
+import { apiGet, apiPost, apiPut, apiDelete } from './apiClient';
 
 export const usuarioApi = {
     
@@ -11,23 +11,23 @@ export const usuarioApi = {
     },
 
     actualizar: async (id,datos) => {
-        return await apiPut('/usuarios/${id}', datos)
+        return await apiPut(`/usuarios/${id}`, datos)
     },
 
     eliminar: async (id) => {
-        return await apiDelete('/usuarios/${id}');
+        return await apiDelete(`/usuarios/${id}`);
     },
 
     suspender: async (id) => {
-        return await apiPost('/usuarios/${id}/suspender');
+        return await apiPost(`/usuarios/${id}/suspender`);
     },
 
     reactivar: async (id) => {
-        return await apiPost('/usuarios/${id}/reactivar');
+        return await apiPost(`/usuarios/${id}/reactivar`);
     },
 
-    buscar: async (id) => {
-        return await apiGet('/usuarios/buscar?termino=${termino}');
+    buscar: async (termino) => {
+        return await apiGet(`/usuarios/buscar?termino=${termino}`);
     },
 
     obtenerSuspendidos: async () => {
