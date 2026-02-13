@@ -6,8 +6,8 @@ export const fetchApi = async (endpoint, options = {}) => {
     const config = {
         ...options,
         headers: {
-            'content.Type': 'application/json',
-            ...API_URL(token && { Authorization: `Bearer ${token}` }),
+            'Content-Type': 'application/json',
+            ...(token && { Authorization: `Bearer ${token}` }),
             ...options.headers
         }
     };
