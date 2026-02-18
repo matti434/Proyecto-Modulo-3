@@ -8,8 +8,6 @@ import {
   Row,
 } from "react-bootstrap";
 
-import "bootstrap/dist/css/bootstrap.min.css";
-
 import "../../../../estilos/variables.css";
 import "./Carrito.css";
 
