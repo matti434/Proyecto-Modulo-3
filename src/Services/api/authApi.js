@@ -10,7 +10,9 @@ export const authApi = {
   },
 
   registro: async (datos) => {
-    const resultado = await apiPost('/auth/registro', datos);
+    const { contrasena, confirmarContrasena, ...resto } = datos;
+    const body = { ...resto, password: contrasena };
+    const resultado = await apiPost('/auth/registro', body);
     if (resultado.token) {
       localStorage.setItem('token', resultado.token);
     }

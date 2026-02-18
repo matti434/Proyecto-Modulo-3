@@ -77,7 +77,7 @@ export const useUsuariosManagement = (
     async (id, nuevosDatos) => {
       try {
         const respuesta = await usuariosApi.actualizar(id, nuevosDatos);
-        const usuarioJSON = normalizar(respuesta?.usuario ?? respuesta);
+        const usuarioJSON = normalizar(respuesta?.datos ?? respuesta?.usuario ?? respuesta);
         if (usuarioJSON) {
           setUsuarios((prev) =>
             prev.map((u) => (u.id === id ? usuarioJSON : u))

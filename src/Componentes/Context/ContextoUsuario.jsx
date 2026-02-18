@@ -24,16 +24,16 @@ export const UserProvider = ({ children }) => {
       setCargando(true);
 
       const [dataUsuarios, dataSuspendidos] = await Promise.all([
-        usuariosApi.obtenerTodos(),
+        usuariosApi.obtenerTodos(true),
         usuariosApi.obtenerSuspendidos(),
       ]);
 
       const rawUsuarios = Array.isArray(dataUsuarios)
         ? dataUsuarios
-        : dataUsuarios?.usuarios ?? dataUsuarios?.data ?? [];
+        : dataUsuarios?.datos ?? dataUsuarios?.usuarios ?? dataUsuarios?.data ?? [];
       const rawSuspendidos = Array.isArray(dataSuspendidos)
         ? dataSuspendidos
-        : dataSuspendidos?.usuarios ?? dataSuspendidos?.data ?? [];
+        : dataSuspendidos?.datos ?? dataSuspendidos?.usuarios ?? dataSuspendidos?.data ?? [];
       const listaUsuarios = rawUsuarios.map(normalizarUsuario);
       const listaSuspendidos = rawSuspendidos.map(normalizarUsuario);
 

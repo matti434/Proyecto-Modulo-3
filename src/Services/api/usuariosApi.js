@@ -2,8 +2,9 @@ import { apiGet, apiPost, apiPut, apiDelete } from './apiClient';
 
 export const usuariosApi = {
     
-    obtenerTodos: async () => {
-      return await apiGet('/usuarios');
+    obtenerTodos: async (soloActivos = false) => {
+      const query = soloActivos ? '?suspendidos=false' : '';
+      return await apiGet(`/usuarios${query}`);
     },
 
     obtenerPorId: async (id) => {
@@ -27,11 +28,11 @@ export const usuariosApi = {
     },
 
     buscar: async (termino) => {
-        return await apiGet(`/usuarios/buscar?termino=${termino}`);
+        return await apiGet(`/usuarios?buscar=${encodeURIComponent(termino)}`);
     },
 
     obtenerSuspendidos: async () => {
-        return await apiGet('/usuarios/suspendidos');
+        return await apiGet('/usuarios?suspendidos=true');
     },
 
 };

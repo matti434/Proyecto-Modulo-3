@@ -30,12 +30,11 @@ export const fetchApi = async (endpoint, options = {}) => {
 
         return data;
     } catch (error) {
-        if (error.name === 'TypeError' && error.message === 'Failed to fetch')
-        {
-            throw new Error('No se puede conectar al servidor. Verifica que el backend este corriendo.')     
+        if (error.name === 'TypeError' && error.message === 'Failed to fetch') {
+            throw new Error('No se puede conectar al servidor. Verifica que el backend este corriendo.');
+        }
+        throw error;
     }
-    throw error;
-}
 };
 
 export const apiGet = (endpoint) => fetchApi(endpoint, { method: 'GET' });
