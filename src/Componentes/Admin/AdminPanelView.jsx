@@ -178,13 +178,8 @@ export const AdminPanelView = ({
       {vistaActiva === "pedidos" && (
         <AdminPedidosView
           pedidos={pedidos}
-          pedidoActual={pedidoActual}
-          modoPedido={modoPedido}
-          errores={erroresPedido}
-          onPedidoCampoChange={onPedidoCampoChange}
-          onGuardarPedido={onGuardarPedido}
-          onEditarPedido={onEditarPedido}
-          onEliminarPedido={onEliminarPedido}
+          pedidosCargando={pedidosCargando}
+          onActualizarEstadoPedido={onActualizarEstadoPedido}
         />
       )}
 

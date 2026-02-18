@@ -34,9 +34,9 @@ function App() {
 
   return (
     <FavoritosProvider>
-      <CarritoProvider>
-        <ProveedorProductos>
-          <UserProvider>
+      <ProveedorProductos>
+        <UserProvider>
+          <CarritoProvider>
             <BrowserRouter>
               <Menu />
               <Routes>
@@ -61,9 +61,9 @@ function App() {
               </Routes>
               <Footer />
             </BrowserRouter>
-          </UserProvider>
-        </ProveedorProductos>
-      </CarritoProvider>
+          </CarritoProvider>
+        </UserProvider>
+      </ProveedorProductos>
     </FavoritosProvider>
   );
 }

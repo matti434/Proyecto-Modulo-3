@@ -1,104 +1,85 @@
-import { LIMITES } from "../Utils/ValidacionesForm";
-
-const L = LIMITES.pedido;
+const ESTADOS_PEDIDO = ["pendiente", "procesando", "enviado", "entregado", "cancelado"];
 
 /**
- * View pura para la sección de Pedidos.
- * Límites de caracteres solo desde ValidacionesForm (LIMITES).
+ * Vista de pedidos desde la API.
+ * Muestra lista de pedidos y permite actualizar el estado.
  */
 export const AdminPedidosView = ({
   pedidos,
-  pedidoActual,
-  modoPedido,
-  errores = {},
-  onPedidoCampoChange,
-  onGuardarPedido,
-  onEditarPedido,
-  onEliminarPedido,
+  pedidosCargando = false,
+  onActualizarEstadoPedido,
 }) => {
+  const formatFecha = (fecha) => {
+    if (!fecha) return "-";
+    const d = new Date(fecha);
+    return isNaN(d.getTime()) ? "-" : d.toLocaleDateString("es-AR", { dateStyle: "short" });
+  };
+
+  const usuarioLabel = (pedido) => {
+    const u = pedido.usuario;
+    if (!u) return "-";
+    if (typeof u === "object") return u.nombreDeUsuario || u.email || u._id || "-";
+    return String(u);
+  };
+
+  if (pedidosCargando) {
+    return (
+      <div className="contenedor-tabla">
+        <h2>Gestión de Pedidos</h2>
+        <p className="cargando">Cargando pedidos...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="contenedor-tabla">
       <h2>Gestión de Pedidos</h2>
-
-      <form
-        className="form-comentario"
-        noValidate
-        onSubmit={(e) => { e.preventDefault(); onGuardarPedido(); }}
-      >
-        <div className="campo-formulario">
-          <label htmlFor="titulo-pedido" className="visually-hidden">Título </label>
-          <input
-            id="titulo-pedido"
-            type="text"
-            placeholder={`Título del pedido (máx. ${L.titulo} caracteres)`}
-            className={`input-textarea placeholder-blanco ${errores.titulo ? "input-invalido" : ""}`}
-            value={pedidoActual.titulo}
-            onChange={(e) => onPedidoCampoChange("titulo", e.target.value.slice(0, L.titulo))}
-            maxLength={L.titulo}
-            aria-invalid={!!errores.titulo}
-          />
-          {errores.titulo && (
-            <span className="mensaje-error-formulario" role="alert">{errores.titulo}</span>
-          )}
-        </div>
-        <div className="campo-formulario">
-          <label htmlFor="desc-pedido" className="visually-hidden">Descripción </label>
-          <textarea
-            id="desc-pedido"
-            placeholder={`Descripción del pedido (máx. ${L.descripcion} caracteres)`}
-            className={`input-textarea placeholder-blanco ${errores.descripcion ? "input-invalido" : ""}`}
-            value={pedidoActual.descripcion}
-            onChange={(e) => onPedidoCampoChange("descripcion", e.target.value.slice(0, L.descripcion))}
-            maxLength={L.descripcion}
-            aria-invalid={!!errores.descripcion}
-          />
-          {errores.descripcion && (
-            <span className="mensaje-error-formulario" role="alert">{errores.descripcion}</span>
-          )}
-        </div>
-
-        <button className="boton-agregar" type="submit">
-          {modoPedido === "agregar" ? "Crear pedido" : "Guardar cambios"}
-        </button>
-      </form>
+      <p className="texto-ayuda mb-3">
+        Los pedidos se crean desde el carrito en el checkout. Aquí puedes ver el listado y actualizar el estado.
+      </p>
 
       <div className="tabla-responsive">
         <table className="tabla-administracion">
           <thead>
             <tr>
-              <th>Título</th>
-              <th>Descripción</th>
+              <th>Id</th>
+              <th>Usuario</th>
+              <th>Total</th>
+              <th>Estado</th>
+              <th>Fecha</th>
               <th>Acciones</th>
             </tr>
           </thead>
-
           <tbody>
             {pedidos.map((p) => (
-              <tr key={p.id}>
-                <td data-label="Titulo">{p.titulo}</td>
-                <td data-label="Descripción">{p.descripcion}</td>
+              <tr key={p._id || p.id}>
+                <td data-label="Id">{(p._id || p.id || "").toString().slice(-8)}</td>
+                <td data-label="Usuario">{usuarioLabel(p)}</td>
+                <td data-label="Total">
+                  {typeof p.total === "number" ? `$${p.total.toLocaleString("es-AR")}` : p.total ?? "-"}
+                </td>
+                <td data-label="Estado">{p.estado ?? "pendiente"}</td>
+                <td data-label="Fecha">{formatFecha(p.createdAt)}</td>
                 <td data-label="Acciones">
-                  <div className="acciones">
-                    <button
-                      className="boton-editar"
-                      onClick={() => onEditarPedido(p)}
-                    >
-                      ✏️
-                    </button>
-                    <button
-                      className="boton-eliminar"
-                      onClick={() => onEliminarPedido(p.id)}
-                    >
-                      🗑️
-                    </button>
-                  </div>
+                  <select
+                    className="select-estado-pedido"
+                    value={p.estado || "pendiente"}
+                    onChange={(e) => onActualizarEstadoPedido?.(p._id || p.id, e.target.value)}
+                    aria-label="Cambiar estado del pedido"
+                  >
+                    {ESTADOS_PEDIDO.map((est) => (
+                      <option key={est} value={est}>
+                        {est}
+                      </option>
+                    ))}
+                  </select>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
         {pedidos.length === 0 && (
-          <div className="sin-datos">No hay pedidos creados</div>
+          <div className="sin-datos">No hay pedidos. Los pedidos aparecen cuando un usuario finaliza una compra desde el carrito.</div>
         )}
       </div>
     </div>

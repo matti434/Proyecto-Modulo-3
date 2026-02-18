@@ -1,9 +1,10 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { useUser } from "../Componentes/Context/ContextoUsuario";
 import { useProductos } from "../Componentes/Context/ContextoProducto";
+import { pedidosApi } from "../Services/Api";
 import toast from "react-hot-toast";
 import { confirmarAccion } from "../Componentes/Utils/confirmacion";
-import { productoSchema, pedidoSchema, LIMITES } from "../Componentes/Utils/ValidacionesForm";
+import { productoSchema, LIMITES } from "../Componentes/Utils/ValidacionesForm";
 
 /** Convierte errores de Zod a { campo: mensaje } para los formularios. */
 function erroresZodAObjeto(errorZod) {
@@ -60,13 +61,10 @@ export const useAdminViewModel = () => {
   const [modoEdicion, setModoEdicion] = useState(false);
   const [notaEditando, setNotaEditando] = useState(null);
 
-  // Estado para pedidos
+  // Estado para pedidos (desde API)
   const [pedidos, setPedidos] = useState([]);
-  const [pedidoActual, setPedidoActual] = useState({
-    id: null,
-    titulo: "",
-    descripcion: "",
-  });
+  const [pedidosCargando, setPedidosCargando] = useState(false);
+  const [pedidoActual, setPedidoActual] = useState({ id: null, titulo: "", descripcion: "" });
   const [modoPedido, setModoPedido] = useState("agregar");
 
   // Estado para formulario de producto
@@ -95,6 +93,24 @@ export const useAdminViewModel = () => {
       cargarProductos();
     }
   }, [vistaActiva, cargarProductos]);
+
+  useEffect(() => {
+    if (vistaActiva === "pedidos" && esAdministrador) {
+      const cargarPedidos = async () => {
+        setPedidosCargando(true);
+        try {
+          const data = await pedidosApi.obtenerTodos();
+          setPedidos(Array.isArray(data) ? data : []);
+        } catch {
+          toast.error("Error al cargar pedidos");
+          setPedidos([]);
+        } finally {
+          setPedidosCargando(false);
+        }
+      };
+      cargarPedidos();
+    }
+  }, [vistaActiva, esAdministrador]);
 
   // Inicializar formulario al editar producto (trunca con LIMITES de ValidacionesForm)
   useEffect(() => {
@@ -372,54 +388,39 @@ export const useAdminViewModel = () => {
     setNuevoComentario("");
   }, []);
 
-  // Funciones de pedidos
-  const manejarGuardarPedido = useCallback(() => {
-    const resultado = pedidoSchema.safeParse(pedidoActual);
-    if (!resultado.success) {
-      setErroresPedido(erroresZodAObjeto(resultado.error));
-      return;
-    }
-    setErroresPedido({});
-    if (modoPedido === "agregar") {
-      setPedidos([
-        ...pedidos,
-        {
-          id: Date.now(),
-          titulo: pedidoActual.titulo,
-          descripcion: pedidoActual.descripcion,
-        },
-      ]);
-    } else {
+  const manejarActualizarEstadoPedido = useCallback(async (pedidoId, estado) => {
+    try {
+      await pedidosApi.actualizarEstado(pedidoId, estado);
       setPedidos((prev) =>
-        prev.map((p) => (p.id === pedidoActual.id ? pedidoActual : p)),
+        prev.map((p) => (p._id === pedidoId || p.id === pedidoId ? { ...p, estado } : p))
       );
+      toast.success("Estado actualizado");
+    } catch (err) {
+      toast.error(err?.message || "Error al actualizar estado");
     }
-    setPedidoActual({ id: null, titulo: "", descripcion: "" });
-    setModoPedido("agregar");
-  }, [modoPedido, pedidoActual, pedidos]);
+  }, []);
+
+  const manejarGuardarPedido = useCallback(() => {
+    toast.info("Los pedidos se crean desde el carrito en el checkout.");
+  }, []);
 
   const manejarPedidoCampoChange = useCallback((campo, valor) => {
     setPedidoActual((prev) => ({ ...prev, [campo]: valor }));
-    setErroresPedido((prev) => {
-      const next = { ...prev };
-      delete next[campo];
-      return next;
-    });
+    setErroresPedido((prev) => ({ ...prev, [campo]: undefined }));
   }, []);
 
   const manejarEditarPedido = useCallback((pedido) => {
-    const D = LIMITES.pedido;
     setPedidoActual({
-      ...pedido,
-      titulo: (pedido.titulo || "").slice(0, D.titulo),
-      descripcion: (pedido.descripcion || "").slice(0, D.descripcion),
+      id: pedido._id || pedido.id,
+      titulo: pedido.usuario?.nombreDeUsuario || pedido.usuario?.email || "",
+      descripcion: (pedido.estado || "").slice(0, 200),
     });
     setModoPedido("editar");
     setErroresPedido({});
   }, []);
 
-  const manejarEliminarPedido = useCallback((id) => {
-    setPedidos((prev) => prev.filter((x) => x.id !== id));
+  const manejarEliminarPedido = useCallback(() => {
+    toast.info("Eliminar pedidos no está disponible desde el panel.");
   }, []);
 
   // ========== RETORNO ==========
@@ -437,6 +438,7 @@ export const useAdminViewModel = () => {
     mostrarFormProducto,
     modoFormularioProducto,
     pedidos,
+    pedidosCargando,
     pedidoActual,
     modoPedido,
 
@@ -487,5 +489,6 @@ export const useAdminViewModel = () => {
     onGuardarPedido: manejarGuardarPedido,
     onEditarPedido: manejarEditarPedido,
     onEliminarPedido: manejarEliminarPedido,
+    onActualizarEstadoPedido: manejarActualizarEstadoPedido,
   };
 };
