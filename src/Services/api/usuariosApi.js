@@ -1,6 +1,6 @@
 import { apiGet, apiPost, apiPut, apiDelete } from './apiClient';
 
-export const usuarioApi = {
+export const usuariosApi = {
     
     obtenerTodos: async () => {
       return await apiGet('/usuarios');
