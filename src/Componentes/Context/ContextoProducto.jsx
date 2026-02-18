@@ -5,7 +5,7 @@ import {
   useEffect,
   useCallback,
 } from "react";
-import { productoService } from "../../Services";
+import { productosApi } from "../../Services/Api";
 
 const ContextoProducto = createContext();
 
@@ -96,16 +96,17 @@ export const ProveedorProductos = ({ children }) => {
     stock: "",
   });
 
-  const cargarProductos = useCallback(() => {
+  const cargarProductos = useCallback(async () => {
     try {
       setCargando(true);
       setError(null);
 
-      const productosData = productoService.obtenerTodos();
-      const datos = productosData.map(p => p.toJSON ? p.toJSON() : p);
-      setProductos(datos);
-    } catch {
-      setError("Error al cargar los productos desde LocalStorage");
+      const data = await productosApi.obtenerTodos();
+      const lista = Array.isArray(data) ? data : data?.productos ?? data?.data ?? [];
+      setProductos(lista);
+    } catch (err) {
+      setError(err?.message || "Error al cargar los productos. Verifica que el backend esté disponible.");
+      setProductos([]);
     } finally {
       setCargando(false);
     }
@@ -217,64 +218,72 @@ export const ProveedorProductos = ({ children }) => {
     [productos]
   );
 
-  const agregarProducto = useCallback((producto) => {
-    const respuesta = productoService.crear(producto);
-    if (respuesta.exito) {
-      const productoJSON = respuesta.producto.toJSON ? respuesta.producto.toJSON() : respuesta.producto;
-      setProductos((prev) => [...prev, productoJSON]);
+  const agregarProducto = useCallback(async (producto) => {
+    try {
+      const res = await productosApi.crear(producto);
+      if (res.exito && res.producto) {
+        const p = res.producto;
+        setProductos((prev) => [...prev, p]);
+        return { exito: true, producto: p };
+      }
+      return { exito: false, mensaje: res.mensaje || "Error al crear producto" };
+    } catch (err) {
+      return { exito: false, mensaje: err?.message || "Error al crear producto" };
     }
-    return respuesta;
   }, []);
 
-  const editarProducto = useCallback((id, datosActualizados) => {
-    const respuesta = productoService.actualizar(id, datosActualizados);
-    if (respuesta.exito) {
-      const productoJSON = respuesta.producto.toJSON ? respuesta.producto.toJSON() : respuesta.producto;
-      setProductos((prev) =>
-        prev.map((p) => (p.id === id ? productoJSON : p))
-      );
+  const editarProducto = useCallback(async (id, datosActualizados) => {
+    try {
+      const res = await productosApi.actualizar(id, datosActualizados);
+      if (res.exito && res.producto) {
+        const p = res.producto;
+        setProductos((prev) =>
+          prev.map((item) => (item.id === id || item._id === id ? p : item))
+        );
+        return { exito: true, producto: p };
+      }
+      return { exito: false, mensaje: res.mensaje || "Error al actualizar" };
+    } catch (err) {
+      return { exito: false, mensaje: err?.message || "Error al actualizar producto" };
     }
-    return respuesta;
   }, []);
 
-  const eliminarProducto = useCallback((id) => {
-    const respuesta = productoService.eliminar(id);
-    if (respuesta.exito) {
-      setProductos((prev) => prev.filter((p) => p.id !== id));
+  const eliminarProducto = useCallback(async (id) => {
+    try {
+      const res = await productosApi.eliminar(id);
+      if (res.exito) {
+        setProductos((prev) => prev.filter((p) => p.id !== id && p._id !== id));
+        return { exito: true };
+      }
+      return { exito: false, mensaje: res.mensaje || "Error al eliminar" };
+    } catch (err) {
+      return { exito: false, mensaje: err?.message || "Error al eliminar producto" };
     }
-    return respuesta;
   }, []);
 
   const obtenerProductoPorId = useCallback((id) => {
-    const producto = productoService.obtenerPorId(id);
-    return producto ? (producto.toJSON ? producto.toJSON() : producto) : null;
-  }, []);
+    return productos.find((p) => p.id === id || p._id === id) ?? null;
+  }, [productos]);
 
   const obtenerProductosDestacados = useCallback(() => {
-    const productosDestacados = productoService.obtenerDestacados();
-    return productosDestacados.map(p => p.toJSON ? p.toJSON() : p);
-  }, []);
+    return productos.filter((p) => p.destacado);
+  }, [productos]);
 
   const obtenerProductosConStock = useCallback(() => {
-    const productosConStock = productoService.obtenerConStock();
-    return productosConStock.map(p => p.toJSON ? p.toJSON() : p);
-  }, []);
+    return productos.filter((p) => p.stock);
+  }, [productos]);
 
   const obtenerProductosRecientes = useCallback((limite = 5) => {
-    const productosRecientes = productoService.obtenerRecientes(limite);
-    return productosRecientes.map(p => p.toJSON ? p.toJSON() : p);
-  }, []);
+    return [...productos]
+      .sort((a, b) => new Date(b.fechaCreacion || b.createdAt || 0) - new Date(a.fechaCreacion || a.createdAt || 0))
+      .slice(0, limite);
+  }, [productos]);
 
-  const actualizarStockProducto = useCallback((id, tieneStock) => {
-    const respuesta = productoService.actualizarStock(id, tieneStock);
-    if (respuesta.exito) {
-      const productoJSON = respuesta.producto.toJSON ? respuesta.producto.toJSON() : respuesta.producto;
-      setProductos((prev) =>
-        prev.map((p) => (p.id === id ? productoJSON : p))
-      );
-    }
-    return respuesta;
-  }, []);
+  const actualizarStockProducto = useCallback(async (id, tieneStock) => {
+    const product = productos.find((p) => p.id === id || p._id === id);
+    if (!product) return { exito: false, mensaje: "Producto no encontrado" };
+    return editarProducto(id, { ...product, stock: tieneStock });
+  }, [productos, editarProducto]);
 
   // Productos filtrados para compatibilidad con componentes existentes
   // La lógica de filtrado también está disponible en useProductosViewModel
