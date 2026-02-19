@@ -116,7 +116,7 @@ export const useAdminViewModel = () => {
   useEffect(() => {
     const limites = LIMITES.producto;
     if (modoFormularioProducto === "editar" && productoEditando) {
-      const s = (val, max) => (val || "").slice(0, max);
+      const s = (val, max) => String(val ?? "").slice(0, max);
       setDatosFormularioProducto({
         nombre: productoEditando.nombre || "",
         precio:

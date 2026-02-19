@@ -32,6 +32,7 @@ export const AdminPanelView = ({
   mostrarFormProducto,
   modoFormularioProducto,
   pedidos,
+  pedidosCargando,
   pedidoActual,
   modoPedido,
   // Estado del formulario de producto
@@ -183,7 +184,7 @@ export const AdminPanelView = ({
         />
       )}
 
-      {vistaActiva === "mapa" && <MapaUsuarios />}
+      {vistaActiva === "mapa" && <MapaUsuarios usuarios={usuarios} />}
 
       
       {usuarioEditando && (

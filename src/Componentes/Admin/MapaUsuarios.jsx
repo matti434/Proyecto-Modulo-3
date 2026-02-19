@@ -12,9 +12,10 @@ L.Icon.Default.mergeOptions({
   shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
 });
 
-const MapaUsuarios = () => {
+const MapaUsuarios = ({ usuarios: usuariosProp }) => {
   const [mapaListo, setMapaListo] = useState(false);
-  const usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+  const usuariosLocal = JSON.parse(localStorage.getItem("usuarios")) || [];
+  const usuarios = Array.isArray(usuariosProp) ? usuariosProp : usuariosLocal;
 
   const usuariosConCoordenadas = usuarios
     .map(user => {
