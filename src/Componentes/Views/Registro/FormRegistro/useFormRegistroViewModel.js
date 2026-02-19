@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { registroSchema } from '../../../Utils/ValidacionesForm';
 
-export const useFormRegistroViewModel = ({ onSubmit, onClose }) => {
+export const useFormRegistroViewModel = ({ onSubmit, onClose, onAbrirLogin }) => {
   const [mostrarContrasena, setMostrarContrasena] = useState(false);
   const [mostrarConfirmar, setMostrarConfirmar] = useState(false);
   const [estaEnviando, setEstaEnviando] = useState(false);
@@ -100,5 +100,6 @@ export const useFormRegistroViewModel = ({ onSubmit, onClose }) => {
     
     // Callbacks externos
     onClose,
+    onAbrirLogin,
   };
 };

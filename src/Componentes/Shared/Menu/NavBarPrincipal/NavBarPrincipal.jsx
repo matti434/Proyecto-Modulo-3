@@ -5,25 +5,18 @@ import { useTranslation } from "react-i18next";
 
 import { useCarrito } from "../../../Context/ContextoCarrito";
 import { useUser } from "../../../Context/ContextoUsuario";
+import MenuUsuario from "./menuUsuario/MenuUsuario";
 
 import "./NavBarPrincipal.css";
 
 export const NavBarPrincipal = ({ onAbrirRegistro, onAbrirLogin }) => {
-  const { usuarioActual, logout } = useUser();
+  const { usuarioActual } = useUser();
   const { itemsCarrito } = useCarrito();
   const { t, i18n } = useTranslation();
 
   const cambiarIdioma = (lng) => {
     i18n.changeLanguage(lng);
     localStorage.setItem("language", lng);
-  };
-
-  const obtenerTextoIdiomaActual = () => {
-    return i18n.language === "es" ? "ES" : "EN";
-  };
-
-  const manejarCerrarSesion = () => {
-    logout();
   };
 
   return (
@@ -106,14 +99,9 @@ export const NavBarPrincipal = ({ onAbrirRegistro, onAbrirLogin }) => {
               <FaGlobe className="lang-icon" />
             </div>
 
-            {/* Botones de usuario */}
+            {/* Botones de usuario: menú con perfil o login/registro */}
             {usuarioActual ? (
-              <div className="user-actions">
-                <button className="user-btn" onClick={manejarCerrarSesion}>
-                  <FaUser className="me-2" />
-                  <span className="d-none d-md-inline">{t("logout")}</span>
-                </button>
-              </div>
+              <MenuUsuario />
             ) : (
               <div className="auth-buttons">
                 <button className="login-btn" onClick={onAbrirLogin}>
@@ -129,25 +117,18 @@ export const NavBarPrincipal = ({ onAbrirRegistro, onAbrirLogin }) => {
 
             {/* Botones móviles (solo aparecen en móvil) */}
             {usuarioActual ? (
-              <div className="user-actions mobile d-lg-none">
-                <Link
-                  to="/carrito"
-                  className="carrito-btn-mobile"
-                  title="Carrito"
-                >
-                  <FaShoppingCart size={20} />
-                  {itemsCarrito.length > 0 && (
-                    <span className="carrito-badge-mobile">
-                      {itemsCarrito.length}
-                    </span>
-                  )}
-                </Link>
-
-                <button className="user-btn" onClick={manejarCerrarSesion}>
-                  <FaUser className="me-2" />
-                  <span>{t("logout")}</span>
-                </button>
-              </div>
+              <Link
+                to="/carrito"
+                className="carrito-btn-mobile d-lg-none"
+                title="Carrito"
+              >
+                <FaShoppingCart size={20} />
+                {itemsCarrito.length > 0 && (
+                  <span className="carrito-badge-mobile">
+                    {itemsCarrito.length}
+                  </span>
+                )}
+              </Link>
             ) : (
               <div className="auth-buttons mobile d-lg-none">
                 <button className="login-btn" onClick={onAbrirLogin}>

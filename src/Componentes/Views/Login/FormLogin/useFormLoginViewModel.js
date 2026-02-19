@@ -103,6 +103,7 @@ export const useFormLoginViewModel = ({ onSubmit, onClose, onAbrirRegistro }) =>
     limpiarErrorGeneral,
     manejarClickRegistro,
     manejarClickRecuperarPassword,
+    onRecuperarPassword: manejarClickRecuperarPassword,
 
     // Callbacks externos
     onClose,

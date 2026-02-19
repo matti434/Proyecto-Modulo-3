@@ -34,6 +34,7 @@ const FormRegistroView = ({
 
   // Callbacks
   onClose,
+  onAbrirLogin,
 }) => {
   const { t } = useTranslation();
 
@@ -246,6 +247,20 @@ const FormRegistroView = ({
           </Button>
         </Col>
       </Row>
+
+      {onAbrirLogin && (
+        <div className="text-center mt-3 pt-3 border-top border-secondary">
+          <Button
+            variant="outline-warning"
+            type="button"
+            onClick={onAbrirLogin}
+            className="w-75 py-1 boton-registro"
+            disabled={estaEnviando}
+          >
+            {t("alreadyHaveAccount")}
+          </Button>
+        </div>
+      )}
     </Form>
   );
 };

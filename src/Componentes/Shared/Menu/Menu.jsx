@@ -51,7 +51,7 @@ const Menu = () => {
         />
       )}
       {modalAbierto === "registro" && (
-        <Registro onClose={onClose} />
+        <Registro onClose={onClose} onAbrirLogin={abrirLogin} />
       )}
     </>
   );
