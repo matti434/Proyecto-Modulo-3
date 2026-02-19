@@ -71,6 +71,7 @@ export const AdminPanelView = ({
   onGuardarPedido,
   onEditarPedido,
   onEliminarPedido,
+  onActualizarEstadoPedido,
 }) => {
   
   if (!esAdministrador) {
