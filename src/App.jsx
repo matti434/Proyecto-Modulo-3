@@ -19,8 +19,6 @@ import Pagina404 from "./Componentes/Views/Pagina404/Pagina404";
 import CarritoContainer from "./Componentes/Views/Productos/componenteCarrito/CarritoContainer";
 import Categorias from "./Componentes/Views/Productos/ComponenteProducto/Categorias/Categorias";
 import DetalleProducto from "./Componentes/Views/Productos/ComponenteProducto/PaginaProductos/Detalle-Producto/DetalleProducto";
-import CarritoContainer from "./Componentes/Views/Productos/componenteCarrito/CarritoContainer";
-import Footer from "./Componentes/Shared/Footer/Footer";
 import RecuperarPassword from "./Componentes/Views/Login/RecuperarPassword";
 import PaginaProductos from "./Componentes/Views/Productos/ComponenteProducto/PaginaProductos/PaginaProductos";
 import Ofertas from "./Componentes/Views/Productos/Ofertas/Ofertas";
