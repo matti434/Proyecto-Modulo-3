@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Form, Button, Alert } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
+import "./RecuperarPassword.css";
 
 const API_URL = import.meta.env.VITE_API_URL || "";
 
@@ -34,10 +35,21 @@ export default function RecuperarPassword() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: email.trim() }),
       });
-      const data = await res.json().catch(() => ({}));
+      const contentType = res.headers.get("content-type");
+      const data =
+        contentType && contentType.includes("application/json")
+          ? await res.json().catch(() => ({}))
+          : {};
       if (!res.ok) {
         setTipoMensaje("danger");
-        setMensaje(data?.message || "Error al enviar el código. Intenta de nuevo.");
+        if (res.status === 500) {
+          setMensaje(
+            data?.message ||
+              "Error en el servidor al enviar el código. Revisa que el backend esté corriendo y configurado (env, email). Intenta más tarde."
+          );
+        } else {
+          setMensaje(data?.message || "Error al enviar el código. Intenta de nuevo.");
+        }
         return;
       }
       setTipoMensaje("info");
@@ -99,7 +111,7 @@ export default function RecuperarPassword() {
   };
 
   return (
-    <div className="container py-5">
+    <div className="container py-5 pagina-recuperar-password">
       <div className="row justify-content-center">
         <div className="col-md-6">
           <h2 className="mb-4">{t("forgotPassword")}</h2>
