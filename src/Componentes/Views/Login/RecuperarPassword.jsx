@@ -111,7 +111,7 @@ export default function RecuperarPassword() {
   };
 
   return (
-    <div className="container py-5 pagina-recuperar-password">
+    <div className="container py-5 pagina-recuperar-password mt-5">
       <div className="row justify-content-center">
         <div className="col-md-6">
           <h2 className="mb-4">{t("forgotPassword")}</h2>
