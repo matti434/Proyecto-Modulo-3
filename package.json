@@ -17,6 +17,7 @@
     "aos": "^2.3.4",
     "bootstrap": "^5.3.8",
     "bootstrap-icons": "^1.13.1",
+    "cors": "^2.8.6",
     "framer-motion": "^12.23.24",
     "i18next": "^25.6.3",
     "leaflet": "^1.9.4",
