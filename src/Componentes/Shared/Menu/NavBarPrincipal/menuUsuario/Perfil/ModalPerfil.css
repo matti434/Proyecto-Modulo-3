@@ -82,7 +82,7 @@
 
 .info-value {
   font-size: 1rem;
-  color: var(--color-crema);
+  color: #1a1a1a;
   font-weight: 500;
 }
 
@@ -92,23 +92,31 @@
   text-transform: uppercase;
 }
 
-.form-control {
-  background: var(--color-crema);
-  border: 1px solid var(--color-metal);
-  color: var(--color-oscuro);
+.modal-perfil .form-control,
+.modal-confirmacion .form-control {
+  background: #f8f8f8;
+  border: 1px solid #d0d0d0;
+  color: #1a1a1a;
   border-radius: 6px;
   padding: 10px 12px;
 }
 
-.form-control:focus {
-  background: var(--color-crema);
+.modal-perfil .input-perfil {
+  color: #1a1a1a;
+  background: #f8f8f8;
+}
+
+.modal-perfil .form-control:focus,
+.modal-confirmacion .form-control:focus {
+  background: #f8f8f8;
   border-color: var(--color-dorado);
-  color: var(--color-oscuro);
+  color: #1a1a1a;
   box-shadow: 0 0 0 3px rgba(200, 155, 43, 0.2);
 }
 
-.form-label {
-  color: var(--color-crema);
+.modal-perfil .form-label,
+.modal-confirmacion .form-label {
+  color: #2c2c2c;
   font-weight: 600;
   margin-bottom: 8px;
 }
@@ -196,10 +204,11 @@
 }
 
 /* Alertas */
-.alert-eliminacion {
+.modal-perfil .alert-eliminacion,
+.modal-confirmacion .alert-eliminacion {
   background: rgba(107, 0, 0, 0.1);
   border: 1px solid var(--color-rojo);
-  color: var(--color-crema);
+  color: #2c2c2c;
   border-radius: 8px;
 }
 
@@ -276,7 +285,7 @@
 .alert-info-admin {
   background: rgba(200, 155, 43, 0.1);
   border: 1px solid var(--color-dorado);
-  color: var(--color-crema);
+  color: #2c2c2c;
   border-radius: 8px;
   margin-top: 20px;
 }
