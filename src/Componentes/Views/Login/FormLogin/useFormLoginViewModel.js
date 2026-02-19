@@ -26,10 +26,8 @@ export const useFormLoginViewModel = ({ onSubmit, onClose, onAbrirRegistro }) =>
   const contrasena = watch("contrasena");
 
   useEffect(() => {
-    if (errorGeneral) {
-      setErrorGeneral(null);
-    }
-  }, [credencial, contrasena, errorGeneral]);
+    setErrorGeneral(null);
+  }, [credencial, contrasena]);
 
   const procesarEnvio = useCallback(async (data) => {
     setEstaEnviando(true);

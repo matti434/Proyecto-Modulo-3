@@ -157,16 +157,6 @@ export const useLoginViewModel = ({ onClose }) => {
                       Ir al Panel
                     </button>
                   </div>
-                  
-                  <div style={{
-                    marginTop: '1rem',
-                    fontSize: '0.8rem',
-                    color: '#5f5f5f',
-                    textAlign: 'right',
-                    fontStyle: 'italic'
-                  }}>
-                    Este mensaje se cerrará en 10 segundos
-                  </div>
                 </div>
               ),
               {

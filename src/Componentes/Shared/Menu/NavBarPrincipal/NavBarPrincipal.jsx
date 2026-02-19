@@ -1,9 +1,11 @@
 import { Navbar, Nav, Container } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { FaGlobe, FaUser, FaUserPlus, FaShoppingCart } from "react-icons/fa";
-import { useUser } from "../../../Context/ContextoUsuario";
-import { useCarrito } from "../../../Context/ContextoCarrito";
 import { useTranslation } from "react-i18next";
+
+import { useCarrito } from "../../../Context/ContextoCarrito";
+import { useUser } from "../../../Context/ContextoUsuario";
+
 import "./NavBarPrincipal.css";
 
 export const NavBarPrincipal = ({ onAbrirRegistro, onAbrirLogin }) => {

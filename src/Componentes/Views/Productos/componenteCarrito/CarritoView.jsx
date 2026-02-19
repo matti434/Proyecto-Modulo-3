@@ -1,14 +1,13 @@
-import React from "react";
 import {
-  Container,
-  Row,
-  Col,
-  Card,
   Button,
-  ListGroup,
+  Card,
+  Col,
+  Container,
   Form,
+  ListGroup,
+  Row,
 } from "react-bootstrap";
-import "bootstrap/dist/css/bootstrap.min.css";
+
 import "../../../../estilos/variables.css";
 import "./Carrito.css";
 

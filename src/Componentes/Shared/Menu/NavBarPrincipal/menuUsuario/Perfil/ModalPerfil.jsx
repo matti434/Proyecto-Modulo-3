@@ -11,12 +11,12 @@ import {
   FaCrown 
 } from "react-icons/fa";
 import toast from "react-hot-toast";
-import { usuarioService } from "../../../../../../Services";
+import { usuariosApi } from "../../../../../../Services/Api";
 import "../../../../../../estilos/variables.css";
 import "./ModalPerfil.css";
 
 const ModalPerfil = ({ mostrar, onCerrar }) => {
-  const { usuarioActual, logout } = useUser();
+  const { usuarioActual, logout, editarUsuario } = useUser();
   const [editando, setEditando] = useState(false);
   const [cargando, setCargando] = useState(false);
   const [mostrarConfirmacion, setMostrarConfirmacion] = useState(false);
@@ -54,25 +54,10 @@ const ModalPerfil = ({ mostrar, onCerrar }) => {
 
     setCargando(true);
     try {
-      const respuesta = usuarioService.actualizar(usuarioActual.id, {
+      await editarUsuario(usuarioActual.id, {
         nombreDeUsuario: formData.nombreDeUsuario
       });
-
-      if (respuesta.exito) {
-        toast.success("Nombre de usuario actualizado correctamente");
-        setEditando(false);
-
-        // Actualizamos localStorage
-        const usuarioJSON = respuesta.usuario.toJSON ? respuesta.usuario.toJSON() : respuesta.usuario;
-        localStorage.setItem("ultimoUsuario", JSON.stringify(usuarioJSON));
-
-        // Actualizamos reload opcional para reflejar cambios
-        setTimeout(() => {
-          window.location.reload();
-        }, 500);
-      } else {
-        throw new Error(respuesta.mensaje || "Error al actualizar usuario");
-      }
+      setEditando(false);
     } catch {
       toast.error("Error al actualizar el nombre de usuario");
     } finally {
@@ -80,35 +65,29 @@ const ModalPerfil = ({ mostrar, onCerrar }) => {
     }
   };
 
-  const manejarEliminarCuenta = () => {
+  const manejarEliminarCuenta = async () => {
     if (!contrasenaConfirmacion) {
       toast.error("Por favor ingresa tu contraseña para confirmar");
       return;
     }
 
-    if (contrasenaConfirmacion !== usuarioActual.contrasena) {
+    if (usuarioActual.contrasena && contrasenaConfirmacion !== usuarioActual.contrasena) {
       toast.error("Contraseña incorrecta");
       return;
     }
 
     setCargando(true);
     try {
-      const respuesta = usuarioService.eliminar(usuarioActual.id);
-
-      if (respuesta.exito) {
-        localStorage.removeItem("ultimoUsuario");
-        toast.success("Cuenta eliminada correctamente");
-
-        setTimeout(() => {
-          logout();
-          onCerrar();
-          window.location.href = "/";
-        }, 1000);
-      } else {
-        throw new Error(respuesta.mensaje || "Error al eliminar usuario");
-      }
-    } catch {
-      toast.error("Error al eliminar la cuenta");
+      await usuariosApi.eliminar(usuarioActual.id);
+      localStorage.removeItem("ultimoUsuario");
+      toast.success("Cuenta eliminada correctamente");
+      setTimeout(() => {
+        logout();
+        onCerrar();
+        window.location.href = "/";
+      }, 1000);
+    } catch (err) {
+      toast.error(err?.message || "Error al eliminar la cuenta");
     } finally {
       setCargando(false);
       setMostrarConfirmacion(false);
