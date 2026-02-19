@@ -11,10 +11,11 @@
 
 .titulo-carrito-pagina {
   margin-top: 4rem;
+  color: #0c0c0c !important ;
 }
 
 .bg-oscuro {
-  background-color: #f0f0f0 !important;
+  background-color: #0d0d0d !important;
   color: #2c2c2c !important;
 }
 
@@ -162,7 +163,9 @@
   background-color: transparent;
 }
 
-.codigo-descuento-label {  color: #000;}
+.codigo-descuento-label {  
+  color: #0c0c0c !important ; 
+} 
 
 @media (max-width: 768px) {
   .carrito-container {

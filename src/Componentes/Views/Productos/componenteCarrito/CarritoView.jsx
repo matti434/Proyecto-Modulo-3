@@ -210,7 +210,7 @@ const CarritoView = ({
 
               <div className="mb-3">
                 <Form.Label className="mb-2 codigo-descuento-label">
-                  <i className="bi bi-ticket-perforated me-2"></i>Código de
+                  <i className="bi bi-ticket-perforated me-2 "></i>Código de
                   descuento
                 </Form.Label>
 
