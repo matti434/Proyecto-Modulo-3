@@ -9,6 +9,10 @@
   letter-spacing: 1px;
 }
 
+.titulo-carrito-pagina {
+  margin-top: 4rem;
+}
+
 .bg-oscuro {
   background-color: #f0f0f0 !important;
   color: #2c2c2c !important;
@@ -157,6 +161,8 @@
   border-color: rgba(138, 138, 138, 0.2);
   background-color: transparent;
 }
+
+.codigo-descuento-label {  color: #000;}
 
 @media (max-width: 768px) {
   .carrito-container {

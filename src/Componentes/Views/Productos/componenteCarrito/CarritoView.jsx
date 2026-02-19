@@ -35,7 +35,7 @@ const CarritoView = ({
   if (estaVacio) {
     return (
       <Container className="carrito-container py-5">
-        <h1 className="text-center mb-4 titulo-carrito">
+        <h1 className="text-center mb-4 titulo-carrito titulo-carrito-pagina">
           <i className="bi bi-cart3 me-2"></i>Tu Carrito de Motos
         </h1>
 
@@ -60,7 +60,7 @@ const CarritoView = ({
 
   return (
     <Container className="carrito-container py-5">
-      <h1 className="text-center mb-4 titulo-carrito">
+      <h1 className="text-center mb-4 titulo-carrito titulo-carrito-pagina">
         <i className="bi bi-cart3 me-2"></i>Tu Carrito de Motos ({totalItems})
       </h1>
 
@@ -209,7 +209,7 @@ const CarritoView = ({
               </ListGroup>
 
               <div className="mb-3">
-                <Form.Label className="mb-2">
+                <Form.Label className="mb-2 codigo-descuento-label">
                   <i className="bi bi-ticket-perforated me-2"></i>Código de
                   descuento
                 </Form.Label>
