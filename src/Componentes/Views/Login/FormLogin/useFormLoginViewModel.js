@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { loginSchema } from '../../../Utils/ValidacionesForm';
+import { useNavigate } from 'react-router-dom';
 
 export const useFormLoginViewModel = ({ onSubmit, onClose, onAbrirRegistro }) => {
   const [mostrarContrasena, setMostrarContrasena] = useState(false);
@@ -71,6 +72,14 @@ export const useFormLoginViewModel = ({ onSubmit, onClose, onAbrirRegistro }) =>
     onAbrirRegistro?.();
   }, [reset, onAbrirRegistro]);
 
+  const navigate = useNavigate();
+
+  const manejarClickRecuperarPassword = useCallback((e) => {
+    e?.preventDefault?.();
+    onClose?.();
+    navigate('/recuperar-password');
+  }, [onClose, navigate]);
+
   return {
     // Estado del formulario
     mostrarContrasena,
@@ -78,22 +87,23 @@ export const useFormLoginViewModel = ({ onSubmit, onClose, onAbrirRegistro }) =>
     errorGeneral,
     isValid,
     isDirty,
-    
+
     // Valores observados
     credencial,
     contrasena,
-    
+
     // Funciones de react-hook-form
     register,
     handleSubmit: handleSubmit(procesarEnvio),
     errors,
-    
+
     // Funciones de UI
     toggleMostrarContrasena,
     limitarCaracteres,
     limpiarErrorGeneral,
     manejarClickRegistro,
-    
+    manejarClickRecuperarPassword,
+
     // Callbacks externos
     onClose,
   };

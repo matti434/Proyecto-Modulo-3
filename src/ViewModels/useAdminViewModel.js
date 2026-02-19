@@ -118,6 +118,28 @@ export const useAdminViewModel = () => {
     if (modoFormularioProducto === "editar" && productoEditando) {
       const s = (val, max) => (val || "").slice(0, max);
       setDatosFormularioProducto({
+        nombre: productoEditando.nombre || "",
+        precio:
+          productoEditando.precio !== null &&
+          productoEditando.precio !== undefined
+            ? String(productoEditando.precio)
+            : "",
+        descripcion: productoEditando.descripcion || "",
+        categoria: productoEditando.categoria || "",
+        marca: productoEditando.marca || "",
+        modelo: productoEditando.modelo || "",
+        año:
+          productoEditando.año !== null &&
+          productoEditando.año !== undefined
+            ? String(productoEditando.año)
+            : "",
+        kilometros:
+          productoEditando.kilometros !== null &&
+          productoEditando.kilometros !== undefined
+            ? String(productoEditando.kilometros)
+            : "",
+        ubicacion: productoEditando.ubicacion || "",
+        imagen: productoEditando.imagen || "",
         nombre: s(productoEditando.nombre, limites.nombre),
         precio: productoEditando.precio ?? "",
         descripcion: s(productoEditando.descripcion, limites.descripcion),
