@@ -53,8 +53,38 @@ const buildQuery = (params = {}) => {
   return qs ? `?${qs}` : '';
 };
 
+/** Sube imagen a Cloudinary vía POST /api/productos/upload (multipart/form-data, campo "imagen"). */
+export const subirImagenProducto = async (file) => {
+  const token = localStorage.getItem('token');
+  const formData = new FormData();
+  formData.append('imagen', file);
+
+  const headers = {};
+  if (token) headers.Authorization = `Bearer ${token}`;
+
+  const response = await fetch(`${API_URL}/productos/upload`, {
+    method: 'POST',
+    headers,
+    body: formData,
+  });
+
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    const mensaje =
+      data.mensaje ||
+      (response.status === 413 ? 'Archivo demasiado grande' : null) ||
+      (response.status === 401 ? 'Debes iniciar sesión' : null) ||
+      (response.status === 400 ? 'Formato de imagen no válido' : null) ||
+      'Error al subir la imagen';
+    throw new Error(mensaje);
+  }
+  return data;
+};
+
 export const productosApi = {
-  subirImagen,
+
+  subirImagen: subirImagenProducto,
+
 
   obtenerTodos: async (params) => {
     const query = buildQuery(params);
