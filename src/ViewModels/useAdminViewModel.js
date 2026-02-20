@@ -293,15 +293,6 @@ export const useAdminViewModel = () => {
     setErroresFormularioProducto({});
   }, []);
 
-  const manejarCambioCampoFormulario = useCallback((campo, valor) => {
-    setDatosFormularioProducto((prev) => ({ ...prev, [campo]: valor }));
-    setErroresFormularioProducto((prev) => {
-      const next = { ...prev };
-      delete next[campo];
-      return next;
-    });
-  }, []);
-
   const manejarArchivoSeleccionado = useCallback(
     async (file) => {
       setErrorUploadImagen("");
@@ -374,6 +365,15 @@ export const useAdminViewModel = () => {
       manejarCerrarFormularioProducto,
     ],
   );
+
+  const manejarCambioCampoFormulario = useCallback((campo, valor) => {
+    setDatosFormularioProducto((prev) => ({ ...prev, [campo]: valor }));
+    setErroresFormularioProducto((prev) => {
+      const next = { ...prev };
+      delete next[campo];
+      return next;
+    });
+  }, []);
 
   const manejarErrorImagen = useCallback((error) => {
     setErrorImagenProducto(error);
