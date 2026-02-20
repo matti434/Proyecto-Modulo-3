@@ -3,6 +3,29 @@
  * Centraliza código duplicado de CardProducto y DetalleProducto
  */
 
+/** Base URL del backend para rutas legacy de imagen */
+const BASE_URL_IMAGEN = import.meta.env.VITE_API_URL
+  ? new URL(import.meta.env.VITE_API_URL).origin
+  : "http://localhost:5000";
+
+/**
+ * Devuelve la URL lista para <img src>. Soporta:
+ * - URL completa (https://res.cloudinary.com/...): se usa tal cual.
+ * - Ruta legacy (/Galeria/..., /Productos/...): se concatena con base del backend.
+ * - Vacío/null/undefined: devuelve undefined para mostrar placeholder.
+ */
+export const getImagenProductoUrl = (imagen) => {
+  if (!imagen || typeof imagen !== "string") return undefined;
+  const trimmed = imagen.trim();
+  if (!trimmed) return undefined;
+  if (trimmed.startsWith("http://") || trimmed.startsWith("https://")) return trimmed;
+  if (trimmed.startsWith("/")) return `${BASE_URL_IMAGEN}${trimmed}`;
+  return trimmed;
+};
+
+/** URL de imagen placeholder cuando no hay imagen */
+export const IMAGEN_PLACEHOLDER = "/Productos/imgCard.jpg";
+
 /**
  * Crea un objeto de producto normalizado con valores por defecto
  * @param {Object} props - Props del producto
@@ -21,21 +44,21 @@ export const crearProductoData = ({
   destacado = false,
   stock = true,
   categoria = "",
-  nombre = ""
+  nombre = "",
 } = {}) => ({
   id: id || Date.now().toString(),
   marca,
   modelo,
   año,
   precio,
-  imagen: imagen || "/Productos/imgCard.jpg",
+  imagen: imagen || IMAGEN_PLACEHOLDER,
   kilometros,
   ubicacion,
   descripcion,
   destacado,
   stock,
   categoria,
-  nombre: nombre || `${marca} ${modelo}`.trim()
+  nombre: nombre || `${marca} ${modelo}`.trim(),
 });
 
 /**
@@ -63,8 +86,8 @@ export const validarStock = (producto) => {
  */
 export const formatearPrecio = (precioStr) => {
   if (!precioStr) return "0";
-  const numero = parseInt(String(precioStr).replace(/\D/g, ''));
-  return isNaN(numero) ? "0" : numero.toLocaleString('es-ES');
+  const numero = parseInt(String(precioStr).replace(/\D/g, ""));
+  return isNaN(numero) ? "0" : numero.toLocaleString("es-ES");
 };
 
 /**
@@ -74,8 +97,8 @@ export const formatearPrecio = (precioStr) => {
  */
 export const formatearKilometros = (kmStr) => {
   if (!kmStr) return "0 km";
-  const numero = parseInt(String(kmStr).replace(/\D/g, ''));
-  return isNaN(numero) ? "0 km" : numero.toLocaleString('es-ES') + ' km';
+  const numero = parseInt(String(kmStr).replace(/\D/g, ""));
+  return isNaN(numero) ? "0 km" : numero.toLocaleString("es-ES") + " km";
 };
 
 /**
@@ -86,7 +109,7 @@ export const formatearKilometros = (kmStr) => {
  */
 export const truncarTexto = (texto, maxLength = 75) => {
   if (!texto || texto.length <= maxLength) return texto;
-  return texto.substring(0, maxLength) + '...';
+  return texto.substring(0, maxLength) + "...";
 };
 
 /**
@@ -98,7 +121,7 @@ export const truncarTexto = (texto, maxLength = 75) => {
 export const acortarUbicacion = (ubicacionStr, maxLength = 20) => {
   if (!ubicacionStr) return "";
   if (ubicacionStr.length <= maxLength) return ubicacionStr;
-  return ubicacionStr.substring(0, maxLength) + '...';
+  return ubicacionStr.substring(0, maxLength) + "...";
 };
 
 /**
@@ -115,5 +138,5 @@ export const PRODUCTO_DEFAULT = {
   ubicacion: "Buenos Aires, AR",
   descripcion: "Moto en excelente estado, mantenimiento al día. Perfecta para ciudad y rutas cortas.",
   destacado: false,
-  stock: true
+  stock: true,
 };

@@ -149,7 +149,19 @@ export const productoSchema = z.object({
     errorMap: () => ({ message: "Seleccione una categoría válida" }),
   }),
 
-  imagen: z.string().min(1, "URL obligatoria").url("URL válida").max(P.imagen, `Máximo ${P.imagen} caracteres`),
+ imagen: z
+    .string()
+    .max(P.imagen, `Máximo ${P.imagen} caracteres`)
+    .refine(
+      (val) =>
+        !val ||
+        val.length === 0 ||
+        /^https?:\/\//.test(val) ||
+        val.startsWith("/"),
+      { message: "Debe ser una URL válida o dejar vacío si subes un archivo" }
+    )
+    .optional()
+    .or(z.literal("")),
 
   marca: z
     .string()

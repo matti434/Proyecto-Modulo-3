@@ -18,6 +18,7 @@ export const AdminFormularioView = ({
   onErrorImagen,
 }) => {
   const esEdicion = modo === "editar";
+  const urlVistaPrevia = urlImagenSubida || datosFormulario.imagen;
 
   return (
     <div className="superposicion-formulario">
