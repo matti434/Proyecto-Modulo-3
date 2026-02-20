@@ -736,7 +736,7 @@ button:disabled {
 .contenedor-formulario h3 {
   margin: 0 0 24px 0;
   font-size: 1.6rem;
-  color: #e8eaed !important;
+  color: #0a0a0a !important;
   font-weight: 700;
   letter-spacing: -0.3px;
 }
@@ -758,7 +758,7 @@ button:disabled {
 
 .campo-formulario label {
   font-weight: 600;
-  color: #e8eaed !important;
+  color: #0a0a0a !important;
   font-size: 0.95rem;
 }
 
@@ -784,7 +784,7 @@ button:disabled {
 .campo-formulario textarea:focus,
 .campo-formulario select:focus {
   outline: none;
-  border-color: #c89b2b;
+  border-color: #2f2f2e;
   box-shadow: 0 0 0 3px rgba(200, 155, 43, 0.15);
   background: #161b28 !important;
 }
