@@ -39,6 +39,8 @@ export const AdminPanelView = ({
   datosFormularioProducto,
   errorImagenProducto,
   enviandoFormularioProducto,
+  subiendoImagenProducto,
+  errorUploadImagen,
   erroresFormularioProducto,
   erroresPedido,
 
@@ -66,6 +68,7 @@ export const AdminPanelView = ({
   onCancelarFormularioProducto,
   onCambioCampoFormulario,
   onErrorImagen,
+  onArchivoSeleccionado,
   onPedidoActualChange,
   onPedidoCampoChange,
   onGuardarPedido,
@@ -202,11 +205,14 @@ export const AdminPanelView = ({
           datosFormulario={datosFormularioProducto}
           errorImagen={errorImagenProducto}
           enviando={enviandoFormularioProducto}
+          subiendoImagen={subiendoImagenProducto}
+          errorUploadImagen={errorUploadImagen}
           errores={erroresFormularioProducto}
           onGuardar={onGuardarProducto}
           onCancelar={onCancelarFormularioProducto}
           onCambioCampo={onCambioCampoFormulario}
           onErrorImagen={onErrorImagen}
+          onArchivoSeleccionado={onArchivoSeleccionado}
         />
       )}
     </div>

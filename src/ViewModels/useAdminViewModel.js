@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { useUser } from "../Componentes/Context/ContextoUsuario";
 import { useProductos } from "../Componentes/Context/ContextoProducto";
-import { pedidosApi } from "../Services/Api";
+import { pedidosApi, productosApi } from "../Services/Api";
 import toast from "react-hot-toast";
 import { confirmarAccion } from "../Componentes/Utils/confirmacion";
 import { productoSchema, LIMITES } from "../Componentes/Utils/ValidacionesForm";
@@ -84,6 +84,8 @@ export const useAdminViewModel = () => {
   });
   const [errorImagenProducto, setErrorImagenProducto] = useState(false);
   const [enviandoFormularioProducto, setEnviandoFormularioProducto] = useState(false);
+  const [subiendoImagenProducto, setSubiendoImagenProducto] = useState(false);
+  const [errorUploadImagen, setErrorUploadImagen] = useState("");
   const [erroresFormularioProducto, setErroresFormularioProducto] = useState({});
   const [erroresPedido, setErroresPedido] = useState({});
 
@@ -171,6 +173,7 @@ export const useAdminViewModel = () => {
       });
     }
     setErrorImagenProducto(false);
+    setErrorUploadImagen("");
     setErroresFormularioProducto({});
   }, [productoEditando, modoFormularioProducto]);
 
@@ -263,6 +266,7 @@ export const useAdminViewModel = () => {
       stock: true,
     });
     setErrorImagenProducto(false);
+    setErrorUploadImagen("");
     setErroresFormularioProducto({});
   }, []);
 
@@ -285,8 +289,38 @@ export const useAdminViewModel = () => {
       stock: true,
     });
     setErrorImagenProducto(false);
+    setErrorUploadImagen("");
     setErroresFormularioProducto({});
   }, []);
+
+  const manejarCambioCampoFormulario = useCallback((campo, valor) => {
+    setDatosFormularioProducto((prev) => ({ ...prev, [campo]: valor }));
+    setErroresFormularioProducto((prev) => {
+      const next = { ...prev };
+      delete next[campo];
+      return next;
+    });
+  }, []);
+
+  const manejarArchivoSeleccionado = useCallback(
+    async (file) => {
+      setErrorUploadImagen("");
+      setSubiendoImagenProducto(true);
+      try {
+        const data = await productosApi.subirImagen(file);
+        if (data.imagen) {
+          manejarCambioCampoFormulario("imagen", data.imagen);
+        }
+      } catch (err) {
+        const mensaje = err?.message || "Error al subir la imagen";
+        setErrorUploadImagen(mensaje);
+        toast.error(mensaje);
+      } finally {
+        setSubiendoImagenProducto(false);
+      }
+    },
+    [manejarCambioCampoFormulario],
+  );
 
   const manejarGuardarProducto = useCallback(
     async (e) => {
@@ -340,15 +374,6 @@ export const useAdminViewModel = () => {
       manejarCerrarFormularioProducto,
     ],
   );
-
-  const manejarCambioCampoFormulario = useCallback((campo, valor) => {
-    setDatosFormularioProducto((prev) => ({ ...prev, [campo]: valor }));
-    setErroresFormularioProducto((prev) => {
-      const next = { ...prev };
-      delete next[campo];
-      return next;
-    });
-  }, []);
 
   const manejarErrorImagen = useCallback((error) => {
     setErrorImagenProducto(error);
@@ -467,6 +492,8 @@ export const useAdminViewModel = () => {
     datosFormularioProducto,
     errorImagenProducto,
     enviandoFormularioProducto,
+    subiendoImagenProducto,
+    errorUploadImagen,
     erroresFormularioProducto,
     erroresPedido,
 
@@ -499,6 +526,7 @@ export const useAdminViewModel = () => {
     onCancelarFormularioProducto: manejarCerrarFormularioProducto,
     onCambioCampoFormulario: manejarCambioCampoFormulario,
     onErrorImagen: manejarErrorImagen,
+    onArchivoSeleccionado: manejarArchivoSeleccionado,
 
     onNuevoComentarioChange: setNuevoComentario,
     onAgregarRecomendacion: manejarAgregarRecomendacion,
