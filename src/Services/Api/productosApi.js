@@ -1,5 +1,43 @@
 import { apiGet, apiPost, apiPut, apiDelete } from './apiClient';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+
+/**
+ * Sube una imagen a Cloudinary vía POST /api/productos/upload.
+ * FormData, campo "imagen". No se establece Content-Type (multipart con boundary).
+ * Requiere Authorization: Bearer <token> (admin).
+ * @param {File} file - Archivo de imagen
+ * @returns {Promise<{ exito: boolean, imagen: string, publicId?: string }>}
+ */
+export const subirImagen = async (file) => {
+  const token = localStorage.getItem('token');
+  const formData = new FormData();
+  formData.append('imagen', file);
+
+  const headers = {};
+  if (token) headers.Authorization = `Bearer ${token}`;
+
+  const response = await fetch(`${API_URL}/productos/upload`, {
+    method: 'POST',
+    headers,
+    body: formData,
+  });
+
+  const data = await response.json().catch(() => ({}));
+
+  if (!response.ok) {
+    const mensaje =
+      data.mensaje ||
+      (response.status === 413 ? 'Archivo demasiado grande' : null) ||
+      (response.status === 401 ? 'Debes iniciar sesión' : null) ||
+      (response.status === 400 ? 'Formato de imagen no válido' : null) ||
+      'Error al subir la imagen';
+    throw new Error(mensaje);
+  }
+
+  return data;
+};
+
 const buildQuery = (params = {}) => {
   const searchParams = new URLSearchParams();
   if (params.categoria != null) searchParams.set('categoria', params.categoria);
@@ -16,6 +54,8 @@ const buildQuery = (params = {}) => {
 };
 
 export const productosApi = {
+  subirImagen,
+
   obtenerTodos: async (params) => {
     const query = buildQuery(params);
     return await apiGet(`/productos${query}`);

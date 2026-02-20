@@ -11,11 +11,14 @@ export const AdminFormularioView = ({
   datosFormulario,
   errorImagen,
   enviando,
+  subiendoImagen = false,
+  errorUploadImagen = "",
   errores = {},
   onGuardar,
   onCancelar,
   onCambioCampo,
   onErrorImagen,
+  onArchivoSeleccionado,
 }) => {
   const esEdicion = modo === "editar";
 
@@ -85,11 +88,26 @@ export const AdminFormularioView = ({
           </div>
 
           <div className="campo-formulario">
-            <label htmlFor="imagen">URL de la imagen</label>
+            <label htmlFor="imagen">Imagen del producto</label>
+            <input
+              id="imagen-file"
+              type="file"
+              accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
+              disabled={enviando || subiendoImagen}
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) onArchivoSeleccionado?.(file);
+                e.target.value = "";
+              }}
+            />
+            {subiendoImagen && <p className="estado-subida">Subiendo imagen...</p>}
+            {errorUploadImagen && (
+              <span className="mensaje-error-formulario" role="alert">{errorUploadImagen}</span>
+            )}
             <input
               id="imagen"
               type="url"
-              placeholder="https://ejemplo.com/imagen.jpg"
+              placeholder="O pega aquí la URL de la imagen"
               value={datosFormulario.imagen}
               onChange={(e) => {
                 onCambioCampo("imagen", e.target.value.slice(0, L.imagen));
@@ -252,18 +270,20 @@ export const AdminFormularioView = ({
           </div>
 
           <div className="botones-formulario">
-            <button type="submit" className="boton-guardar" disabled={enviando}>
+            <button type="submit" className="boton-guardar" disabled={enviando || subiendoImagen}>
               {enviando
                 ? "Procesando..."
-                : esEdicion
-                  ? "Guardar Cambios"
-                  : "Agregar Producto"}
+                : subiendoImagen
+                  ? "Subiendo imagen..."
+                  : esEdicion
+                    ? "Guardar Cambios"
+                    : "Agregar Producto"}
             </button>
             <button
               type="button"
               onClick={onCancelar}
               className="boton-cancelar"
-              disabled={enviando}
+              disabled={enviando || subiendoImagen}
             >
               Cancelar
             </button>

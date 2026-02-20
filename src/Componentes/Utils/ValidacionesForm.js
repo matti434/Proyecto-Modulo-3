@@ -116,7 +116,7 @@ export const LIMITES = {
   producto: {
     nombre: 20,
     precio: 15,
-    imagen: 100,
+    imagen: 1000,
     marca: 20,
     modelo: 20,
     año: 4,
