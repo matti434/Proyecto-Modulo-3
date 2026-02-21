@@ -355,22 +355,23 @@ const Contacto = () => {
                         maxWidth: "800px", 
                         color: "white", 
                         textAlign: "center",
-                        background: "rgba(0, 0, 0, 0.56)",
+                        background: "rgb(0, 0, 0)",
                         backdropFilter: "blur(6px)",
+                        border: "1px solid yellow",
                         borderRadius: "15px",
                         padding: "30px",
-                        border: "1px solid rgba(255, 255, 0, 0.3)"
+                        boxShadow: "0 0 20px rgba(255, 255, 0, 0.1)"
                     }}>
                         <h3 className="fw-bold mb-4" style={{ color: "rgba(233, 64, 22, 0.75)" }}>HORARIOS DE ATENCIÓN</h3>
                         <div className="row">
                             <div className="col-md-6 mb-4">
                                 <h5 className="fw-semibold mb-3" style={{ color: "#fff" }}>Lunes a Viernes</h5>
-                                <p className="m-0" style={{ color: "#ccc" }}>09:00 a 12:00</p>
-                                <p className="m-0" style={{ color: "#ccc" }}>17:00 a 20:00</p>
+                                <p className="m-0" style={{ color: "#fff" }}>09:00 a 12:00</p>
+                                <p className="m-0" style={{ color: "#fff" }}>17:00 a 20:00</p>
                             </div>
                             <div className="col-md-6 mb-4">
                                 <h5 className="fw-semibold mb-3" style={{ color: "#fff" }}>Sábados</h5>
-                                <p className="m-0" style={{ color: "#ccc" }}>09:00 a 13:00</p>
+                                <p className="m-0" style={{ color: "#fff" }}>09:00 a 13:00</p>
                             </div>
                         </div>
 
@@ -393,13 +394,13 @@ const Contacto = () => {
                                     }}
                                 />
                             </div>
-                            <p className="mb-2 pt-3" style={{ color: "#ccc" }}>
+                            <p className="mb-2 pt-3" style={{ color: "#fff" }}>
                                 Escaneá el QR para contactarnos por WhatsApp
                             </p>
-                            <p className="mb-0" style={{ color: "#ccc" }}>
+                            <p className="mb-0" style={{ color: "#fff" }}>
                                 📩 <strong style={{ color: "#fff" }}>Email:</strong> RollingMotor@gmail.com
                             </p>
-                            <p className="mt-2" style={{ color: "#ccc" }}>
+                            <p className="mt-2" style={{ color: "#fff" }}>
                                 📞 <strong style={{ color: "#fff" }}>Teléfono:</strong> +54 9 381 3905024
                             </p>
                         </div>
