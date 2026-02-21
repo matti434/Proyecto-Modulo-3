@@ -168,8 +168,9 @@ export const ProveedorProductos = ({ children }) => {
   const obtenerProductosPorCategoria = useCallback(
     (categoria) => {
       if (!categoria) return productos;
+      const catNorm = normalizarCategoria(categoria);
       return productos.filter(
-        (p) => p.categoria?.toLowerCase() === categoria.toLowerCase()
+        (p) => normalizarCategoria(p.categoria) === catNorm
       );
     },
     [productos]
@@ -180,7 +181,7 @@ export const ProveedorProductos = ({ children }) => {
     const productosPorMarca = {};
 
     productos.forEach((p) => {
-      const categoria = p.categoria || "Sin categoría";
+      const categoria = normalizarCategoria(p.categoria) || "Sin categoría";
       productosPorCategoria[categoria] =
         (productosPorCategoria[categoria] || 0) + 1;
 
