@@ -27,6 +27,7 @@ function normalizarCategoria(c) {
   if (!c || typeof c !== "string") return "";
   const lower = c.trim().toLowerCase();
   if (lower === "motocicletas" || lower === "motos") return "motos";
+  if (lower === "accesorios") return "protecciones";
   return c.trim();
 }
 
@@ -34,7 +35,7 @@ export const filtrarProductos = (productos, filtros) => {
   return productos.filter((producto) => {
     // Filtro por categoría
     if (filtros.categoria && producto.categoria) {
-      const catFiltro = normalizarCategoria(filtro.categoria);
+      const catFiltro = normalizarCategoria(filtros.categoria);
       const catProd = normalizarCategoria(producto.categoria);
       if (catProd !== catFiltro) return false;
     }

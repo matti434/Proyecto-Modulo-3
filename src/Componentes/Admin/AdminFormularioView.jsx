@@ -82,7 +82,6 @@ export const AdminFormularioView = ({
               <option value="motos">Motos</option>
               <option value="protecciones">Protecciones</option>
               <option value="indumentaria">Indumentaria</option>
-              <option value="accesorios">Accesorios</option>
               <option value="repuestos">Repuestos</option>
             </select>
             {errores.categoria && <span className="mensaje-error-formulario" role="alert">{errores.categoria}</span>}

@@ -41,7 +41,7 @@ const LETRAS_NUMEROS_ESPACIOS_GUIONES = /^[a-zA-Z0-9áéíóúÁÉÍÓúñÑüÜ
 const MARCA_O_MODELO = /^[a-zA-Z0-9áéíóúÁÉÍÓúñÑüÜ\s\-]+$/;
 const KILOMETROS_OPCIONAL = /^[\d\s.,]+(\s*km)?$/i;
 
-const CATEGORIAS_PRODUCTO = ["motos", "protecciones", "indumentaria", "accesorios", "repuestos"];
+const CATEGORIAS_PRODUCTO = ["motos", "protecciones", "indumentaria", "repuestos"];
 
 // ============== SCHEMAS: REGISTRO DE USUARIO ==============
 

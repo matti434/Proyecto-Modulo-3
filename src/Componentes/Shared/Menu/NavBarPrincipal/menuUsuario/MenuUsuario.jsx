@@ -1,5 +1,6 @@
 import { Dropdown } from "react-bootstrap";
 import { useUser } from "../../../../Context/ContextoUsuario";
+import { useCarrito } from "../../../../Context/ContextoCarrito";
 import { useNavigate } from "react-router-dom";
 import { FaUser, FaEnvelope, FaHeadset, FaSignOutAlt } from "react-icons/fa";
 import { useState } from "react";
