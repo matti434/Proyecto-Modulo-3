@@ -8,10 +8,12 @@ import "./MenuUsuario.css";
 
 const MenuUsuario = () => {
   const { usuarioActual, logout } = useUser();
+  const { cargarCarritoInvitado } = useCarrito();
   const navigate = useNavigate();
   const [mostrarModalPerfil, setMostrarModalPerfil] = useState(false);
 
   const manejarCerrarSesion = () => {
+    cargarCarritoInvitado();
     logout();
     navigate("/");
   };
