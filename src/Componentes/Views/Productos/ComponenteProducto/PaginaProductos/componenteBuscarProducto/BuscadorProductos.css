@@ -165,3 +165,22 @@
   box-shadow: 0 0 0 0.25rem rgba(200, 155, 43, 0.25) !important;
   color: #e8eaed !important;
 }
+
+/* Textos y placeholder visibles sobre fondo oscuro */
+.cuerpo-buscador .text-muted,
+.cuerpo-buscador .form-text.text-muted,
+.cuerpo-buscador span.text-muted {
+color: #ffffff !important;
+}
+
+.cuerpo-buscador .input-royal::placeholder {
+  color: #ffffff !important;
+}
+
+.cuerpo-buscador .input-royal::-webkit-input-placeholder {
+  color: #ffffff !important;
+}
+
+.cuerpo-buscador .input-royal::-ms-input-placeholder {
+color: #ffffff !important;
+}
