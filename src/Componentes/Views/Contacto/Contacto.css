@@ -2,7 +2,7 @@
 
 body {
   background-color: #f8f8f8 !important;
-  color: #2c2c2c !important;
+  color: #1b1a1a !important;
 }
 
 /* ================= ICONOS CONTACTO ================= */
@@ -11,7 +11,7 @@ body {
   width: 88px;
   height: 88px;
   border-radius: 50%;
-  color: #2c2c2c;
+  color: #d0d0d0;
   text-decoration: none;
   background: rgba(200, 155, 43, 0.12);
   backdrop-filter: blur(10px);
@@ -31,7 +31,7 @@ body {
 .titulo-glow {
   font-size: 38px;
   font-weight: 600;
-  color: #2c2c2c;
+  color: rgba(233, 64, 22, 0.75);
   letter-spacing: 1px;
   text-shadow: none;
 }
@@ -39,7 +39,7 @@ body {
 .titulo-glow2 {
   font-size: 18px;
   font-weight: 400;
-  color: #666666;
+  color: #ffffff;
   text-shadow: none;
 }
 
@@ -121,12 +121,12 @@ body {
 
 input::placeholder,
 textarea::placeholder {
-  color: rgba(44, 44, 44, 0.5) !important;
+  color: rgba(255, 255, 255, 0.993) !important;
 }
 
 input,
 textarea {
-  background: rgba(255, 255, 255, 0.8) !important;
+  background: rgba(255, 255, 255, 0.993) !important;
   border: none !important;
   border-bottom: 2px solid #d0d0d0 !important;
   color: #2c2c2c !important;
@@ -137,7 +137,7 @@ textarea:focus {
   outline: none !important;
   box-shadow: none !important;
   border-bottom: 2px solid #666 !important;
-  background-color: #ffffff !important;
+  background-color: rgba(214, 55, 16, 0.64) !important;
 }
 
 /* ================= TEXTO AYUDA / ERROR ================= */
@@ -153,7 +153,7 @@ textarea:focus {
 }
 
 .texto-input.visible {
-  color: #e6d88a;
+  color: #e68a8a;
 }
 
 .error-msg {

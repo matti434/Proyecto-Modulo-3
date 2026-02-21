@@ -114,7 +114,7 @@ const Contacto = () => {
             <Toaster position="top-right" />
 
             <div style={{
-                backgroundColor: "#000000",
+                backgroundColor: "#2c2c2c",
                 minHeight: "100vh",
                 width: "100%",
                 position: "relative"
@@ -127,14 +127,14 @@ const Contacto = () => {
                     <div className="row shadow-lg rounded-4 overflow-hidden" style={{ 
                         width: "75%", 
                         maxWidth: "800px", 
-                        background: "rgba(0, 0, 0, 0.7)", 
+                        background: "rgba(214, 55, 16, 0.64)", 
                         backdropFilter: "blur(6px)", 
                         border: "1px solid yellow", 
                         borderRadius: "15px",
-                        boxShadow: "0 0 20px rgba(255, 255, 0, 0.2)"
+                        boxShadow: "0 0 20px rgba(255, 255, 0, 0.3)"
                     }}>
                         <div className="col-12 col-md-6 text-white d-flex flex-column justify-content-center p-5" style={{ 
-                            background: "rgba(0, 0, 0, 0.6)", 
+                            background: "rgb(0, 0, 0)", 
                             backdropFilter: "blur(6px)", 
                             color: "white",
                             borderRight: "1px solid rgba(255, 255, 0, 0.3)"
@@ -145,7 +145,7 @@ const Contacto = () => {
                             </p>
                         </div>
                         <form ref={form} onSubmit={sendEmail} className="col-12 col-md-6 d-flex flex-column justify-content-center p-5" style={{ 
-                            background: "rgba(0, 0, 0, 0.6)", 
+                            background: "rgba(88, 1, 1, 0.6)", 
                             backdropFilter: "blur(6px)", 
                             color: "white"
                         }}>
@@ -300,7 +300,7 @@ const Contacto = () => {
                                         }}>
                                             Mensaje Enviado
                                         </h3>
-                                        <p style={{ color: "#ccc", lineHeight: "1.5" }}>
+                                        <p style={{ color: "#fff", lineHeight: "1.5" }}>
                                             Gracias por contactarnos. Te responderemos a la brevedad.
                                         </p>
                                         <button 
@@ -355,13 +355,13 @@ const Contacto = () => {
                         maxWidth: "800px", 
                         color: "white", 
                         textAlign: "center",
-                        background: "rgba(0, 0, 0, 0.6)",
+                        background: "rgba(0, 0, 0, 0.56)",
                         backdropFilter: "blur(6px)",
                         borderRadius: "15px",
                         padding: "30px",
                         border: "1px solid rgba(255, 255, 0, 0.3)"
                     }}>
-                        <h3 className="fw-bold mb-4" style={{ color: "#eee605" }}>HORARIOS DE ATENCIÓN</h3>
+                        <h3 className="fw-bold mb-4" style={{ color: "rgba(233, 64, 22, 0.75)" }}>HORARIOS DE ATENCIÓN</h3>
                         <div className="row">
                             <div className="col-md-6 mb-4">
                                 <h5 className="fw-semibold mb-3" style={{ color: "#fff" }}>Lunes a Viernes</h5>
@@ -374,7 +374,7 @@ const Contacto = () => {
                             </div>
                         </div>
 
-                        <h4 className="fw-bold mt-4 mb-4" style={{ color: "#eee605" }}>CONTACTO</h4>
+                        <h4 className="fw-bold mt-4 mb-4" style={{ color: "rgba(233, 64, 22, 0.75)" }}>CONTACTO</h4>
                         <div className="d-flex flex-column align-items-center">
                             <div style={{
                                 background: "rgba(255, 255, 255, 0.9)",
