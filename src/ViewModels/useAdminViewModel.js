@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo, useCallback } from "react";
 import { useUser } from "../Componentes/Context/ContextoUsuario";
 import { useProductos } from "../Componentes/Context/ContextoProducto";
 import { pedidosApi } from "../Services/Api";
+import { homeApi } from "../Services/Api/homeApi";
 import toast from "react-hot-toast";
 import { confirmarAccion } from "../Componentes/Utils/confirmacion";
 import { useAdminProductoForm } from "./useAdminProductoForm";
@@ -42,6 +43,16 @@ export const useAdminViewModel = () => {
   const [pedidoActual, setPedidoActual] = useState({ id: null, titulo: "", descripcion: "" });
   const [modoPedido, setModoPedido] = useState("agregar");
   const [erroresPedido, setErroresPedido] = useState({});
+
+  const [contenidoHome, setContenidoHome] = useState({
+    galeria: [],
+    portada: { imagenUrl: "" },
+  });
+  const [contenidoHomeCargando, setContenidoHomeCargando] = useState(false);
+  const [contenidoHomeError, setContenidoHomeError] = useState("");
+  const [portadaSubiendo, setPortadaSubiendo] = useState(false);
+  const [galeriaSubiendo, setGaleriaSubiendo] = useState(false);
+  const [galeriaActualizandoId, setGaleriaActualizandoId] = useState(null);
 
   const cerrarFormularioProducto = useCallback(() => {
     setMostrarFormProducto(false);
@@ -89,6 +100,27 @@ export const useAdminViewModel = () => {
       };
       cargarPedidos();
     }
+  }, [vistaActiva, esAdministrador]);
+
+  useEffect(() => {
+    if (vistaActiva !== "home" || !esAdministrador) return;
+    setContenidoHomeCargando(true);
+    setContenidoHomeError("");
+    homeApi
+      .obtenerContenidoHome()
+      .then((data) => {
+        setContenidoHome({
+          galeria: Array.isArray(data.galeria) ? data.galeria : [],
+          portada:
+            data.portada && data.portada.imagenUrl
+              ? { imagenUrl: data.portada.imagenUrl }
+              : { imagenUrl: "" },
+        });
+      })
+      .catch((err) => {
+        setContenidoHomeError(err?.message || "Error al cargar la home");
+      })
+      .finally(() => setContenidoHomeCargando(false));
   }, [vistaActiva, esAdministrador]);
 
   const estadisticas = useMemo(
@@ -255,6 +287,102 @@ export const useAdminViewModel = () => {
     toast.info("Eliminar pedidos no está disponible desde el panel.");
   }, []);
 
+  const cargarContenidoHome = useCallback(async () => {
+    const data = await homeApi.obtenerContenidoHome();
+    setContenidoHome({
+      galeria: Array.isArray(data.galeria) ? data.galeria : [],
+      portada:
+        data.portada && data.portada.imagenUrl
+          ? { imagenUrl: data.portada.imagenUrl }
+          : { imagenUrl: "" },
+    });
+  }, []);
+
+  const manejarSubirPortada = useCallback(async (file) => {
+    setPortadaSubiendo(true);
+    setContenidoHomeError("");
+    try {
+      const data = await homeApi.subirPortada(file);
+      const url = data.imagenUrl || data.portada?.imagenUrl || "";
+      setContenidoHome((prev) => ({
+        ...prev,
+        portada: { imagenUrl: url },
+      }));
+      toast.success("Imagen de portada actualizada");
+    } catch (err) {
+      setContenidoHomeError(err?.message || "Error al subir portada");
+      toast.error(err?.message || "Error al subir portada");
+    } finally {
+      setPortadaSubiendo(false);
+    }
+  }, []);
+
+  const manejarAgregarImagenGaleria = useCallback(async (file, texto) => {
+    setGaleriaSubiendo(true);
+    setContenidoHomeError("");
+    try {
+      await homeApi.agregarImagenGaleria(file, texto || "");
+      await cargarContenidoHome();
+      toast.success("Imagen agregada a la galería");
+    } catch (err) {
+      setContenidoHomeError(err?.message || "Error al agregar imagen");
+      toast.error(err?.message || "Error al agregar imagen");
+    } finally {
+      setGaleriaSubiendo(false);
+    }
+  }, [cargarContenidoHome]);
+
+  const manejarActualizarTextoGaleria = useCallback(async (id, texto) => {
+    if (id == null) return;
+    try {
+      await homeApi.actualizarTextoGaleria(id, texto ?? "");
+      setContenidoHome((prev) => ({
+        ...prev,
+        galeria: prev.galeria.map((it) =>
+          (it.id ?? it._id) === id ? { ...it, texto: texto ?? "" } : it
+        ),
+      }));
+      toast.success("Texto actualizado");
+    } catch (err) {
+      toast.error(err?.message || "Error al actualizar texto");
+    }
+  }, []);
+
+  const manejarReemplazarImagenGaleria = useCallback(async (id, file) => {
+    if (id == null) return;
+    setGaleriaActualizandoId(id);
+    setContenidoHomeError("");
+    try {
+      await homeApi.reemplazarImagenGaleria(id, file);
+      await cargarContenidoHome();
+      toast.success("Imagen reemplazada");
+    } catch (err) {
+      setContenidoHomeError(err?.message || "Error al reemplazar imagen");
+      toast.error(err?.message || "Error al reemplazar imagen");
+    } finally {
+      setGaleriaActualizandoId(null);
+    }
+  }, [cargarContenidoHome]);
+
+  const manejarEliminarImagenGaleria = useCallback(async (id) => {
+    if (id == null) return;
+    const confirmado = await confirmarAccion(
+      "¿Eliminar esta imagen de la galería?",
+      "Se quitará del carrusel de la página de inicio."
+    );
+    if (!confirmado) return;
+    try {
+      await homeApi.eliminarImagenGaleria(id);
+      setContenidoHome((prev) => ({
+        ...prev,
+        galeria: prev.galeria.filter((it) => (it.id ?? it._id) !== id),
+      }));
+      toast.success("Imagen eliminada de la galería");
+    } catch (err) {
+      toast.error(err?.message || "Error al eliminar");
+    }
+  }, []);
+
   return {
     usuarios,
     usuariosSuspendidos,
@@ -280,6 +408,13 @@ export const useAdminViewModel = () => {
     errorUploadImagen,
     erroresFormularioProducto,
     erroresPedido,
+
+    contenidoHome,
+    contenidoHomeCargando,
+    contenidoHomeError,
+    portadaSubiendo,
+    galeriaSubiendo,
+    galeriaActualizandoId,
 
     recomendaciones,
     nuevoComentario,
@@ -324,5 +459,11 @@ export const useAdminViewModel = () => {
     onEditarPedido: manejarEditarPedido,
     onEliminarPedido: manejarEliminarPedido,
     onActualizarEstadoPedido: manejarActualizarEstadoPedido,
+
+    onSubirPortada: manejarSubirPortada,
+    onAgregarImagenGaleria: manejarAgregarImagenGaleria,
+    onActualizarTextoGaleria: manejarActualizarTextoGaleria,
+    onReemplazarImagenGaleria: manejarReemplazarImagenGaleria,
+    onEliminarImagenGaleria: manejarEliminarImagenGaleria,
   };
 };

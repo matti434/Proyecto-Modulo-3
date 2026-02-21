@@ -8,6 +8,7 @@ import { AdminSuspendidosView } from "./AdminSuspendidosView";
 import { AdminUsuariosView } from "./AdminUsuariosView";
 import MapaUsuarios from "./MapaUsuarios";
 import { ModalEditarUsuarioView } from "./ModalEditarUsuarioView";
+import { AdminHomeView } from "./AdminHomeView";
 
 import "./AdminPanel.css";
 
@@ -75,8 +76,19 @@ export const AdminPanelView = ({
   onEditarPedido,
   onEliminarPedido,
   onActualizarEstadoPedido,
+
+  contenidoHome,
+  contenidoHomeCargando,
+  contenidoHomeError,
+  portadaSubiendo,
+  galeriaSubiendo,
+  galeriaActualizandoId,
+  onSubirPortada,
+  onAgregarImagenGaleria,
+  onActualizarTextoGaleria,
+  onReemplazarImagenGaleria,
+  onEliminarImagenGaleria,
 }) => {
-  
   if (!esAdministrador) {
     return (
       <div className="panel-administracion">
@@ -88,7 +100,6 @@ export const AdminPanelView = ({
     );
   }
 
- 
   if (cargando && vistaActiva === "productos") {
     return (
       <div className="panel-administracion">
@@ -101,7 +112,6 @@ export const AdminPanelView = ({
 
   return (
     <div className="panel-administracion">
-     
       <header className="encabezado-administracion">
         <h1>Panel de Administración</h1>
         <nav className="navegacion-administracion">
@@ -138,6 +148,12 @@ export const AdminPanelView = ({
           >
             📦 Pedidos
           </button>
+          <button
+            className={vistaActiva === "home" ? "btn-activo" : ""}
+            onClick={() => onCambiarVista("home")}
+          >
+            🏠 Inicio
+          </button>
         </nav>
 
         <div className="controles-encabezado">
@@ -147,7 +163,6 @@ export const AdminPanelView = ({
         </div>
       </header>
 
-    
       {vistaActiva === "usuarios" && (
         <AdminUsuariosView
           usuarios={usuarios}
@@ -188,9 +203,24 @@ export const AdminPanelView = ({
         />
       )}
 
+      {vistaActiva === "home" && (
+        <AdminHomeView
+          portadaImagenUrl={contenidoHome?.portada?.imagenUrl}
+          galeria={contenidoHome?.galeria ?? []}
+          portadaSubiendo={portadaSubiendo}
+          galeriaSubiendo={galeriaSubiendo}
+          galeriaActualizandoId={galeriaActualizandoId}
+          errorHome={contenidoHomeError}
+          onSubirPortada={onSubirPortada}
+          onAgregarImagenGaleria={onAgregarImagenGaleria}
+          onActualizarTextoGaleria={onActualizarTextoGaleria}
+          onReemplazarImagenGaleria={onReemplazarImagenGaleria}
+          onEliminarImagenGaleria={onEliminarImagenGaleria}
+        />
+      )}
+
       {vistaActiva === "mapa" && <MapaUsuarios usuarios={usuarios} />}
 
-      
       {usuarioEditando && (
         <ModalEditarUsuarioView
           usuario={usuarioEditando}
