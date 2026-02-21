@@ -122,7 +122,8 @@ const Contacto = () => {
                 <div className="container d-flex justify-content-center align-items-center min-vh-100" style={{ 
                     backgroundSize: "cover", 
                     backgroundPosition: "center", 
-                    padding: "20px"
+                    padding: "20px",
+                    marginTop: "50px",
                 }}>
                     <div className="row shadow-lg rounded-4 overflow-hidden" style={{ 
                         width: "75%", 
