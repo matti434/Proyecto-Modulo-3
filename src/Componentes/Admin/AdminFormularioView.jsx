@@ -79,7 +79,7 @@ export const AdminFormularioView = ({
               aria-invalid={!!errores.categoria}
             >
               <option value="">Seleccione una categoría</option>
-              <option value="motocicletas">Motocicletas</option>
+              <option value="motos">Motos</option>
               <option value="protecciones">Protecciones</option>
               <option value="indumentaria">Indumentaria</option>
               <option value="accesorios">Accesorios</option>
