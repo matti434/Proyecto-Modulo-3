@@ -84,10 +84,17 @@ export const validarStock = (producto) => {
  * @param {number|string} precioStr - Precio a formatear
  * @returns {string} Precio formateado
  */
+const MAX_DIGITOS_PRECIO = 14;
+
 export const formatearPrecio = (precioStr) => {
   if (!precioStr) return "0";
-  const numero = parseInt(String(precioStr).replace(/\D/g, ""));
-  return isNaN(numero) ? "0" : numero.toLocaleString("es-ES");
+  const numero = parseInt(String(precioStr).replace(/\D/g, ""), 10);
+  if (Number.isNaN(numero)) return "0";
+  const str = numero.toLocaleString("es-ES");
+  if (str.length > MAX_DIGITOS_PRECIO) {
+    return str.slice(0, MAX_DIGITOS_PRECIO) + "...";
+  }
+  return str;
 };
 
 /**
