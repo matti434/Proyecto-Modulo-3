@@ -23,13 +23,20 @@ export const useProductos = () => {
  * Función de filtrado extraída para ser usada en el ViewModel
  * El contexto la expone para que el ViewModel pueda usarla
  */
+function normalizarCategoria(c) {
+  if (!c || typeof c !== "string") return "";
+  const lower = c.trim().toLowerCase();
+  if (lower === "motocicletas" || lower === "motos") return "motos";
+  return c.trim();
+}
+
 export const filtrarProductos = (productos, filtros) => {
   return productos.filter((producto) => {
     // Filtro por categoría
     if (filtros.categoria && producto.categoria) {
-      if (producto.categoria.toLowerCase() !== filtros.categoria.toLowerCase()) {
-        return false;
-      }
+      const catFiltro = normalizarCategoria(filtro.categoria);
+      const catProd = normalizarCategoria(producto.categoria);
+      if (catProd !== catFiltro) return false;
     }
 
     // Filtro por término de búsqueda

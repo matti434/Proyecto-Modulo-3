@@ -36,7 +36,7 @@ const Categorias = () => {
         <p className="titulo-seccion">Nuestros servicios</p>
 
         {/* MOTOS */}
-        <motion.div {...animacionScroll} {...animacionHover("izquierda")} onClick={() => manejarClickCategoria('motocicletas')}>
+        <motion.div {...animacionScroll} {...animacionHover("izquierda")} onClick={() => manejarClickCategoria('motos')}>
           <Card className="tarjeta-categoria altura-tarjeta">
             <Row className="g-0 h-100">
               <Col md={6}>
