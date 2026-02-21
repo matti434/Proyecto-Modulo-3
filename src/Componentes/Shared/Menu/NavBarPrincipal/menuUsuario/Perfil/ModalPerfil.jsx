@@ -17,6 +17,7 @@ import "./ModalPerfil.css";
 
 const ModalPerfil = ({ mostrar, onCerrar }) => {
   const { usuarioActual, logout, editarUsuario } = useUser();
+  const { cargarCarritoInvitado } = useCarrito();
   const [editando, setEditando] = useState(false);
   const [cargando, setCargando] = useState(false);
   const [mostrarConfirmacion, setMostrarConfirmacion] = useState(false);
@@ -82,6 +83,7 @@ const ModalPerfil = ({ mostrar, onCerrar }) => {
       localStorage.removeItem("ultimoUsuario");
       toast.success("Cuenta eliminada correctamente");
       setTimeout(() => {
+        cargarCarritoInvitado();
         logout();
         onCerrar();
         window.location.href = "/";
