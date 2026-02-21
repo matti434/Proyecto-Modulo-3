@@ -182,6 +182,16 @@ export const CarritoProvider = ({ children }) => {
     setItemsCarrito([]);
   }, [estaAutenticado]);
 
+  const cargarCarritoInvitado = useCallback(() => {
+    setItemsCarrito([]);
+    try {
+      const guardado = localStorage.getItem("carritoMotos");
+      if (guardado) setItemsCarrito(JSON.parse(guardado));
+    } catch {
+      localStorage.removeItem("carritoMotos");
+    }
+  }, []);
+
   const calcularSubtotal = useCallback(() => {
     return itemsCarrito.reduce((total, item) => total + (item.precio || 0) * (item.cantidad || 0), 0);
   }, [itemsCarrito]);
@@ -219,6 +229,7 @@ export const CarritoProvider = ({ children }) => {
     calcularTotalProductos,
     estaEnCarrito,
     obtenerCantidadProducto,
+    cargarCarritoInvitado,
   };
 
   return (
