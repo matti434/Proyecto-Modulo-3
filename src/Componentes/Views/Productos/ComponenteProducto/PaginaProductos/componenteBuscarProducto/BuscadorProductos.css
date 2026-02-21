@@ -184,3 +184,20 @@ color: #ffffff !important;
 .cuerpo-buscador .input-royal::-ms-input-placeholder {
 color: #ffffff !important;
 }
+
+/* Contenedor del título del buscador: fondo oscuro para que el título se vea */
+.buscador-royal-enfield .titulo-buscador {
+  color: #1a1f2e !important;
+  font-weight: 800;
+}
+
+.buscador-royal-enfield > .row {
+background: #1a1f2e;
+padding: 1rem;
+border-radius: 12px;
+margin-bottom: 1rem;
+}
+
+.buscador-royal-enfield .titulo-buscador {
+  color: #1a1f2e !important;
+}
