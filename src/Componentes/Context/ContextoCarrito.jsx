@@ -12,7 +12,6 @@ export const useCarrito = () => {
   return context;
 };
 
-/** Normaliza un ítem del carrito del backend al formato que usa la UI */
 const normalizarItemBackend = (item) => {
   const prod = item.producto || {};
   const nombre =
@@ -140,9 +139,7 @@ export const CarritoProvider = ({ children }) => {
       if (estaAutenticado && itemId && !String(itemId).startsWith("local-")) {
         try {
           await carritoApi.eliminarItem(itemId);
-        } catch {
-          /* Backend puede no tener DELETE; se actualiza solo local */
-        }
+        } catch {}
       }
       setItemsCarrito((prev) => prev.filter((item) => item.id !== itemId));
     },
@@ -160,9 +157,7 @@ export const CarritoProvider = ({ children }) => {
           await carritoApi.actualizarCantidad(itemId, nuevaCantidad);
           await cargarCarritoDesdeApi();
           return;
-        } catch {
-          /* fallback local */
-        }
+        } catch {}
       }
       setItemsCarrito((prev) =>
         prev.map((item) => (item.id === itemId ? { ...item, cantidad: nuevaCantidad } : item))
@@ -175,9 +170,7 @@ export const CarritoProvider = ({ children }) => {
     if (estaAutenticado) {
       try {
         await carritoApi.vaciar();
-      } catch {
-        /* Backend puede no tener DELETE; se actualiza solo local */
-      }
+      } catch {}
     }
     setItemsCarrito([]);
   }, [estaAutenticado]);

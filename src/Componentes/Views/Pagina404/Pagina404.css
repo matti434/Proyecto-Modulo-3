@@ -1,6 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap");
 
-/* ================= CONTENEDOR ================= */
+
 
 .error-container {
   min-height: 100vh;
@@ -24,7 +24,7 @@
   animation: bgFlow 10s ease infinite;
 }
 
-/* ================= FONDO ANIMADO ================= */
+
 
 @keyframes bgFlow {
   0% {
@@ -36,14 +36,14 @@
   }
 }
 
-/* ================= CONTENIDO ================= */
+
 
 .parallax {
   transform-style: preserve-3d;
   animation: fadeUp 0.8s ease forwards;
 }
 
-/* ================= TITULO 404 ================= */
+
 
 .error-title {
   font-size: clamp(5rem, 14vw, 8rem);
@@ -68,12 +68,12 @@
   transition: transform 0.4s ease;
 }
 
-/* Hover animado del 404 */
+
 .error-container:hover .error-title {
   transform: translateY(-18px) scale(1.04);
 }
 
-/* ================= SUBTITULO ================= */
+
 
 .error-subtitle {
   margin-top: 1rem;
@@ -84,7 +84,7 @@
   color: #cfcfcf;
 }
 
-/* ================= TEXTO ================= */
+
 
 .error-text {
   max-width: 460px;
@@ -94,7 +94,7 @@
   color: #a9a9a9;
 }
 
-/* ================= BOTON ================= */
+
 
 .error-btn {
   margin-top: 2.5rem;
@@ -120,7 +120,7 @@
   box-shadow: 0 10px 25px rgba(212, 175, 55, 0.35);
 }
 
-/* ================= ANIMACIONES ================= */
+
 
 @keyframes shimmer {
   from {
@@ -158,7 +158,7 @@
   }
 }
 
-/* ================= RESPONSIVE ================= */
+
 
 @media (max-width: 768px) {
   .error-container {

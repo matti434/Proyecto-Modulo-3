@@ -1,11 +1,11 @@
-/* ================= BASE ================= */
+
 
 body {
   background-color: #f8f8f8 !important;
   color: #2c2c2c !important;
 }
 
-/* ================= ICONOS CONTACTO ================= */
+
 
 .contact-icon-btn {
   width: 88px;
@@ -26,7 +26,7 @@ body {
   box-shadow: 0 15px 40px rgba(212, 175, 55, 0.45);
 }
 
-/* ================= TITULOS ================= */
+
 
 .titulo-glow {
   font-size: 38px;
@@ -43,7 +43,7 @@ body {
   text-shadow: none;
 }
 
-/* ================= BOTONES ================= */
+
 
 .boton-animado {
   transition: transform 0.25s ease, box-shadow 0.25s ease;
@@ -58,7 +58,7 @@ body {
   transform: translateY(0) scale(0.97);
 }
 
-/* ================= MAPA ================= */
+
 
 .map-container-custom {
   width: 75%;
@@ -93,7 +93,7 @@ body {
   z-index: 2;
 }
 
-/* ================= ANIMACIONES ================= */
+
 
 @keyframes zoomIn {
   from {
@@ -117,7 +117,7 @@ body {
   }
 }
 
-/* ================= INPUTS ================= */
+
 
 input::placeholder,
 textarea::placeholder {
@@ -140,7 +140,7 @@ textarea:focus {
   background-color: #ffffff !important;
 }
 
-/* ================= TEXTO AYUDA / ERROR ================= */
+
 
 .texto-input {
   font-size: 0.75rem;
@@ -168,7 +168,7 @@ textarea:focus {
   border-left: 3px solid rgba(212, 175, 55, 0.9);
 }
 
-/* ================= RESPONSIVE ================= */
+
 
 @media (max-width: 768px) {
   .map-container-custom {
@@ -185,7 +185,7 @@ textarea:focus {
   }
 }
 
-/* ================= SCROLL ================= */
+
 
 ::-webkit-scrollbar {
   width: 8px;

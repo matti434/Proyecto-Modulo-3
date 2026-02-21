@@ -1,4 +1,4 @@
-/* ================= MODAL MODERNO REGISTRO ================= */
+
 
 .modal-registro-moderno {
   max-width: none !important;
@@ -31,7 +31,7 @@
   position: relative;
 }
 
-/* ================= OVERLAY ================= */
+
 
 .modal-overlay {
   position: fixed;
@@ -44,7 +44,7 @@
   z-index: 1;
 }
 
-/* ================= CONTAINER ================= */
+
 
 .modal-container {
   position: relative;
@@ -73,7 +73,7 @@
   z-index: 1;
 }
 
-/* ================= SCROLLBAR ================= */
+
 
 .modal-container::-webkit-scrollbar {
   width: 6px;
@@ -93,7 +93,7 @@
   background: var(--color-rojo);
 }
 
-/* ================= BOTON CERRAR ================= */
+
 
 .btn-cerrar-moderno {
   position: absolute;
@@ -120,7 +120,7 @@
   transform: rotate(90deg);
 }
 
-/* ================= ENCABEZADO ================= */
+
 
 .encabezado-registro {
   padding: 1.6rem 1.8rem 0.8rem;
@@ -148,7 +148,7 @@
   line-height: 1.4;
 }
 
-/* ================= CUERPO ================= */
+
 
 .cuerpo-registro {
   padding: 1rem 1.8rem 1.6rem;
@@ -157,7 +157,7 @@
   overflow-y: auto;
 }
 
-/* ================= ANIMACIONES ================= */
+
 
 @keyframes modalSlideUp {
   from {
@@ -171,7 +171,7 @@
   }
 }
 
-/* ================= RESPONSIVE ================= */
+
 
 @media (max-width: 768px) {
   .modal-container {

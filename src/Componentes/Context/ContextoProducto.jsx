@@ -19,10 +19,6 @@ export const useProductos = () => {
   return context;
 };
 
-/**
- * Función de filtrado extraída para ser usada en el ViewModel
- * El contexto la expone para que el ViewModel pueda usarla
- */
 function normalizarCategoria(c) {
   if (!c || typeof c !== "string") return "";
   const lower = c.trim().toLowerCase();
@@ -33,14 +29,12 @@ function normalizarCategoria(c) {
 
 export const filtrarProductos = (productos, filtros) => {
   return productos.filter((producto) => {
-    // Filtro por categoría
     if (filtros.categoria && producto.categoria) {
       const catFiltro = normalizarCategoria(filtros.categoria);
       const catProd = normalizarCategoria(producto.categoria);
       if (catProd !== catFiltro) return false;
     }
 
-    // Filtro por término de búsqueda
     if (filtros.terminoBusqueda) {
       const termino = filtros.terminoBusqueda.toLowerCase();
       const coincideNombre = producto.nombre?.toLowerCase().includes(termino);
@@ -52,7 +46,6 @@ export const filtrarProductos = (productos, filtros) => {
       }
     }
 
-    // Filtro por precio
     const precioProducto = parseFloat(producto.precio) || 0;
     if (filtros.precioMin && precioProducto < parseFloat(filtros.precioMin)) {
       return false;
@@ -61,24 +54,20 @@ export const filtrarProductos = (productos, filtros) => {
       return false;
     }
 
-    // Filtro por marca
     if (filtros.marca && producto.marca?.toLowerCase() !== filtros.marca.toLowerCase()) {
       return false;
     }
 
-    // Filtro por modelo
     if (filtros.modelo && producto.modelo?.toLowerCase() !== filtros.modelo.toLowerCase()) {
       return false;
     }
 
-    // Filtro por destacado
     if (filtros.destacado !== "") {
       if ((producto.destacado?.toString() || "false") !== filtros.destacado) {
         return false;
       }
     }
 
-    // Filtro por stock
     if (filtros.stock !== "") {
       if ((producto.stock?.toString() || "true") !== filtros.stock) {
         return false;
@@ -295,24 +284,17 @@ export const ProveedorProductos = ({ children }) => {
     return editarProducto(id, { ...product, stock: tieneStock });
   }, [productos, editarProducto]);
 
-  // Productos filtrados para compatibilidad con componentes existentes
-  // La lógica de filtrado también está disponible en useProductosViewModel
   const productosFiltrados = filtrarProductos(productos, filtros);
 
   const valorContexto = {
-    // Datos crudos
     productos,
-    productosFiltrados, // Para compatibilidad con componentes existentes
+    productosFiltrados,
     cargando,
     error,
     filtros,
-
-    // Acciones de filtros
     actualizarFiltros,
     limpiarFiltros,
     filtrarPorCategoria,
-
-    // Funciones de consulta
     obtenerCategoriasUnicas,
     obtenerMarcasPorCategoria,
     obtenerProductosPorCategoria,
@@ -323,8 +305,6 @@ export const ProveedorProductos = ({ children }) => {
     obtenerProductosDestacados,
     obtenerProductosConStock,
     obtenerProductosRecientes,
-
-    // Acciones CRUD
     cargarProductos,
     agregarProducto,
     editarProducto,

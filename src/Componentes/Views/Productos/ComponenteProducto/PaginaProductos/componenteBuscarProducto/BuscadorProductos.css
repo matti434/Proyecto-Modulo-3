@@ -166,7 +166,7 @@
   color: #e8eaed !important;
 }
 
-/* Textos y placeholder visibles sobre fondo oscuro */
+
 .cuerpo-buscador .text-muted,
 .cuerpo-buscador .form-text.text-muted,
 .cuerpo-buscador span.text-muted {
@@ -185,7 +185,7 @@ color: #ffffff !important;
 color: #ffffff !important;
 }
 
-/* Contenedor del título del buscador: fondo oscuro para que el título se vea */
+
 .buscador-royal-enfield .titulo-buscador {
   color: #1a1f2e !important;
   font-weight: 800;
