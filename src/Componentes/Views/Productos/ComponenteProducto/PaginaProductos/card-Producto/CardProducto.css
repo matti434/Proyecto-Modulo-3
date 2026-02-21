@@ -233,6 +233,8 @@
   border-radius: 12px;
   border: 2px solid var(--color-dorado);
   position: relative;
+  overflow: hidden;
+  min-width: 0;
 }
 
 .contenedor-precio::before {
@@ -247,12 +249,17 @@
 }
 
 .valor-precio {
-  font-size: 1.5rem;
+  font-size: clamp(0.75rem, 2.5vw, 1.5rem);
   font-weight: 800;
   color: var(--color-dorado);
   margin: 0.5rem 0;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
   font-family: 'Montserrat', sans-serif;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+  display: block;
 }
 
 .contenedor-botones {
