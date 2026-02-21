@@ -146,15 +146,16 @@ export const ProveedorProductos = ({ children }) => {
 
   const obtenerCategoriasUnicas = useCallback(() => {
     const categorias = productos
-      .map((p) => p.categoria)
-      .filter((c) => c && c.trim() !== "");
+      .map((p) => normalizarCategoria(p.categoria))
+      .filter((c) => c !== "");
     return [...new Set(categorias)];
   }, [productos]);
 
   const obtenerMarcasPorCategoria = useCallback(
     (categoria) => {
-      const productosCategoria = categoria
-        ? productos.filter((p) => p.categoria === categoria)
+      const catNorm = normalizarCategoria(categoria);
+      const productosCategoria = catNorm
+        ? productos.filter((p) => normalizarCategoria(p.categoria) === catNorm)
         : productos;
       const marcas = productosCategoria
         .map((p) => p.marca)
