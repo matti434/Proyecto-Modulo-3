@@ -1049,3 +1049,52 @@ button:disabled {
     gap: 10px;
   }
 }
+
+/* Sección Home (portada + galería) */
+.seccion-home-admin {
+  margin-top: 1rem;
+}
+.texto-ayuda-admin {
+  color: #666;
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+}
+.portada-admin-preview {
+  margin-bottom: 0.75rem;
+}
+.acciones-portada-admin,
+.acciones-galeria-admin {
+  margin-bottom: 1rem;
+}
+.boton-subir-imagen-admin {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background: #0d6efd;
+  color: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+.boton-subir-imagen-admin:has(input:disabled) {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+.boton-accion-admin {
+  padding: 0.35rem 0.6rem;
+  margin-right: 0.5rem;
+  font-size: 0.85rem;
+  border-radius: 4px;
+  cursor: pointer;
+  border: 1px solid #ddd;
+  background: #f8f9fa;
+}
+.boton-accion-admin.peligro {
+  background: #dc3545;
+  color: #fff;
+  border-color: #dc3545;
+}
+.input-texto-galeria-admin {
+  padding: 0.35rem 0.5rem;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+}

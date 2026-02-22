@@ -18,7 +18,7 @@ export const fetchApi = async (endpoint, options = {}) => {
 
     try {
         const response = await fetch(`${API_URL}${endpoint}`, config);
-        const data = await response.json();
+        const data = await response.json().catch(() => ({}));
 
         if(response.status === 401 && token) {
             localStorage.removeItem('token');

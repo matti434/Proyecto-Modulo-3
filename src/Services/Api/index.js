@@ -4,3 +4,4 @@ export { productosApi } from './productosApi';
 export { usuariosApi } from './usuariosApi';
 export { carritoApi } from './carritoApi';
 export { pedidosApi } from './pedidosApi';
+export { homeApi } from './homeApi';

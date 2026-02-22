@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 
 import { CarritoProvider } from "./Componentes/Context/ContextoCarrito";
 import { FavoritosProvider } from "./Componentes/Context/ContextoFavoritos";
@@ -15,7 +15,9 @@ import Contacto from "./Componentes/Views/Contacto/Contacto";
 import Favoritos from "./Componentes/Views/Favoritos/Favoritos";
 import Home from "./Componentes/Views/Home/Home";
 import Nosotros from "./Componentes/Views/Nosotros/Nosotros";
+import Login from "./Componentes/Views/Login/Login";
 import Pagina404 from "./Componentes/Views/Pagina404/Pagina404";
+import { Registro } from "./Componentes/Views/Registro/Registro";
 import CarritoContainer from "./Componentes/Views/Productos/componenteCarrito/CarritoContainer";
 import Categorias from "./Componentes/Views/Productos/ComponenteProducto/Categorias/Categorias";
 import DetalleProducto from "./Componentes/Views/Productos/ComponenteProducto/PaginaProductos/Detalle-Producto/DetalleProducto";
@@ -25,6 +27,26 @@ import Ofertas from "./Componentes/Views/Productos/Ofertas/Ofertas";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
+
+function LoginPage() {
+  const navigate = useNavigate();
+  return (
+    <Login
+      onClose={() => navigate("/")}
+      onAbrirRegistro={() => navigate("/registro")}
+    />
+  );
+}
+
+function RegistroPage() {
+  const navigate = useNavigate();
+  return (
+    <Registro
+      onClose={() => navigate("/")}
+      onAbrirLogin={() => navigate("/login")}
+    />
+  );
+}
 
 function App() {
   const [showSplash, setShowSplash] = useState(true);
@@ -51,6 +73,18 @@ function App() {
                 <Route path="/carrito" element={<CarritoContainer />} />
                   <Route path="/recuperar-password" element={ <RecuperarPassword />} />
                 <Route path="/favoritos" element={<Favoritos />} />
+                <Route
+                  path="/login"
+                  element={
+                    <LoginPage />
+                  }
+                />
+                <Route
+                  path="/registro"
+                  element={
+                    <RegistroPage />
+                  }
+                />
                 <Route path="*" element={<Pagina404 />} />
                 <Route
                   path="/admin"

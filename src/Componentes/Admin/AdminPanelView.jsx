@@ -1,6 +1,7 @@
 import "../../estilos/variables.css";
 
 import { AdminFormularioView } from "./AdminFormularioView";
+import { AdminHomeView } from "./AdminHomeView";
 import { AdminPedidosView } from "./AdminPedidosView";
 import { AdminProductosView } from "./AdminProductosView";
 import { AdminRecomendacionesView } from "./AdminRecomendacionesView";
@@ -75,6 +76,17 @@ export const AdminPanelView = ({
   onEditarPedido,
   onEliminarPedido,
   onActualizarEstadoPedido,
+  contenidoHome,
+  contenidoHomeCargando,
+  contenidoHomeError,
+  portadaSubiendo,
+  galeriaSubiendo,
+  galeriaActualizandoId,
+  onSubirPortada,
+  onAgregarImagenGaleria,
+  onActualizarTextoGaleria,
+  onReemplazarImagenGaleria,
+  onEliminarImagenGaleria,
 }) => {
   
   if (!esAdministrador) {
@@ -94,6 +106,16 @@ export const AdminPanelView = ({
       <div className="panel-administracion">
         <div className="cargando">
           <p>Cargando productos...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (contenidoHomeCargando && vistaActiva === "home") {
+    return (
+      <div className="panel-administracion">
+        <div className="cargando">
+          <p>Cargando contenido de inicio...</p>
         </div>
       </div>
     );
@@ -124,6 +146,13 @@ export const AdminPanelView = ({
             onClick={() => onCambiarVista("productos")}
           >
             📦 Productos ({productos.length})
+          </button>
+
+          <button
+            className={vistaActiva === "home" ? "btn-activo" : ""}
+            onClick={() => onCambiarVista("home")}
+          >
+            🏠 Inicio
           </button>
 
           <button
@@ -185,6 +214,22 @@ export const AdminPanelView = ({
           pedidos={pedidos}
           pedidosCargando={pedidosCargando}
           onActualizarEstadoPedido={onActualizarEstadoPedido}
+        />
+      )}
+
+      {vistaActiva === "home" && (
+        <AdminHomeView
+          portadaImagenUrl={contenidoHome?.portada?.imagenUrl}
+          galeria={contenidoHome?.galeria ?? []}
+          portadaSubiendo={portadaSubiendo}
+          galeriaSubiendo={galeriaSubiendo}
+          galeriaActualizandoId={galeriaActualizandoId}
+          errorHome={contenidoHomeError}
+          onSubirPortada={onSubirPortada}
+          onAgregarImagenGaleria={onAgregarImagenGaleria}
+          onActualizarTextoGaleria={onActualizarTextoGaleria}
+          onReemplazarImagenGaleria={onReemplazarImagenGaleria}
+          onEliminarImagenGaleria={onEliminarImagenGaleria}
         />
       )}
 
