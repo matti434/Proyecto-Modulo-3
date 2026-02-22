@@ -1,22 +1,16 @@
 import { apiPost, apiGet, apiPut } from './apiClient';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+
 export const authApi = {
   login: async (credencial, contrasena) => {
-    const resultado = await apiPost('/auth/login', { credencial, contrasena });
-    if (resultado.token) {
-      localStorage.setItem('token', resultado.token);
-    }
-    return resultado;
+    return await apiPost('/auth/login', { credencial, contrasena });
   },
 
   registro: async (datos) => {
     const { contrasena, confirmarContrasena, ...resto } = datos;
     const body = { ...resto, password: contrasena };
-    const resultado = await apiPost('/auth/registro', body);
-    if (resultado.token) {
-      localStorage.setItem('token', resultado.token);
-    }
-    return resultado;
+    return await apiPost('/auth/registro', body);
   },
 
   obtenerPerfil: async () => {
@@ -27,11 +21,10 @@ export const authApi = {
     return await apiPut('/auth/perfil', datos);
   },
 
-  logout: () => {
-    localStorage.removeItem('token');
+  logout: async () => {
+    await fetch(`${API_URL}/auth/logout`, {
+      method: 'POST',
+      credentials: 'include',
+    });
   },
-
-  tieneToken: () => {
-    return !!localStorage.getItem('token');
-  }
 };

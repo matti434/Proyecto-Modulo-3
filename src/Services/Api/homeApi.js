@@ -1,10 +1,5 @@
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
-const getAuthHeaders = () => {
-    const token = localStorage.getItem('token');
-    return token ? { Authorization: `Bearer ${token}` } : {};
-};
-
 /**
  * Obtiene el contenido de la home (galería + portada) desde el backend.
  * @returns {Promise<{ galeria: Array<{ id?: string, url: string, texto: string }>, portada: { imagenUrl: string } }>}
@@ -12,7 +7,7 @@ const getAuthHeaders = () => {
 export const obtenerContenidoHome = async () => {
     const response = await fetch(`${API_URL}/home`, {
     method: 'GET',
-    headers: { ...getAuthHeaders() },
+    credentials: 'include',
   });
   const data = await response.json().catch(() => ({}));
   if (!response.ok) {
@@ -32,7 +27,7 @@ export const subirPortada = async (file) => {
   formData.append('imagen', file);
   const response = await fetch(`${API_URL}/home/portada/upload`, {
     method: 'POST',
-    headers: getAuthHeaders(),
+    credentials: 'include',
     body: formData,
   });
   const data = await response.json().catch(() => ({}));
@@ -59,7 +54,7 @@ export const agregarImagenGaleria = async (file, texto) => {
   formData.append('texto', texto || '');
   const response = await fetch(`${API_URL}/home/galeria`, {
     method: 'POST',
-    headers: getAuthHeaders(),
+    credentials: 'include',
     body: formData,
   });
   const data = await response.json().catch(() => ({}));
@@ -82,10 +77,8 @@ export const agregarImagenGaleria = async (file, texto) => {
 export const actualizarTextoGaleria = async (id, texto) => {
   const response = await fetch(`${API_URL}/home/galeria/${id}`, {
     method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      ...getAuthHeaders(),
-    },
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ texto: texto || '' }),
   });
   const data = await response.json().catch(() => ({}));
@@ -105,7 +98,7 @@ export const reemplazarImagenGaleria = async (id, file) => {
   formData.append('imagen', file);
   const response = await fetch(`${API_URL}/home/galeria/${id}/imagen`, {
     method: 'POST',
-    headers: getAuthHeaders(),
+    credentials: 'include',
     body: formData,
   });
   const data = await response.json().catch(() => ({}));
@@ -126,7 +119,7 @@ export const reemplazarImagenGaleria = async (id, file) => {
 export const eliminarImagenGaleria = async (id) => {
   const response = await fetch(`${API_URL}/home/galeria/${id}`, {
     method: 'DELETE',
-    headers: getAuthHeaders(),
+    credentials: 'include',
   });
   const data = await response.json().catch(() => ({}));
   if (!response.ok) {

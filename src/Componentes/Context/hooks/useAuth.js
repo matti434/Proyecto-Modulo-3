@@ -10,8 +10,8 @@ export const useAuthActions = (setUsuarioActual, setUsuarios) => {
         credenciales.contrasena
       );
 
-      if (resultado.token || resultado.usuario) {
-        const usuario = resultado.usuario || resultado;
+      if (resultado.exito && resultado.usuario) {
+        const usuario = resultado.usuario;
         const usuarioJSON =
           typeof usuario.toJSON === "function" ? usuario.toJSON() : usuario;
         setUsuarioActual(usuarioJSON);
@@ -41,19 +41,22 @@ export const useAuthActions = (setUsuarioActual, setUsuarios) => {
     }
   }, [setUsuarioActual]);
 
-  const logout = useCallback(() => {
-    setUsuarioActual(null);
-    localStorage.removeItem("ultimoUsuario");
-    authApi.logout();
-    toast.success("Sesión cerrada");
+  const logout = useCallback(async () => {
+    try {
+      await authApi.logout();
+    } finally {
+      setUsuarioActual(null);
+      localStorage.removeItem("ultimoUsuario");
+      toast.success("Sesión cerrada");
+    }
   }, [setUsuarioActual]);
 
   const registrarUsuario = useCallback(async (datos) => {
     try {
       const resultado = await authApi.registro(datos);
 
-      if (resultado.token || resultado.usuario) {
-        const usuario = resultado.usuario || resultado;
+      if (resultado.exito && resultado.usuario) {
+        const usuario = resultado.usuario;
         const usuarioJSON =
           typeof usuario.toJSON === "function" ? usuario.toJSON() : usuario;
         setUsuarios((prev) => [...prev, usuarioJSON]);
