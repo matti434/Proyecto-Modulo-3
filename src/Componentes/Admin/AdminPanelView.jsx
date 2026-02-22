@@ -9,7 +9,6 @@ import { AdminSuspendidosView } from "./AdminSuspendidosView";
 import { AdminUsuariosView } from "./AdminUsuariosView";
 import MapaUsuarios from "./MapaUsuarios";
 import { ModalEditarUsuarioView } from "./ModalEditarUsuarioView";
-import { AdminHomeView } from "./AdminHomeView";
 
 import "./AdminPanel.css";
 
