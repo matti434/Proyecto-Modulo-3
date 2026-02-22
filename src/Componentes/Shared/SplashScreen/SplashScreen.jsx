@@ -2,14 +2,12 @@ import { useState, useEffect } from 'react';
 import Lottie from 'lottie-react';
 import './SplashScreen.css';
 
-const LOTTIE_URL = '/Portada/Motorcycle.json';
-
 const SplashScreen = ({ onFinish }) => {
   const [isVisible, setIsVisible] = useState(true);
   const [animationData, setAnimationData] = useState(null);
 
   useEffect(() => {
-    fetch(LOTTIE_URL)
+    fetch('/Portada/Motorcycle.json')
       .then((res) => res.json())
       .then(setAnimationData)
       .catch(() => setAnimationData(null));
