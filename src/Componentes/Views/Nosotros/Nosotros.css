@@ -24,7 +24,7 @@
 
 .grid-integrantes {
   display: grid;
-  grid-template-columns: repeat(5, 1fr); /* 👈 las 5 juntas */
+  grid-template-columns: repeat(5, 1fr); 
   gap: 35px;
   max-width: 1400px;
   margin: 0 auto;

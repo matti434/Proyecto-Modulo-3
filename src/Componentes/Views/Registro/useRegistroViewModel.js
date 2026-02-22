@@ -11,12 +11,12 @@ export const useRegistroViewModel = ({ onClose }) => {
       try {
         const resultado = await authApi.registro(data);
 
-        if (resultado.token || resultado.usuario) {
+        if (resultado.exito && resultado.usuario) {
           toast.success("¡Registro exitoso! Bienvenido a Rolling Motors");
           const usuario =
             resultado.usuario && typeof resultado.usuario.toJSON === "function"
               ? resultado.usuario.toJSON()
-              : resultado.usuario ?? resultado;
+              : resultado.usuario;
           if (usuario) {
             setUsuarioActual(usuario);
             localStorage.setItem("ultimoUsuario", JSON.stringify(usuario));

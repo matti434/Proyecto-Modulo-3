@@ -1,4 +1,4 @@
-/* ================= MODAL BASE ================= */
+
 
 .modal-login-moderno {
   max-width: none !important;
@@ -32,7 +32,7 @@
   padding: 0;
 }
 
-/* ================= OVERLAY ================= */
+
 
 .modal-overlay {
   position: fixed;
@@ -45,7 +45,7 @@
   z-index: 1;
 }
 
-/* ================= CONTAINER ================= */
+
 
 .modal-container {
   position: relative;
@@ -71,7 +71,7 @@
       var(--color-rojo));
 }
 
-/* ================= BOTÓN CERRAR ================= */
+
 
 .btn-cerrar-moderno {
   position: absolute;
@@ -95,7 +95,7 @@
   transform: rotate(90deg);
 }
 
-/* ================= HEADER ================= */
+
 
 .encabezado-login {
   padding: 1rem 1.8rem 0.8rem;
@@ -124,7 +124,7 @@
   margin: 0;
 }
 
-/* ================= BODY (SCROLL INTERNO) ================= */
+
 
 .cuerpo-login {
   padding: 1rem 1rem 1.6rem;
@@ -136,7 +136,7 @@
   background: var(--color-fondo-secundario);
 }
 
-/* Scroll limpio */
+
 .cuerpo-login::-webkit-scrollbar {
   width: 6px;
 }
@@ -146,7 +146,7 @@
   border-radius: 6px;
 }
 
-/* ================= ANIMACIÓN ================= */
+
 
 @keyframes modalSlideUp {
   from {
@@ -172,7 +172,7 @@
   }
 }
 
-/* ================= RESPONSIVE ================= */
+
 
 @media (max-width: 768px) {
   .modal-container {

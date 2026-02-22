@@ -40,22 +40,11 @@ export const UserProvider = ({ children }) => {
       setUsuarios(listaUsuarios);
       setUsuariosSuspendidos(listaSuspendidos);
 
-      if (authApi.tieneToken()) {
-        try {
-          const perfil = await authApi.obtenerPerfil();
-          const usuarioJSON = normalizarUsuario(perfil?.usuario ?? perfil);
-          if (usuarioJSON) setUsuarioActual(usuarioJSON);
-        } catch {
-          const ultimo = JSON.parse(
-            localStorage.getItem("ultimoUsuario") || "null"
-          );
-          if (ultimo) {
-            const usuarioValido = listaUsuarios.find((u) => u.id === ultimo.id);
-            if (usuarioValido) setUsuarioActual(usuarioValido);
-            else localStorage.removeItem("ultimoUsuario");
-          }
-        }
-      } else {
+      try {
+        const perfil = await authApi.obtenerPerfil();
+        const usuarioJSON = normalizarUsuario(perfil?.usuario ?? perfil);
+        if (usuarioJSON) setUsuarioActual(usuarioJSON);
+      } catch {
         const ultimo = JSON.parse(
           localStorage.getItem("ultimoUsuario") || "null"
         );
