@@ -23,6 +23,25 @@ export const UserProvider = ({ children }) => {
     try {
       setCargando(true);
 
+      // Primero comprobar si hay sesión (perfil). Si no hay, no llamar a usuarios (evita 401 en primera visita).
+      let perfil = null;
+      try {
+        perfil = await authApi.obtenerPerfil();
+      } catch {
+        // Sin sesión (401 o error): no pedir lista de usuarios, dejar listas vacías y no mostrar error al usuario.
+        setUsuarios([]);
+        setUsuariosSuspendidos([]);
+        const ultimo = JSON.parse(localStorage.getItem("ultimoUsuario") || "null");
+        if (ultimo) setUsuarioActual(ultimo);
+        else setUsuarioActual(null);
+        setCargando(false);
+        return;
+      }
+
+      const usuarioJSON = normalizarUsuario(perfil?.usuario ?? perfil);
+      if (usuarioJSON) setUsuarioActual(usuarioJSON);
+
+      // Solo si hay sesión, cargar listas de usuarios (endpoints que requieren auth).
       const [dataUsuarios, dataSuspendidos] = await Promise.all([
         usuariosApi.obtenerTodos(true),
         usuariosApi.obtenerSuspendidos(),
@@ -39,21 +58,6 @@ export const UserProvider = ({ children }) => {
 
       setUsuarios(listaUsuarios);
       setUsuariosSuspendidos(listaSuspendidos);
-
-      try {
-        const perfil = await authApi.obtenerPerfil();
-        const usuarioJSON = normalizarUsuario(perfil?.usuario ?? perfil);
-        if (usuarioJSON) setUsuarioActual(usuarioJSON);
-      } catch {
-        const ultimo = JSON.parse(
-          localStorage.getItem("ultimoUsuario") || "null"
-        );
-        if (ultimo) {
-          const usuarioValido = listaUsuarios.find((u) => u.id === ultimo.id);
-          if (usuarioValido) setUsuarioActual(usuarioValido);
-          else localStorage.removeItem("ultimoUsuario");
-        }
-      }
     } catch (err) {
       console.error("Error al cargar usuarios:", err);
       toast.error(
