@@ -18,16 +18,12 @@ const buildQuery = (params = {}) => {
 };
 
 export const subirImagenProducto = async (file) => {
-  const token = localStorage.getItem('token');
   const formData = new FormData();
   formData.append('imagen', file);
 
-  const headers = {};
-  if (token) headers.Authorization = `Bearer ${token}`;
-
   const response = await fetch(`${API_URL}/productos/upload`, {
     method: 'POST',
-    headers,
+    credentials: 'include',
     body: formData,
   });
 

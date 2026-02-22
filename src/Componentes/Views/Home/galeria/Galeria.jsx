@@ -16,6 +16,7 @@ const Galeria = ({ imagenes = [] }) => {
 
   const indexPrev =
     (index - 1 + imagenes.length) % Math.max(1, imagenes.length);
+
   const indexNext = (index + 1) % Math.max(1, imagenes.length);
 
   if (!imagenes.length) {

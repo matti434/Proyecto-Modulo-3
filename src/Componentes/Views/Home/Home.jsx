@@ -21,10 +21,12 @@ const Home = () => {
         if (!cancel) {
           setContenido({
             galeria: Array.isArray(data.galeria) ? data.galeria : [],
+
             portada:
               data.portada && data.portada.imagenUrl
                 ? { imagenUrl: data.portada.imagenUrl }
                 : { imagenUrl: "" },
+
           });
         }
       } catch (e) {
@@ -39,6 +41,7 @@ const Home = () => {
     return () => {
       cancel = true;
     };
+
   }, []);
 
   if (cargando) {

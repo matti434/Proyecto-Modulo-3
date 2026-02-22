@@ -1,13 +1,11 @@
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 export const fetchApi = async (endpoint, options = {}) => {
-    const token = localStorage.getItem('token');
-
     const config = {
         ...options,
+        credentials: 'include',
         headers: {
             'Content-Type': 'application/json',
-            ...(token && { Authorization: `Bearer ${token}` }),
             ...options.headers
         }
     };
@@ -19,10 +17,6 @@ export const fetchApi = async (endpoint, options = {}) => {
     try {
         const response = await fetch(`${API_URL}${endpoint}`, config);
         const data = await response.json().catch(() => ({}));
-
-        if(response.status === 401 && token) {
-            localStorage.removeItem('token');
-        }
 
         if (!response.ok) {
             throw new Error(data.mensaje || 'Error en la peticion');

@@ -26,3 +26,4 @@ const Portada = ({ imagenUrl = "" }) => {
 };
 
 export default Portada;
+
