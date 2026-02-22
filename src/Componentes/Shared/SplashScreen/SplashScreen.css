@@ -76,3 +76,9 @@
     font-size: 2.5rem;
   }
 }
+
+.splash-lottie {
+  width: 200px;
+  height: 200px;
+  margin: 0 auto 1rem;
+}
