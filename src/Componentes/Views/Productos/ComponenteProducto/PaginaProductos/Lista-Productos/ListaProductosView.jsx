@@ -1,8 +1,18 @@
-import { Row, Col, Spinner, Alert, Badge } from 'react-bootstrap';
-import CardProducto from '../card-Producto/CardProducto';
-import './ListaProducto.css';
+import { Row, Col, Spinner, Alert, Badge, Pagination } from "react-bootstrap";
+import CardProducto from "../card-Producto/CardProducto";
+import "./ListaProducto.css";
 
-const ListaProductosView = ({ productos, cargando, filtros, tieneResultados }) => {
+const ListaProductosView = ({
+  productos,
+  cargando,
+  filtros,
+  tieneResultados,
+  cantidadResultados,
+  paginaActual,
+  totalPaginas,
+  productosPorPagina,
+  irAPagina,
+}) => {
   if (cargando) {
     return (
       <div className="contenedor-cargando">
@@ -16,16 +26,14 @@ const ListaProductosView = ({ productos, cargando, filtros, tieneResultados }) =
     return (
       <Alert variant="info" className="alerta-sin-productos">
         <Alert.Heading>
-          {filtros.categoria 
+          {filtros.categoria
             ? `No hay productos en la categoría "${filtros.categoria}"`
-            : 'No se encontraron productos'
-          }
+            : "No se encontraron productos"}
         </Alert.Heading>
         <p>
-          {filtros.terminoBusqueda 
+          {filtros.terminoBusqueda
             ? `No hay resultados para "${filtros.terminoBusqueda}"`
-            : `No hay productos disponibles con los filtros seleccionados`
-          }
+            : `No hay productos disponibles con los filtros seleccionados`}
         </p>
       </Alert>
     );
@@ -39,9 +47,10 @@ const ListaProductosView = ({ productos, cargando, filtros, tieneResultados }) =
             <div>
               <h4 className="mb-2">
                 <Badge bg="primary" className="me-2">
-                  {filtros.categoria}
+                  {cantidadResultados} producto
+                  {cantidadResultados !== 1 ? "s" : ""}
                 </Badge>
-                {productos.length} producto{productos.length !== 1 ? 's' : ''}
+                {productos.length} producto{productos.length !== 1 ? "s" : ""}
               </h4>
             </div>
             <small className="text-muted">
@@ -50,16 +59,47 @@ const ListaProductosView = ({ productos, cargando, filtros, tieneResultados }) =
           </div>
         </div>
       )}
-
-      <Row className="g-4">
-        {productos.map(producto => (
-          <Col key={producto.id} xs={12} sm={6} lg={4} xl={3}>
-            <CardProducto {...producto} />
-          </Col>
-        ))}
-      </Row>
+      div className="contenedor-grid-productos"
+      {productos.map((producto) => (
+        <div key={producto.id ?? producto._id} className="item-producto">
+          <CardProducto {...producto} />
+        </div>
+      ))}
     </div>
   );
 };
+{
+  totalPaginas > 1 && (
+    <div className="paginacion-productos mt-4">
+      <span className="info-pagina">
+        Mostrando {(paginaActual - 1) * productosPorPagina + 1}–
+        {Math.min(paginaActual * productosPorPagina, cantidadResultados)} de
+        {cantidadResultados}
+      </span>
+      <Pagination className="mb-0">
+        <Pagination.Prev
+          disabled={paginaActual === 1}
+          onClick={() => irAPagina(paginaActual - 1)}
+          aria-label="Anterior"
+        />
+
+        {Array.from({ length: totalPaginas }, (_, i) => i + 1).map((num) => (
+          <Pagination.Item
+            key={num}
+            active={num === paginaActual}
+            onClick={() => irAPagina(num)}
+          >
+            {num}
+          </Pagination.Item>
+        ))}
+        <Pagination.Next
+          disabled={paginaActual === totalPaginas}
+          onClick={() => irAPagina(paginaActual + 1)}
+          aria-label="Siguiente"
+        />
+      </Pagination>
+    </div>
+  );
+}
 
 export default ListaProductosView;
