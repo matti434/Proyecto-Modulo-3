@@ -6,14 +6,14 @@ const INTEGRANTES = [
     id: 1,
     nombre: "Matias Lazarte",
     descripcion: "Descripción del primer miembro del equipo.",
-    foto: "public/Equipo/foto_carnet_32x43mm_300dpi.jpg",
+    foto: "Equipo/foto_carnet_32x43mm_300dpi.jpg",
     github: "https://github.com/matti434",
   },
   {
     id: 2,
     nombre: "Alvaro Morillo",
     descripcion: "Descripción del segundo miembro del equipo.",
-    foto: "public/Equipo/foto_carnet_32x43mm_final_300dpi.jpg",
+    foto: "Equipo/foto_carnet_32x43mm_final_300dpi.jpg",
     github: "https://github.com/alvaro-morillo",
   },
   {
@@ -27,7 +27,7 @@ const INTEGRANTES = [
     id: 4,
     nombre: "Patricio Romero",
     descripcion: "Descripción del cuarto miembro del equipo.",
-    foto: "public/Equipo/foto_32x43mm_300dpi.jpg",
+    foto: "Equipo/foto_32x43mm_300dpi.jpg",
     github: "https://github.com/pato1404",
   },
 ];
