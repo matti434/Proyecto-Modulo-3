@@ -187,17 +187,13 @@ color: #ffffff !important;
 
 
 .buscador-royal-enfield .titulo-buscador {
-  color: #1a1f2e !important;
+  color: #ffffff !important;
   font-weight: 800;
 }
 
 .buscador-royal-enfield > .row {
-background: #1a1f2e;
-padding: 1rem;
-border-radius: 12px;
-margin-bottom: 1rem;
-}
-
-.buscador-royal-enfield .titulo-buscador {
-  color: #1a1f2e !important;
+  background: #1a1f2e;
+  padding: 1rem;
+  border-radius: 12px;
+  margin-bottom: 1rem;
 }

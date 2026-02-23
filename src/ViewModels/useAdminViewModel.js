@@ -5,6 +5,7 @@ import { pedidosApi } from "../Services/Api";
 import { homeApi } from "../Services/Api/homeApi";
 import toast from "react-hot-toast";
 import { confirmarAccion } from "../Componentes/Utils/confirmacion";
+import { pedidoSchema } from "../Componentes/Utils/ValidacionesForm";
 import { useAdminProductoForm } from "./useAdminProductoForm";
 
 export const useAdminViewModel = () => {
@@ -40,7 +41,9 @@ export const useAdminViewModel = () => {
 
   const [pedidos, setPedidos] = useState([]);
   const [pedidosCargando, setPedidosCargando] = useState(false);
-  const [pedidoActual, setPedidoActual] = useState({ id: null, titulo: "", descripcion: "" });
+  const [pedidoActual, setPedidoActual] = useState({ id: null, titulo: "", descripcion: "", fecha: "" });
+  const [mostrarFormPedido, setMostrarFormPedido] = useState(false);
+  const [enviandoPedido, setEnviandoPedido] = useState(false);
   const [modoPedido, setModoPedido] = useState("agregar");
   const [erroresPedido, setErroresPedido] = useState({});
 
@@ -264,20 +267,65 @@ export const useAdminViewModel = () => {
     }
   }, []);
 
-  const manejarGuardarPedido = useCallback(() => {
-    toast.info("Los pedidos se crean desde el carrito en el checkout.");
-  }, []);
+  const manejarGuardarPedido = useCallback(async () => {
+    const resultado = pedidoSchema.safeParse({
+      titulo: (pedidoActual.titulo ?? "").trim(),
+      descripcion: (pedidoActual.descripcion ?? "").trim(),
+      fecha: (pedidoActual.fecha ?? "").trim(),
+    });
+    if (!resultado.success) {
+      const errores = {};
+      resultado.error.errors.forEach((err) => {
+        const path = err.path[0];
+        if (path) errores[path] = err.message;
+      });
+      setErroresPedido(errores);
+      toast.error("Revisa los campos del pedido.");
+      return;
+    }
+    setErroresPedido({});
+    setEnviandoPedido(true);
+    try {
+      await pedidosApi.crear({
+        titulo: resultado.data.titulo,
+        descripcion: resultado.data.descripcion,
+        fecha: resultado.data.fecha,
+      });
+      toast.success("Pedido creado correctamente.");
+      setPedidoActual({ id: null, titulo: "", descripcion: "", fecha: "" });
+      setMostrarFormPedido(false);
+      const data = await pedidosApi.obtenerTodos();
+      setPedidos(Array.isArray(data) ? data : []);
+    } catch (err) {
+      toast.error(err?.message || "Error al crear el pedido");
+    } finally {
+      setEnviandoPedido(false);
+    }
+  }, [pedidoActual.titulo, pedidoActual.descripcion, pedidoActual.fecha]);
 
   const manejarPedidoCampoChange = useCallback((campo, valor) => {
     setPedidoActual((prev) => ({ ...prev, [campo]: valor }));
     setErroresPedido((prev) => ({ ...prev, [campo]: undefined }));
   }, []);
 
+  const abrirFormPedido = useCallback(() => {
+    setPedidoActual({ id: null, titulo: "", descripcion: "", fecha: "" });
+    setErroresPedido({});
+    setMostrarFormPedido(true);
+  }, []);
+
+  const cerrarFormPedido = useCallback(() => {
+    setMostrarFormPedido(false);
+    setPedidoActual({ id: null, titulo: "", descripcion: "", fecha: "" });
+    setErroresPedido({});
+  }, []);
+
   const manejarEditarPedido = useCallback((pedido) => {
     setPedidoActual({
       id: pedido._id || pedido.id,
-      titulo: pedido.usuario?.nombreDeUsuario || pedido.usuario?.email || "",
-      descripcion: (pedido.estado || "").slice(0, 200),
+      titulo: pedido.titulo ?? "",
+      descripcion: pedido.descripcion ?? "",
+      fecha: pedido.fecha ? String(pedido.fecha).slice(0, 10) : "",
     });
     setModoPedido("editar");
     setErroresPedido({});
@@ -400,6 +448,8 @@ export const useAdminViewModel = () => {
     pedidosCargando,
     pedidoActual,
     modoPedido,
+    mostrarFormPedido,
+    enviandoPedido,
 
     datosFormularioProducto,
     errorImagenProducto,
@@ -456,6 +506,8 @@ export const useAdminViewModel = () => {
     onPedidoActualChange: setPedidoActual,
     onPedidoCampoChange: manejarPedidoCampoChange,
     onGuardarPedido: manejarGuardarPedido,
+    onAbrirFormPedido: abrirFormPedido,
+    onCerrarFormPedido: cerrarFormPedido,
     onEditarPedido: manejarEditarPedido,
     onEliminarPedido: manejarEliminarPedido,
     onActualizarEstadoPedido: manejarActualizarEstadoPedido,

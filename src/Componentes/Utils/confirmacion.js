@@ -1,4 +1,5 @@
 import Swal from 'sweetalert2';
+import './confirmacion.css';
 
 // Alerta de confirmación (reemplaza a window.confirm)
 export const confirmarAccion = async (titulo, texto) => {
@@ -7,13 +8,18 @@ export const confirmarAccion = async (titulo, texto) => {
     text: texto,
     icon: 'warning',
     showCancelButton: true,
-    confirmButtonColor: '#b77702',
-    cancelButtonColor: '#d33',
     confirmButtonText: 'Confirmar',
     cancelButtonText: 'Cancelar',
     reverseButtons: true,
-    background: '#0c0c0c',
-    color: '#c69b0c'
+
+    customClass: {
+      container: 'swal-custom-container',
+      popup: 'swal-custom-popup',
+      title: 'swal-custom-title',
+      confirmButton: 'swal-custom-confirm',
+      cancelButton: 'swal-custom-cancel'
+    },
+      buttonsStyling: false // Importante para que no use los estilos por defecto de SweetAlert
   });
 
   return result.isConfirmed;

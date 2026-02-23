@@ -1,75 +1,70 @@
 import { FaGithub } from "react-icons/fa";
 import "./Nosotros.css";
 
-const integrantes = [
+const INTEGRANTES = [
   {
     id: 1,
-    nombre: "Matias Lazarte",
-    rol: "Lider Tecnico",
-    descripcion:
-      "Construyo la infraestructura técnica sólida que soporta cada función, siempre pensando en cómo cada línea de código mejora la experiencia global.",
-    github: "https://github.com/matti434",
+    nombre: "Integrante 1",
+    descripcion: "Descripción del primer miembro del equipo.",
+    foto: "/equipo/1.jpg",
+    github: "https://github.com",
   },
   {
     id: 2,
-    nombre: "Romina Danelutto",
-    rol: "Scrum Master",
-    descripcion:
-      "Coordino al equipo, organizo y facilito el cumplimiento de cada sprint. Colaboro en el desarrollo de nuevas funcionalidades para mejorar la experiencia del usuario",
-    github: "https://github.com/rominadanelutto",
+    nombre: "Integrante 2",
+    descripcion: "Descripción del segundo miembro del equipo.",
+    foto: "/equipo/2.jpg",
+    github: "https://github.com",
   },
   {
     id: 3,
-    nombre: "Alvaro Morillo",
-    rol: "Fullstack Developer",
-    descripcion:
-      "Conecto cada pieza del proyecto, asegurando que diseño, tecnología y estrategia trabajen en armonía hacia un objetivo común. Trabajo en equipo para integrar mejoras continuas",
-    github: "https://github.com/alvaro-morillo",
+    nombre: "Integrante 3",
+    descripcion: "Descripción del tercer miembro del equipo.",
+    foto: "/equipo/3.jpg",
+    github: "https://github.com",
   },
-    {
+  {
     id: 4,
-    nombre: "Miguel Zambrano",
-    rol: "Fullstack Developer",
-    descripcion:
-      "Participo tanto en frontend como backend, integrando componentes visuales con la lógica del sistema. Apoyo en nuevas funcionalidades y optimización general del proyecto. Aporte constante a la evolución técnica y funcional del proyecto",
-    github: "https://github.com/mizambran",
-  },
-    {
-    id: 5,
-    nombre: "Patricio Romero",
-    rol: "Fullstack Developer",
-    descripcion:
-      "Colaboro en el desarrollo de nuevas funcionalidades, conectando diseño y código para mejorar la experiencia del usuario. Aporte constante a la evolución técnica y funcional",
-    github: "https://github.com/pato1404",
+    nombre: "Integrante 4",
+    descripcion: "Descripción del cuarto miembro del equipo.",
+    foto: "/equipo/4.jpg",
+    github: "https://github.com",
   },
 ];
 
- const Nosotros = () => {
+const Nosotros = () => {
   return (
     <div className="nosotros-contenedor mt-5">
       <h1 className="titulo-nosotros">Nuestro Equipo</h1>
-
       <div className="grid-integrantes">
-        {integrantes.map((persona) => (
-          <div className="tarjeta-integrante" key={persona.id}>
-
-            <h3>{persona.nombre}</h3>
-            <p className="rol-integrante">{persona.rol}</p>
+        {INTEGRANTES.map((persona) => (
+          <article className="tarjeta-integrante" key={persona.id}>
+            <div className="tarjeta-integrante-imagen-wrapper">
+              <img
+                src={persona.foto}
+                alt={persona.nombre}
+                className="tarjeta-integrante-imagen"
+                onError={(e) => {
+                  e.target.src = "https://placehold.co/280x280/2a2a2a/c9a227?text=Foto";
+                }}
+              />
+            </div>
+            <h3 className="nombre-integrante">{persona.nombre}</h3>
             <p className="descripcion-integrante">{persona.descripcion}</p>
-
             <a
               href={persona.github}
               target="_blank"
               className="link-github"
               rel="noopener noreferrer"
+              aria-label={`GitHub de ${persona.nombre}`}
             >
-              <FaGithub size={25} /> GitHub
+              <FaGithub size={22} /> GitHub
             </a>
-          </div>
+          </article>
         ))}
       </div>
     </div>
   );
 };
 
-export default Nosotros
+export default Nosotros;

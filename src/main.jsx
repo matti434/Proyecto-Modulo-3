@@ -4,13 +4,10 @@ import { Toaster } from "react-hot-toast";
 
 import App from "./App.jsx";
 import "./Componentes/Utils/I18next.js";
-import { inicializarLocalStorage } from "./Componentes/Utils/inicializarLocalStorage.js";
-import { initializeAdminUser } from "./db.js";
 import "./estilos/variables.css";
 import "./RoyaLToast.css";
 
 inicializarLocalStorage();
-initializeAdminUser();
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>

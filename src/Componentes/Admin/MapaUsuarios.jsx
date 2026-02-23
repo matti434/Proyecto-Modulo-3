@@ -14,8 +14,7 @@ L.Icon.Default.mergeOptions({
 
 const MapaUsuarios = ({ usuarios: usuariosProp }) => {
   const [mapaListo, setMapaListo] = useState(false);
-  const usuariosLocal = JSON.parse(localStorage.getItem("usuarios")) || [];
-  const usuarios = Array.isArray(usuariosProp) ? usuariosProp : usuariosLocal;
+  const usuarios = Array.isArray(usuariosProp) ? usuariosProp : [];
 
   const usuariosConCoordenadas = usuarios
     .map(user => {
