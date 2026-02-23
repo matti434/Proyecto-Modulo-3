@@ -1,75 +1,64 @@
+import { useState, useEffect } from "react";
 import { FaGithub } from "react-icons/fa";
+import { homeApi } from "../../../Services/Api/homeApi";
 import "./Nosotros.css";
-
-const integrantes = [
-  {
-    id: 1,
-    nombre: "Matias Lazarte",
-    rol: "Lider Tecnico",
-    descripcion:
-      "Construyo la infraestructura técnica sólida que soporta cada función, siempre pensando en cómo cada línea de código mejora la experiencia global.",
-    github: "https://github.com/matti434",
-  },
-  {
-    id: 2,
-    nombre: "Romina Danelutto",
-    rol: "Scrum Master",
-    descripcion:
-      "Coordino al equipo, organizo y facilito el cumplimiento de cada sprint. Colaboro en el desarrollo de nuevas funcionalidades para mejorar la experiencia del usuario",
-    github: "https://github.com/rominadanelutto",
-  },
-  {
-    id: 3,
-    nombre: "Alvaro Morillo",
-    rol: "Fullstack Developer",
-    descripcion:
-      "Conecto cada pieza del proyecto, asegurando que diseño, tecnología y estrategia trabajen en armonía hacia un objetivo común. Trabajo en equipo para integrar mejoras continuas",
-    github: "https://github.com/alvaro-morillo",
-  },
-    {
-    id: 4,
-    nombre: "Miguel Zambrano",
-    rol: "Fullstack Developer",
-    descripcion:
-      "Participo tanto en frontend como backend, integrando componentes visuales con la lógica del sistema. Apoyo en nuevas funcionalidades y optimización general del proyecto. Aporte constante a la evolución técnica y funcional del proyecto",
-    github: "https://github.com/mizambran",
-  },
-    {
-    id: 5,
-    nombre: "Patricio Romero",
-    rol: "Fullstack Developer",
-    descripcion:
-      "Colaboro en el desarrollo de nuevas funcionalidades, conectando diseño y código para mejorar la experiencia del usuario. Aporte constante a la evolución técnica y funcional",
-    github: "https://github.com/pato1404",
-  },
-];
-
- const Nosotros = () => {
-  return (
-    <div className="nosotros-contenedor mt-5">
-      <h1 className="titulo-nosotros">Nuestro Equipo</h1>
-
-      <div className="grid-integrantes">
-        {integrantes.map((persona) => (
-          <div className="tarjeta-integrante" key={persona.id}>
-
-            <h3>{persona.nombre}</h3>
-            <p className="rol-integrante">{persona.rol}</p>
-            <p className="descripcion-integrante">{persona.descripcion}</p>
-
-            <a
-              href={persona.github}
-              target="_blank"
-              className="link-github"
-              rel="noopener noreferrer"
-            >
-              <FaGithub size={25} /> GitHub
-            </a>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+const Nosotros = () => {
+const [equipo, setEquipo] = useState([]);
+const [cargando, setCargando] = useState(true);
+const [error, setError] = useState(null);
+useEffect(() => {
+let cancel = false;
+const cargar = async () => {
+try {
+const data = await homeApi.obtenerContenidoHome();
+if (!cancel && Array.isArray(data.equipo)) {
+setEquipo(data.equipo);
+}
+} catch (e) {
+if (!cancel) setError(e?.message || "Error al cargar el equipo");
+} finally {
+if (!cancel) setCargando(false);
+}
 };
-
-export default Nosotros
+cargar();
+return () => { cancel = true; };
+}, []);
+if (cargando) return <div className="nosotros-contenedor mt-5"><p>Cargando 
+equipo...</p></div>;
+if (error) return <div className="nosotros-contenedor mt-5"><p role="alert">
+{error}</p></div>;
+if (equipo.length === 0) return <div className="nosotros-contenedor mt-5"><p>No 
+hay integrantes.</p></div>;
+return (
+<div className="nosotros-contenedor mt-5">
+<h1 className="titulo-nosotros">Nuestro Equipo</h1>
+<div className="grid-integrantes">
+{equipo.map((persona) => (
+<div className="tarjeta-integrante" key={persona.id ?? persona._id}>
+{persona.imagenUrl && (
+<div className="tarjeta-integrante-imagen-wrapper">
+<img
+src={persona.imagenUrl}
+alt={persona.nombre ?? "Integrante"}
+className="tarjeta-integrante-imagen"
+/>
+</div>
+)}
+<h3>{persona.nombre}</h3>
+<p className="rol-integrante">{persona.rol}</p>
+<p className="descripcion-integrante">{persona.descripcion}</p>
+<a
+>
+href={persona.github}
+target="_blank"
+className="link-github"
+rel="noopener noreferrer"
+<FaGithub size={25} /> GitHub
+</a>
+</div>
+))}
+</div>
+</div>
+);
+};
+export default Nosotros;

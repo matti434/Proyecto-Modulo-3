@@ -233,6 +233,10 @@ export const AdminPanelView = ({
           onActualizarTextoGaleria={onActualizarTextoGaleria}
           onReemplazarImagenGaleria={onReemplazarImagenGaleria}
           onEliminarImagenGaleria={onEliminarImagenGaleria}
+          equipo={contenidoHome?.equipo ?? []}
+          equipoActualizandoId={equipoActualizandoId}
+          onActualizarIntegranteEquipo={onActualizarIntegranteEquipo}
+          onSubirImagenEquipo={onSubirImagenEquipo}
         />
       )}
 

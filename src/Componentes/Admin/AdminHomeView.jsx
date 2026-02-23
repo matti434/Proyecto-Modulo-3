@@ -100,6 +100,135 @@ export const AdminHomeView = ({
                   <td colSpan={3}>No hay imágenes en la galería.</td>
                 </tr>
               )}
+
+              <section className="seccion-home-admin">
+                <h3>Equipo (Nosotros)</h3>
+                  <p className="texto-ayuda-admin">
+                     Imágenes y datos que se muestran en la página Nosotros. Podés cambiar la foto 
+                     de cada integrante.
+                   </p>
+                  <div className="tabla-responsive">
+                 <table className="tabla-administracion">
+                 <thead>
+                   <tr>
+                    <th>Foto</th>
+                    <th>Nombre</th>
+                    <th>Rol</th>
+                    <th>Descripción</th>
+                   <th>GitHub</th>
+                    <th>Acciones</th>
+                   </tr>
+                 </thead>
+                 <tbody>
+                  {(!equipo || equipo.length === 0) && (
+                   <tr>
+                   <td colSpan={6}>No hay integrantes en el equipo.</td>
+                   </tr>
+                  )}
+                 {equipo?.map((integrante) => (
+                  <tr key={integrante.id ?? integrante._id}>
+                   <td>
+                   <div className="contenedor-imagen-tabla">
+                   {integrante.imagenUrl ? (
+                   <img
+                    src={integrante.imagenUrl}
+                    alt={integrante.nombre}
+                    style={{ width: 80, height: 50, objectFit: "cover" }}
+                  />
+                ) : (
+                  <span className="sin-imagen">Sin imagen</span>
+                )}
+              </div>
+            </td>
+            <td>
+              <input
+                type="text"
+               className="input-texto-galeria-admin"
+               defaultValue={integrante.nombre ?? ""}
+               onBlur={(e) => {
+               const v = e.target.value?.trim() ?? "";
+               const id = integrante.id ?? integrante._id;
+               if (id && v !== (integrante.nombre ?? "")) {
+               onActualizarIntegranteEquipo(id, { nombre: v });
+               }
+               }}
+               placeholder="Nombre"
+               style={{ width: "100%", maxWidth: 160 }}
+               />
+               </td>
+               <td>
+               <input
+                 type="text"
+                 className="input-texto-galeria-admin"
+                 defaultValue={integrante.rol ?? ""}
+                 onBlur={(e) => {
+                 const v = e.target.value?.trim() ?? "";
+                 const id = integrante.id ?? integrante._id;
+                 if (id && v !== (integrante.rol ?? "")) {
+                 onActualizarIntegranteEquipo(id, { rol: v });
+                 }
+                 }}
+                 placeholder="Rol"
+                 style={{ width: "100%", maxWidth: 140 }}
+                />
+               </td>
+               <td>
+               <input
+                 type="text"
+                 className="input-texto-galeria-admin"
+                 defaultValue={integrante.descripcion ?? ""}
+                  onBlur={(e) => {
+                  const v = e.target.value?.trim() ?? "";
+                  const id = integrante.id ?? integrante._id;
+                 if (id && v !== (integrante.descripcion ?? "")) {
+                 onActualizarIntegranteEquipo(id, { descripcion: v });
+                 }
+                 }}
+                 placeholder="Descripción"
+                 style={{ width: "100%", maxWidth: 280 }}
+               />
+                </td>
+                <td>
+               <input
+                 type="text"
+                 className="input-texto-galeria-admin"
+                 defaultValue={integrante.github ?? ""}
+                 onBlur={(e) => {
+                 const v = e.target.value?.trim() ?? "";
+                 const id = integrante.id ?? integrante._id;
+                 if (id && v !== (integrante.github ?? "")) {
+                 onActualizarIntegranteEquipo(id, { github: v });
+                 }
+                 }}
+                 placeholder="URL GitHub"
+                 style={{ width: "100%", maxWidth: 200 }}
+                />
+               </td>
+               <td>
+               <label className="boton-accion-admin pequeno">
+               {equipoActualizandoId === (integrante.id ?? integrante._id) ? 
+                "Subiendo..." : "Cambiar foto"}
+                <input
+                   type="file"
+                   accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
+                   onChange={(ev) => {
+                    const f = ev.target.files?.[0];
+                    const id = integrante.id ?? integrante._id;
+                    if (f && id) onSubirImagenEquipo(id, f);
+                    ev.target.value = "";
+                  }}
+                  disabled={!!equipoActualizandoId}
+                  hidden
+                />
+              </label>
+            </td>
+          </tr>
+        ))}
+</tbody>
+</table>
+</div>
+</section>
+
               {galeria?.map((item) => (
                 <tr key={item.id ?? item._id ?? item.url}>
                   <td>

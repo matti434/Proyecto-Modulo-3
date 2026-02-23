@@ -6,7 +6,7 @@
   padding: 80px 24px;
   min-height: 100vh;
   background:
-    radial-gradient(circle at top, #ffffff, #f1f1f1);
+    radial-gradient(circle at top, #353535, #030303f9);
   font-family: "Montserrat", sans-serif;
 }
 
@@ -17,7 +17,7 @@
   font-weight: 700;
   letter-spacing: 1px;
   margin-bottom: 60px;
-  color: #1c1c1c;
+  color: #b23030;
 }
 
 
@@ -36,14 +36,15 @@
 .tarjeta-integrante {
   background: rgba(255, 255, 255, 0.9);
   border-radius: 22px;
-  padding: 30px 24px;
+  padding: 50px 34px;
   text-align: center;
   position: relative;
   overflow: hidden;
 
   box-shadow:
-    0 15px 35px rgba(0, 0, 0, 0.08),
-    inset 0 0 0 1px rgba(0, 0, 0, 0.04);
+    0 15px 35px rgba(129, 17, 17, 0.356),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.864);
+  background-color: #F2F2F2;
 
   transition:
     transform 0.35s ease,
@@ -55,7 +56,7 @@
   position: absolute;
   inset: 0;
   background: linear-gradient(135deg,
-      rgba(0, 0, 0, 0.03),
+      rgba(112, 110, 110, 0.205),
       transparent);
   pointer-events: none;
 }
@@ -63,16 +64,28 @@
 .tarjeta-integrante:hover {
   transform: translateY(-10px);
   box-shadow:
-    0 25px 50px rgba(0, 0, 0, 0.15),
-    inset 0 0 0 1px rgba(0, 0, 0, 0.05);
+    0 25px 50px rgba(212, 40, 17, 0.596),
+    inset 0 0 0 1px rgba(212, 40, 17, 0.596);
 }
 
-
+.tarjeta-integrante-imagen-wrapper {
+width: 100%;
+aspect-ratio: 1;
+border-radius: 14px;
+overflow: hidden;
+margin-bottom: 16px;
+background: #eee;
+}
+.tarjeta-integrante-imagen {
+width: 100%;
+height: 100%;
+object-fit: cover;
+}
 
 .nombre-integrante {
   font-size: 1.2rem;
   font-weight: 600;
-  color: #1e1e1e;
+  color: #1c1c1c;
   margin-bottom: 4px;
 }
 
@@ -80,7 +93,7 @@
   font-size: 0.9rem;
   font-weight: 600;
   letter-spacing: 0.5px;
-  color: #777;
+  color: #1C1C1C;
   margin-bottom: 12px;
   text-transform: uppercase;
 }
@@ -88,7 +101,7 @@
 .descripcion-integrante {
   font-size: 0.92rem;
   line-height: 1.5;
-  color: #666;
+  color: #000000;
   margin-bottom: 22px;
 }
 
