@@ -66,7 +66,7 @@ const Home = () => {
     <div className="home-contenedor">
       <aside className="home-publicidad home-publicidad-izq" aria-hidden="true">
         <div className="home-publicidad-placeHolder">
-          <span>Publicidad 1</span>
+          <img src="/publicidad/images.jpg" alt="Publicidad" />
         </div>
       </aside>
       <main className="home-contenido-principal">
@@ -76,7 +76,7 @@ const Home = () => {
       </main>
       <aside className="home-publicidad home-publicidad-der" aria-hidden= "true">
         <div className="home-publicidad-placeholder">
-          <span>Publidcidad 2</span>
+          <img src="/publicidad/images (2).jpg" alt="Publicidad" />
         </div>
       </aside>
     </div>
