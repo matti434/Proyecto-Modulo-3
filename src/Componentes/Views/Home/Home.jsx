@@ -3,6 +3,8 @@ import Categorias from "../Productos/ComponenteProducto/Categorias/Categorias";
 import Galeria from "./galeria/Galeria";
 import Portada from "./inicio/Portada";
 import { homeApi } from "../../../Services/Api/homeApi";
+import "./Home.css";
+import { div } from "framer-motion/client";
 
 const Home = () => {
   const [contenido, setContenido] = useState({
@@ -61,10 +63,22 @@ const Home = () => {
   }
 
   return (
-    <div>
-      <Galeria imagenes={contenido.galeria} />
-      <Categorias />
-      <Portada imagenUrl={contenido.portada.imagenUrl} />
+    <div className="home-contenedor">
+      <aside className="home-publicidad home-publicidad-izq" aria-hidden="true">
+        <div className="home-publicidad-placeHolder">
+          <img src="/publicidad/images.jpg" alt="Publicidad" />
+        </div>
+      </aside>
+      <main className="home-contenido-principal">
+        <Galeria imagenes={contenido.galeria} />
+        <Categorias />
+        <Portada imagenUrl={contenido.portada.imagenUrl} />
+      </main>
+      <aside className="home-publicidad home-publicidad-der" aria-hidden= "true">
+        <div className="home-publicidad-placeholder">
+          <img src="/publicidad/images (2).jpg" alt="Publicidad" />
+        </div>
+      </aside>
     </div>
   );
 };
