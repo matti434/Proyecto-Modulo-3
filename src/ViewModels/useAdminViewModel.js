@@ -47,6 +47,7 @@ export const useAdminViewModel = () => {
   const [contenidoHome, setContenidoHome] = useState({
     galeria: [],
     portada: { imagenUrl: "" },
+    equipo: [],
   });
   const [contenidoHomeCargando, setContenidoHomeCargando] = useState(false);
   const [contenidoHomeError, setContenidoHomeError] = useState("");
@@ -295,8 +296,48 @@ export const useAdminViewModel = () => {
         data.portada && data.portada.imagenUrl
           ? { imagenUrl: data.portada.imagenUrl }
           : { imagenUrl: "" },
+          equipo: Array.isArray(data.equipo) ? data.equipo : [],
     });
   }, []);
+
+  const [equipoActualizandoId, setEquipoActualizandoId] = useState(null);
+
+  const manejarActualizarIntegranteEquipo = useCallback(async (id, campos) => {
+ if (id == null) return;
+ try {
+ await homeApi.actualizarIntegranteEquipo(id, campos);
+ setContenidoHome((prev) => ({
+ ... prev,
+ equipo: prev.equipo.map((it) =>
+ (it.id ?? it._id) === id ? { ...it, ...campos } : it
+ ),
+ }));
+ toast.success("Integrante actualizado");
+ } catch (err) {
+ toast.error(err?.message || "Error al actualizar");
+ }
+ }, []);
+  const manejarSubirImagenEquipo = useCallback(async (id, file) => {
+ if (id == null) return;
+ setEquipoActualizandoId(id);
+ setContenidoHomeError("");
+ try {
+ const data = await homeApi.subirImagenEquipo(id, file);
+ const url = data.imagenUrl || data.url || "";
+ setContenidoHome((prev) => ({
+ ... prev,
+ equipo: prev.equipo.map((it) =>
+ (it.id ?? it._id) === id ? { ...it, imagenUrl: url } : it
+ ),
+ }));
+ toast.success("Imagen actualizada");
+ } catch (err) {
+ setContenidoHomeError(err?.message || "Error al subir imagen");
+ toast.error(err?.message || "Error al subir imagen");
+ } finally {
+ setEquipoActualizandoId(null);
+ }
+ }, []);
 
   const manejarSubirPortada = useCallback(async (file) => {
     setPortadaSubiendo(true);
