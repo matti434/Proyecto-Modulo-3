@@ -1097,3 +1097,62 @@ button:disabled {
   border: 1px solid #ced4da;
   border-radius: 4px;
 }
+
+/* Formulario nuevo pedido (admin) */
+.formulario-pedido-admin {
+  padding: 1.25rem;
+  background: var(--admin-bg-secondary);
+  border-radius: 12px;
+  border: 1px solid var(--admin-border);
+}
+.formulario-pedido-admin h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1.1rem;
+  color: var(--admin-text-primary);
+}
+.formulario-pedido-campos {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 480px;
+}
+.campo-form-pedido label {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-size: 0.9rem;
+  color: var(--admin-text-secondary);
+}
+.campo-form-pedido input,
+.campo-form-pedido textarea {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  border: 1px solid var(--admin-border);
+  background: var(--admin-bg-input);
+  color: var(--admin-text-primary);
+  font-size: 0.95rem;
+}
+.campo-form-pedido input.input-error,
+.campo-form-pedido textarea.input-error {
+  border-color: var(--admin-error);
+  box-shadow: 0 0 0 2px var(--admin-error-focus);
+}
+.campo-form-pedido .mensaje-error-formulario {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.85rem;
+}
+.formulario-pedido-botones {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+.boton-accion-admin.boton-primario {
+  background: var(--admin-accent);
+  color: #0a0a0a;
+  border-color: var(--admin-accent);
+}
+.boton-accion-admin.boton-primario:hover:not(:disabled) {
+  background: var(--admin-accent-lighter);
+  border-color: var(--admin-accent-lighter);
+}

@@ -36,6 +36,8 @@ export const AdminPanelView = ({
   pedidosCargando,
   pedidoActual,
   modoPedido,
+  mostrarFormPedido,
+  enviandoPedido,
   // Estado del formulario de producto
   datosFormularioProducto,
   errorImagenProducto,
@@ -73,6 +75,8 @@ export const AdminPanelView = ({
   onPedidoActualChange,
   onPedidoCampoChange,
   onGuardarPedido,
+  onAbrirFormPedido,
+  onCerrarFormPedido,
   onEditarPedido,
   onEliminarPedido,
   onActualizarEstadoPedido,
@@ -216,7 +220,15 @@ export const AdminPanelView = ({
         <AdminPedidosView
           pedidos={pedidos}
           pedidosCargando={pedidosCargando}
+          pedidoActual={pedidoActual}
+          erroresPedido={erroresPedido}
+          mostrarFormPedido={mostrarFormPedido}
+          enviandoPedido={enviandoPedido}
           onActualizarEstadoPedido={onActualizarEstadoPedido}
+          onPedidoCampoChange={onPedidoCampoChange}
+          onGuardarPedido={onGuardarPedido}
+          onAbrirFormPedido={onAbrirFormPedido}
+          onCerrarFormPedido={onCerrarFormPedido}
         />
       )}
 

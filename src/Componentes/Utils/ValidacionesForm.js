@@ -112,6 +112,10 @@ export const cambiarContrasenaSchema = z
 // ============== SCHEMAS: CRUD ADMIN (PRODUCTO, USUARIO, PEDIDO) ==============
 // Única fuente de verdad para límites de caracteres (usar en formularios y validación)
 
+// Rango de fecha para pedidos (ej. fecha del pedido o entrega): 1930–2025
+export const PEDIDO_FECHA_MIN = new Date(1930, 0, 1);
+export const PEDIDO_FECHA_MAX = new Date(2025, 11, 31);
+
 export const LIMITES = {
   producto: {
     nombre: 20,
@@ -124,7 +128,7 @@ export const LIMITES = {
     ubicacion: 60,
     descripcion: 150,
   },
-  pedido: { titulo: 50, descripcion: 150 },
+  pedido: { titulo: 30, descripcion: 150 },
   usuario: { nombreDeUsuario: 20, email: 60 },
 };
 
@@ -222,9 +226,19 @@ export const editarUsuarioSchema = z.object({
     .refine(fechaEnRangoPermitido, "Entre 18 y 70 años (1955-2007)"),
 });
 
+function fechaPedidoEnRango(fecha) {
+  const d = new Date(fecha);
+  return d >= PEDIDO_FECHA_MIN && d <= PEDIDO_FECHA_MAX;
+}
+
 export const pedidoSchema = z.object({
   titulo: z.string().min(1, "Título obligatorio").max(D.titulo, `Máximo ${D.titulo} caracteres`),
   descripcion: z.string().min(1, "Descripción obligatoria").max(D.descripcion, `Máximo ${D.descripcion} caracteres`),
+  fecha: z
+    .string()
+    .min(1, "La fecha es requerida")
+    .refine(esFechaValida, "Formato: año-mes-día (YYYY-MM-DD)")
+    .refine(fechaPedidoEnRango, "La fecha debe estar entre 1930 y 2025"),
 });
 
 export default registroSchema;
