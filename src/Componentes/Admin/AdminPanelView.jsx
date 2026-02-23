@@ -83,15 +83,11 @@ export const AdminPanelView = ({
   portadaSubiendo,
   galeriaSubiendo,
   galeriaActualizandoId,
-  equipoActualizandoId,
   onSubirPortada,
   onAgregarImagenGaleria,
   onActualizarTextoGaleria,
   onReemplazarImagenGaleria,
   onEliminarImagenGaleria,
-  onActualizarIntegranteEquipo,
-  onSubirImagenEquipo,
-  onEliminarIntegranteEquipo,
 }) => {
   if (!esAdministrador) {
     return (
@@ -237,11 +233,6 @@ export const AdminPanelView = ({
           onActualizarTextoGaleria={onActualizarTextoGaleria}
           onReemplazarImagenGaleria={onReemplazarImagenGaleria}
           onEliminarImagenGaleria={onEliminarImagenGaleria}
-          equipo={contenidoHome?.equipo ?? []}
-          equipoActualizandoId={equipoActualizandoId}
-          onActualizarIntegranteEquipo={onActualizarIntegranteEquipo}
-          onSubirImagenEquipo={onSubirImagenEquipo}
-          onEliminarIntegranteEquipo={onEliminarIntegranteEquipo}
         />
       )}
 

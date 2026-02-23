@@ -4,7 +4,7 @@
  */
 export const inicializarLocalStorage = () => {
   try {
-    // Reservado para futuras claves de cliente (ej. preferencias) si se necesitan.
+    
   } catch (error) {
     console.error("Error al inicializar LocalStorage:", error);
   }

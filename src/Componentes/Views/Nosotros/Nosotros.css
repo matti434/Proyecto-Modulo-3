@@ -1,15 +1,11 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap");
 
-
-
 .nosotros-contenedor {
   padding: 80px 24px;
   min-height: 100vh;
-  background:
-    radial-gradient(circle at top, #353535, #030303f9);
+  background: radial-gradient(circle at top, #353535, #030303f9);
   font-family: "Montserrat", sans-serif;
 }
-
 
 .titulo-nosotros {
   text-align: center;
@@ -20,32 +16,29 @@
   color: #b23030;
 }
 
-
-
 .grid-integrantes {
   display: grid;
-  grid-template-columns: repeat(5, 1fr); 
-  gap: 35px;
-  max-width: 1400px;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 28px;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
-
-
-
 .tarjeta-integrante {
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 22px;
-  padding: 50px 34px;
+  --altura-fija: 420px;
+  height: var(--altura-fija);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  padding: 24px 20px;
   position: relative;
   overflow: hidden;
-
   box-shadow:
-    0 15px 35px rgba(129, 17, 17, 0.356),
-    inset 0 0 0 1px rgba(0, 0, 0, 0.864);
-  background-color: #F2F2F2;
-
+    0 10px 30px rgba(0, 0, 0, 0.35),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.06);
   transition:
     transform 0.35s ease,
     box-shadow 0.35s ease;
@@ -55,106 +48,98 @@
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg,
-      rgba(112, 110, 110, 0.205),
-      transparent);
+  border-radius: 20px;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(201, 162, 39, 0.15), transparent 50%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
   pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.35s ease;
 }
 
 .tarjeta-integrante:hover {
-  transform: translateY(-10px);
+  transform: translateY(-12px);
   box-shadow:
-    0 25px 50px rgba(212, 40, 17, 0.596),
-    inset 0 0 0 1px rgba(212, 40, 17, 0.596);
+    0 20px 45px rgba(0, 0, 0, 0.4),
+    0 0 35px rgba(201, 162, 39, 0.4),
+    0 0 60px rgba(201, 162, 39, 0.15),
+    inset 0 0 0 1px rgba(201, 162, 39, 0.25);
+}
+
+.tarjeta-integrante:hover::before {
+  opacity: 1;
 }
 
 .tarjeta-integrante-imagen-wrapper {
-width: 100%;
-aspect-ratio: 1;
-border-radius: 14px;
-overflow: hidden;
-margin-bottom: 16px;
-background: #eee;
+  width: 160px;
+  height: 160px;
+  flex-shrink: 0;
+  border-radius: 14px;
+  overflow: hidden;
+  margin-bottom: 16px;
+  background: #e8e8e8;
 }
+
 .tarjeta-integrante-imagen {
-width: 100%;
-height: 100%;
-object-fit: cover;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .nombre-integrante {
   font-size: 1.2rem;
   font-weight: 600;
   color: #1c1c1c;
-  margin-bottom: 4px;
-}
-
-.rol-integrante {
-  font-size: 0.9rem;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  color: #1C1C1C;
-  margin-bottom: 12px;
-  text-transform: uppercase;
+  margin: 0 0 10px 0;
 }
 
 .descripcion-integrante {
-  font-size: 0.92rem;
+  font-size: 0.9rem;
   line-height: 1.5;
-  color: #000000;
-  margin-bottom: 22px;
+  color: #333;
+  margin: 0 0 18px 0;
+  flex: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
-
-
 
 .link-github {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-
+  gap: 8px;
   padding: 10px 18px;
   border-radius: 999px;
-
-  background: linear-gradient(135deg, #333333, #555555);
-  color: #ffffff;
+  background: linear-gradient(135deg, #333, #555);
+  color: #fff;
   font-weight: 600;
   font-size: 0.85rem;
-  letter-spacing: 0.5px;
-
   text-decoration: none;
-  transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease,
-    background 0.3s ease;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
 .link-github:hover {
   transform: translateY(-2px);
-  background: linear-gradient(135deg, #555555, #777777);
-  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 6px 16px rgba(201, 162, 39, 0.35);
 }
-
-
 
 @media (max-width: 768px) {
   .titulo-nosotros {
-    font-size: 2.2rem;
-    margin-bottom: 45px;
+    font-size: 2rem;
+    margin-bottom: 40px;
+  }
+
+  .grid-integrantes {
+    grid-template-columns: 1fr;
+    gap: 24px;
   }
 
   .tarjeta-integrante {
-    padding: 26px 20px;
-  }
-}
-
-@media (max-width: 1200px) {
-  .grid-integrantes {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-@media (max-width: 768px) {
-  .grid-integrantes {
-    grid-template-columns: repeat(1, 1fr);
+    --altura-fija: auto;
+    min-height: 380px;
   }
 }
