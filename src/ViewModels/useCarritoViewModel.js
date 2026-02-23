@@ -58,10 +58,17 @@ export const useCarritoViewModel = () => {
   );
 
   const aplicarCodigoDescuento = useCallback(() => {
-    if (!codigoDescuento.trim()) {
-      return { exito: false, mensaje: "Ingresa un código de descuento" };
+    const codigo = codigoDescuento.trim(); 
+    if (!codigo) {
+      return { exito: false, mensaje: "Ingresa un codigo de descuento" };
+    } 
+    if (codigo.length !== 5) {
+      return { exito: false, mensaje: "El codigo debe tener 5 letras" };
     }
 
+    if (!/^[A-Za-z]+$/.test(codigo)) {
+      return { exito: false, mensaje: "Solo se permiten letras" };
+    }
     const porcentajes = [10, 20, 30, 40, 50];
     const porcentaje =
       porcentajes[Math.floor(Math.random() * porcentajes.length)];
