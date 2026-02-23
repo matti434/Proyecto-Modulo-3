@@ -231,10 +231,17 @@ export default function RecuperarPassword() {
                 <Form.Control
                   type="password"
                   value={confirmarPassword}
-                  onChange={(e) => setConfirmarPassword(e.target.value)}
+                  onChange={(e) => {setConfirmarPassword(e.target.value);
+                  if (errorConfirmarPassword) setErrorConfirmarPassword("");
+                  }}
                   placeholder="Repite la contraseña"
+                  maxLength={PASSWORD_MAX}
+                  isInvalid={!!errorConfirmarPassword}
                   required
                 />
+
+                <Form.Control.Feedback type="invalid">{errorConfirmarPassword}
+                </Form.Control.Feedback>
               </Form.Group>
               <div className="d-flex gap-2 flex-wrap">
                 <Button
