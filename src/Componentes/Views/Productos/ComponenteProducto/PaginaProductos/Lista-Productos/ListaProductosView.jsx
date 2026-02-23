@@ -59,16 +59,47 @@ const ListaProductosView = ({
           </div>
         </div>
       )}
-
-      <Row className="g-4">
-        {productos.map((producto) => (
-          <Col key={producto.id} xs={12} sm={6} lg={4} xl={3}>
-            <CardProducto {...producto} />
-          </Col>
-        ))}
-      </Row>
+      div className="contenedor-grid-productos"
+      {productos.map((producto) => (
+        <div key={producto.id ?? producto._id} className="item-producto">
+          <CardProducto {...producto} />
+        </div>
+      ))}
     </div>
   );
 };
+{
+  totalPaginas > 1 && (
+    <div className="paginacion-productos mt-4">
+      <span className="info-pagina">
+        Mostrando {(paginaActual - 1) * productosPorPagina + 1}–
+        {Math.min(paginaActual * productosPorPagina, cantidadResultados)} de
+        {cantidadResultados}
+      </span>
+      <Pagination className="mb-0">
+        <Pagination.Prev
+          disabled={paginaActual === 1}
+          onClick={() => irAPagina(paginaActual - 1)}
+          aria-label="Anterior"
+        />
+
+        {Array.from({ length: totalPaginas }, (_, i) => i + 1).map((num) => (
+          <Pagination.Item
+            key={num}
+            active={num === paginaActual}
+            onClick={() => irAPagina(num)}
+          >
+            {num}
+          </Pagination.Item>
+        ))}
+        <Pagination.Next
+          disabled={paginaActual === totalPaginas}
+          onClick={() => irAPagina(paginaActual + 1)}
+          aria-label="Siguiente"
+        />
+      </Pagination>
+    </div>
+  );
+}
 
 export default ListaProductosView;
