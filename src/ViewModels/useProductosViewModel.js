@@ -46,6 +46,26 @@ export const useProductosViewModel = () => {
   const productosFiltrados = useMemo(() => {
     return filtrarProductos(productosOriginales, filtros);
   }, [productosOriginales, filtros]);
+  
+  const PRODUCTOS_POR_PAGINA = 10;
+
+  const [paginaActual, setPaginaActual] = useState(1);
+useEffect(() => {
+setPaginaActual(1);
+}, [filtros, location.state?.categoriaSeleccionada]);
+const productosPaginados = useMemo(() => {
+const inicio = (paginaActual - 1) * PRODUCTOS_POR_PAGINA;
+return productosFiltrados.slice(inicio, inicio + PRODUCTOS_POR_PAGINA);
+}, [productosFiltrados, paginaActual]);
+const totalPaginas = useMemo(
+() => Math.max(1, Math.ceil(productosFiltrados.length /
+PRODUCTOS_POR_PAGINA)),
+[productosFiltrados.length]
+);
+
+const irAPagina = useCallback((pagina) => {
+setPaginaActual((prev) => Math.min(totalPaginas, Math.max(1, pagina)));
+}, [totalPaginas]);
 
   // Categorías disponibles
   const categorias = useMemo(() => obtenerCategoriasUnicas(), [obtenerCategoriasUnicas]);
