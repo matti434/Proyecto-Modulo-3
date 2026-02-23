@@ -1,18 +1,10 @@
+/**
+ * Inicialización de localStorage para datos que siguen viviendo en el cliente.
+ * Usuarios, productos y suspendidos se obtienen del backend (API).
+ */
 export const inicializarLocalStorage = () => {
   try {
-    const db = { usuarios: [], usuariosSuspendidos: [], productos: [] };
-
-    if (!localStorage.getItem("usuarios")) {
-      localStorage.setItem("usuarios", JSON.stringify(db.usuarios || []));
-    }
-
-    if (!localStorage.getItem("usuariosSuspendidos")) {
-      localStorage.setItem("usuariosSuspendidos", JSON.stringify(db.usuariosSuspendidos || []));
-    }
-
-    if (!localStorage.getItem("productos")) {
-      localStorage.setItem("productos", JSON.stringify(db.productos || []));
-    }
+    // Reservado para futuras claves de cliente (ej. preferencias) si se necesitan.
   } catch (error) {
     console.error("Error al inicializar LocalStorage:", error);
   }
