@@ -139,7 +139,11 @@ export const CarritoProvider = ({ children }) => {
       if (estaAutenticado && itemId && !String(itemId).startsWith("local-")) {
         try {
           await carritoApi.eliminarItem(itemId);
-        } catch {}
+          setItemsCarrito((prev) => prev.filter((item) => item.id !== itemId));
+        } catch {
+          // Si falla el API no quitamos del estado; al recargar se verá la verdad del servidor
+        }
+        return;
       }
       setItemsCarrito((prev) => prev.filter((item) => item.id !== itemId));
     },

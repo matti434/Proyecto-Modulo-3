@@ -70,16 +70,27 @@
 }
 
 .contenedor-grid-productos {
-display: grid;
-grid-template-columns: repeat(5, 1fr);
-gap: 1rem;
-padding: 2rem 0;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1.5rem;
+  padding: 2rem 0;
+  align-items: stretch;
 }
-.contenedor-grid-productos .item-producto {min-width: 0;
+.contenedor-grid-productos .item-producto {
+  min-width: 0;
+  display: flex;
 }
 .contenedor-grid-productos .item-producto:hover {
-transform: translateY(-5px);
-transition: transform 0.3s ease;
+  transform: translateY(-5px);
+  transition: transform 0.3s ease;
+}
+
+/* Espaciado solo por el grid; la card no añade margen para no pegarse */
+.contenedor-grid-productos .item-producto .card-moto {
+  margin: 0;
+  width: 100%;
+  min-width: 0;
+  max-width: none;
 }
 .paginacion-productos {
 display: flex;
@@ -122,22 +133,26 @@ cursor: pointer;
 }
 
 @media (max-width: 1200px) {
-.contenedor-grid-productos {
-grid-template-columns: repeat(4, 1fr);
+  .contenedor-grid-productos {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.25rem;
+  }
 }
-}
-@media (max-width: 992px) {.contenedor-grid-productos {
-grid-template-columns: repeat(3, 1fr);
-}
+@media (max-width: 992px) {
+  .contenedor-grid-productos {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+  }
 }
 @media (max-width: 768px) {
-.contenedor-grid-productos {
-grid-template-columns: repeat(2, 1fr);
-gap: 0.75rem;
-}
+  .contenedor-grid-productos {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
 }
 @media (max-width: 480px) {
-.contenedor-grid-productos {
-grid-template-columns: 1fr;
-}
+  .contenedor-grid-productos {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
 }
