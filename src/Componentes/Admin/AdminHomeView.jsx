@@ -8,12 +8,16 @@ export const AdminHomeView = ({
   portadaSubiendo,
   galeriaSubiendo,
   galeriaActualizandoId,
+  equipo = [],
+  equipoActualizandoId,
   errorHome,
   onSubirPortada,
   onAgregarImagenGaleria,
   onActualizarTextoGaleria,
   onReemplazarImagenGaleria,
   onEliminarImagenGaleria,
+  onActualizarIntegranteEquipo,
+  onSubirImagenEquipo,
 }) => {
   const handlePortadaFile = (e) => {
     const file = e.target.files?.[0];
