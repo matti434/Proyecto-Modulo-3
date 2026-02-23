@@ -7,7 +7,6 @@ import "./Componentes/Utils/I18next.js";
 import "./estilos/variables.css";
 import "./RoyaLToast.css";
 
-inicializarLocalStorage();
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
