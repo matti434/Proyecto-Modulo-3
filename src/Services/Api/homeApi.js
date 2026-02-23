@@ -9,6 +9,7 @@ const getAuthHeaders = () => {
 export const obtenerContenidoHome = async () => {
   const response = await fetch(`${API_URL}/home`, {
     method: "GET",
+    credentials: "include",
     headers: { ...getAuthHeaders() },
   });
   const data = await response.json().catch(() => ({}));
@@ -25,8 +26,8 @@ export const subirPortada = async (file) => {
   formData.append("imagen", file);
   const response = await fetch(`${API_URL}/home/portada/upload`, {
     method: "POST",
+    credentials: "include",
     headers: getAuthHeaders(),
-
     body: formData,
   });
   const data = await response.json().catch(() => ({}));
@@ -49,8 +50,8 @@ export const agregarImagenGaleria = async (file, texto) => {
   formData.append("texto", texto || "");
   const response = await fetch(`${API_URL}/home/galeria`, {
     method: "POST",
+    credentials: "include",
     headers: getAuthHeaders(),
-
     body: formData,
   });
   const data = await response.json().catch(() => ({}));
@@ -69,6 +70,7 @@ export const agregarImagenGaleria = async (file, texto) => {
 export const actualizarTextoGaleria = async (id, texto) => {
   const response = await fetch(`${API_URL}/home/galeria/${id}`, {
     method: "PUT",
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
       ...getAuthHeaders(),
@@ -88,8 +90,8 @@ export const reemplazarImagenGaleria = async (id, file) => {
   formData.append("imagen", file);
   const response = await fetch(`${API_URL}/home/galeria/${id}/imagen`, {
     method: "POST",
+    credentials: "include",
     headers: getAuthHeaders(),
-
     body: formData,
   });
   const data = await response.json().catch(() => ({}));
@@ -107,6 +109,7 @@ export const reemplazarImagenGaleria = async (id, file) => {
 export const eliminarImagenGaleria = async (id) => {
   const response = await fetch(`${API_URL}/home/galeria/${id}`, {
     method: "DELETE",
+    credentials: "include",
     headers: getAuthHeaders(),
   });
   const data = await response.json().catch(() => ({}));

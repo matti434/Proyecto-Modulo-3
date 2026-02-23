@@ -19,7 +19,9 @@ export const fetchApi = async (endpoint, options = {}) => {
         const data = await response.json().catch(() => ({}));
 
         if (!response.ok) {
-            throw new Error(data.mensaje || 'Error en la peticion');
+            const err = new Error(data.mensaje || (response.status === 401 ? 'No autenticado' : 'Error en la peticion'));
+            err.status = response.status;
+            throw err;
         }
 
         return data;

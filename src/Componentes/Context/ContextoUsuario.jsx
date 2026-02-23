@@ -27,13 +27,18 @@ export const UserProvider = ({ children }) => {
       let perfil = null;
       try {
         perfil = await authApi.obtenerPerfil();
-      } catch {
-        // Sin sesión (401 o error): no pedir lista de usuarios, dejar listas vacías y no mostrar error al usuario.
+      } catch (err) {
+        // Sin sesión (401 o error): tratar como no autenticado para no dejar estado inconsistente.
         setUsuarios([]);
         setUsuariosSuspendidos([]);
-        const ultimo = JSON.parse(localStorage.getItem("ultimoUsuario") || "null");
-        if (ultimo) setUsuarioActual(ultimo);
-        else setUsuarioActual(null);
+        if (err?.status === 401) {
+          setUsuarioActual(null);
+          localStorage.removeItem("ultimoUsuario");
+        } else {
+          const ultimo = JSON.parse(localStorage.getItem("ultimoUsuario") || "null");
+          if (ultimo) setUsuarioActual(ultimo);
+          else setUsuarioActual(null);
+        }
         setCargando(false);
         return;
       }
@@ -76,7 +81,8 @@ export const UserProvider = ({ children }) => {
 
   const { login, logout, registrarUsuario } = useAuthActions(
     setUsuarioActual,
-    setUsuarios
+    setUsuarios,
+    cargarDatos
   );
 
   const {

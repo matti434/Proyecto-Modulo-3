@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import toast from "react-hot-toast";
 import { authApi } from "../../../Services/Api";
 
-export const useAuthActions = (setUsuarioActual, setUsuarios) => {
+export const useAuthActions = (setUsuarioActual, setUsuarios, cargarDatos) => {
   const login = useCallback(async (credenciales) => {
     try {
       const resultado = await authApi.login(
@@ -16,6 +16,10 @@ export const useAuthActions = (setUsuarioActual, setUsuarios) => {
           typeof usuario.toJSON === "function" ? usuario.toJSON() : usuario;
         setUsuarioActual(usuarioJSON);
         localStorage.setItem("ultimoUsuario", JSON.stringify(usuarioJSON));
+        // Recargar datos del contexto (perfil + lista usuarios) para que el panel admin tenga usuarios sin recargar la página
+        if (typeof cargarDatos === "function") {
+          cargarDatos().catch(() => {});
+        }
         toast.success(
           `Bienvenido ${usuarioJSON.nombreDeUsuario || usuarioJSON.nombre || "Usuario"}`
         );
@@ -39,7 +43,7 @@ export const useAuthActions = (setUsuarioActual, setUsuarios) => {
       toast.error(mensaje);
       return { login: false, mensaje };
     }
-  }, [setUsuarioActual]);
+  }, [setUsuarioActual, cargarDatos]);
 
   const logout = useCallback(async () => {
     try {

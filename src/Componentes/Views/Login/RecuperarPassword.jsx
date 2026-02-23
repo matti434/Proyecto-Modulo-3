@@ -38,6 +38,7 @@ export default function RecuperarPassword() {
     try {
       const res = await fetch(`${API_URL}/auth/recuperar-password`, {
         method: "POST",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: email.trim() }),
       });
@@ -114,6 +115,7 @@ export default function RecuperarPassword() {
       };
       const res = await fetch(`${API_URL}/auth/restablecer-password`, {
         method: "POST",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
       });
