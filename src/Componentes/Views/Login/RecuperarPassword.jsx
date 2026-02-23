@@ -104,14 +104,18 @@ export default function RecuperarPassword() {
     if (!validarNuevaContrasena()) return;
     setCargando(true);
     try {
+      const body = {
+        email: email.trim(),
+        codigo: codigo.trim(),
+        nuevaPassword,
+        token: codigo.trim(),
+        password: nuevaPassword,
+        nuevaContrasena: nuevaPassword,
+      };
       const res = await fetch(`${API_URL}/auth/restablecer-password`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: email.trim(),
-          codigo: codigo.trim(),
-          nuevaPassword,
-        }),
+        body: JSON.stringify(body),
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {

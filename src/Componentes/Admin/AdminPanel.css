@@ -1137,9 +1137,18 @@ color: #000;
   padding: 0.5rem 0.75rem;
   border-radius: 6px;
   border: 1px solid var(--admin-border);
-  background: var(--admin-bg-input);
-  color: var(--admin-text-primary);
+  background: var(--admin-bg-hover);
+  color: #e8eaed;
   font-size: 0.95rem;
+}
+.campo-form-pedido input::placeholder,
+.campo-form-pedido textarea::placeholder {
+  color: var(--admin-text-muted);
+}
+.campo-form-pedido input:-webkit-autofill,
+.campo-form-pedido textarea:-webkit-autofill {
+  -webkit-text-fill-color: #e8eaed;
+  box-shadow: 0 0 0 1000px var(--admin-bg-hover) inset;
 }
 .campo-form-pedido input.input-error,
 .campo-form-pedido textarea.input-error {

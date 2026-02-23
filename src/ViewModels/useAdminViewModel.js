@@ -5,7 +5,7 @@ import { pedidosApi } from "../Services/Api";
 import { homeApi } from "../Services/Api/homeApi";
 import toast from "react-hot-toast";
 import { confirmarAccion } from "../Componentes/Utils/confirmacion";
-import { pedidoSchema } from "../Componentes/Utils/ValidacionesForm";
+import { pedidoSchema, PEDIDO_FECHA_MIN, PEDIDO_FECHA_MAX } from "../Componentes/Utils/ValidacionesForm";
 import { useAdminProductoForm } from "./useAdminProductoForm";
 
 export const useAdminViewModel = () => {
@@ -93,7 +93,8 @@ export const useAdminViewModel = () => {
         setPedidosCargando(true);
         try {
           const data = await pedidosApi.obtenerTodos();
-          setPedidos(Array.isArray(data) ? data : []);
+          const lista = Array.isArray(data) ? data : Array.isArray(data?.pedidos) ? data.pedidos : [];
+          setPedidos(lista);
         } catch {
           toast.error("Error al cargar pedidos");
           setPedidos([]);
@@ -275,10 +276,13 @@ export const useAdminViewModel = () => {
     });
     if (!resultado.success) {
       const errores = {};
-      resultado.error.errors.forEach((err) => {
-        const path = err.path[0];
-        if (path) errores[path] = err.message;
-      });
+      const errList = resultado.error?.errors;
+      if (Array.isArray(errList)) {
+        errList.forEach((err) => {
+          const path = err.path?.[0];
+          if (path) errores[path] = err.message;
+        });
+      }
       setErroresPedido(errores);
       toast.error("Revisa los campos del pedido.");
       return;
@@ -295,7 +299,8 @@ export const useAdminViewModel = () => {
       setPedidoActual({ id: null, titulo: "", descripcion: "", fecha: "" });
       setMostrarFormPedido(false);
       const data = await pedidosApi.obtenerTodos();
-      setPedidos(Array.isArray(data) ? data : []);
+      const lista = Array.isArray(data) ? data : Array.isArray(data?.pedidos) ? data.pedidos : [];
+      setPedidos(lista);
     } catch (err) {
       toast.error(err?.message || "Error al crear el pedido");
     } finally {
@@ -304,6 +309,14 @@ export const useAdminViewModel = () => {
   }, [pedidoActual.titulo, pedidoActual.descripcion, pedidoActual.fecha]);
 
   const manejarPedidoCampoChange = useCallback((campo, valor) => {
+    if (campo === "fecha" && valor) {
+      const d = new Date(valor);
+      if (Number.isNaN(d.getTime()) || d < PEDIDO_FECHA_MIN || d > PEDIDO_FECHA_MAX) {
+        setErroresPedido((prev) => ({ ...prev, fecha: "La fecha debe estar entre 1930 y 2025." }));
+        setPedidoActual((prev) => ({ ...prev, fecha: "" }));
+        return;
+      }
+    }
     setPedidoActual((prev) => ({ ...prev, [campo]: valor }));
     setErroresPedido((prev) => ({ ...prev, [campo]: undefined }));
   }, []);
