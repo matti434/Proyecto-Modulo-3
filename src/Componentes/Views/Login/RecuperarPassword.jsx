@@ -99,16 +99,9 @@ export default function RecuperarPassword() {
   const handleRestablecer = async (e) => {
     e.preventDefault();
     limpiarMensaje();
-    if (nuevaPassword !== confirmarPassword) {
-      setTipoMensaje("danger");
-      setMensaje("Las contraseñas no coinciden.");
-      return;
-    }
-    if (nuevaPassword.length < 8) {
-      setTipoMensaje("danger");
-      setMensaje("La contraseña debe tener al menos 8 caracteres.");
-      return;
-    }
+    setErrorNuevaPassword("");
+    setErrorConfirmarPassword("");
+    if (!validarNuevaContrasena()) return;
     setCargando(true);
     try {
       const res = await fetch(`${API_URL}/auth/restablecer-password`, {
@@ -219,10 +212,19 @@ export default function RecuperarPassword() {
                 <Form.Control
                   type="password"
                   value={nuevaPassword}
-                  onChange={(e) => setNuevaPassword(e.target.value)}
-                  placeholder="Mínimo 8 caracteres"
+                  onChange={(e) => {
+                    setNuevaPassword(e.target.value);
+                    if (errorNuevaPassword) setErrorNuevaPassword("");
+                  }}
+                  placeholder="Mín. 8, máx. 50: mayúscula, minúscula, número y símbolo"
+                  maxLength={PASSWORD_MAX}
+                  isValid={!!errorNuevaPassword}
                   required
                 />
+
+                <Form.Control.Feedback type="invalid">
+                  {errorNuevaPassword}
+                </Form.Control.Feedback>
               </Form.Group>
               <Form.Group className="mb-3">
                 <Form.Label>Confirmar contraseña</Form.Label>
