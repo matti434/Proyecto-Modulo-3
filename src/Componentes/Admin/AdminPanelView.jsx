@@ -83,11 +83,14 @@ export const AdminPanelView = ({
   portadaSubiendo,
   galeriaSubiendo,
   galeriaActualizandoId,
+  equipoActualizandoId,
   onSubirPortada,
   onAgregarImagenGaleria,
   onActualizarTextoGaleria,
   onReemplazarImagenGaleria,
   onEliminarImagenGaleria,
+  onActualizarIntegranteEquipo,
+  onSubirImagenEquipo,
 }) => {
   if (!esAdministrador) {
     return (

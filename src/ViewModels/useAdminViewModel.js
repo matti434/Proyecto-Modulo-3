@@ -456,6 +456,7 @@ export const useAdminViewModel = () => {
     portadaSubiendo,
     galeriaSubiendo,
     galeriaActualizandoId,
+    equipoActualizandoId,
 
     recomendaciones,
     nuevoComentario,
@@ -506,5 +507,7 @@ export const useAdminViewModel = () => {
     onActualizarTextoGaleria: manejarActualizarTextoGaleria,
     onReemplazarImagenGaleria: manejarReemplazarImagenGaleria,
     onEliminarImagenGaleria: manejarEliminarImagenGaleria,
+    onActualizarIntegranteEquipo: manejarActualizarIntegranteEquipo,
+    onSubirImagenEquipo: manejarSubirImagenEquipo,
   };
 };
