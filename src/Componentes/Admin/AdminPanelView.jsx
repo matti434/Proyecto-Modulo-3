@@ -165,12 +165,7 @@ export const AdminPanelView = ({
           >
             📦 Pedidos
           </button>
-          <button
-            className={vistaActiva === "home" ? "btn-activo" : ""}
-            onClick={() => onCambiarVista("home")}
-          >
-            🏠 Inicio
-          </button>
+          
         </nav>
 
         <div className="controles-encabezado">

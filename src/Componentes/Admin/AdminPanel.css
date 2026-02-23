@@ -1092,6 +1092,15 @@ button:disabled {
   color: #fff;
   border-color: #dc3545;
 }
+.boton-accion-admin.dorado {
+background: #c9a227;
+color: #000;
+border-color: #b8921f;
+}
+.boton-accion-admin.dorado:hover {
+background: #d4ad2e;
+color: #000;
+}
 .input-texto-galeria-admin {
   padding: 0.35rem 0.5rem;
   border: 1px solid #ced4da;
