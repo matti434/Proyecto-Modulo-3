@@ -117,6 +117,41 @@ export const eliminarImagenGaleria = async (id) => {
   return data;
 };
 
+export const actualizarIntegranteEquipo = async (id, datos) => {
+const response = await fetch(`${API_URL}/home/equipo/${id}`, {
+method: "PUT",
+headers: {
+"Content-Type": "application/json",
+... getAuthHeaders(),
+},
+body: JSON.stringify(datos),
+});
+const data = await response.json().catch(() => ({}));
+if (!response.ok) {
+throw new Error(data.mensaje || "Error al actualizar integrante");
+}
+return data;
+};
+export const subirImagenEquipo = async (id, file) => {
+const formData = new FormData();
+formData.append("imagen", file);
+const response = await fetch(`${API_URL}/home/equipo/${id}/imagen`, {
+method: "POST",
+headers: getAuthHeaders(),
+body: formData,
+});
+const data = await response.json().catch(() => ({}));
+if (!response.ok) {
+throw new Error(
+data.mensaje ||
+(response.status === 413 ? "Archivo demasiado grande" : null) ||
+(response.status === 400 ? "Formato de imagen no válido" : null) ||
+"Error al subir la imagen"
+);
+}
+return data;
+};
+
 export const homeApi = {
   obtenerContenidoHome,
   subirPortada,
@@ -124,4 +159,6 @@ export const homeApi = {
   actualizarTextoGaleria,
   reemplazarImagenGaleria,
   eliminarImagenGaleria,
+  actualizarIntegranteEquipo,
+  subirImagenEquipo,
 };

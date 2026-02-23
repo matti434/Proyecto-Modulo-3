@@ -1,5 +1,6 @@
 import { FaGithub } from "react-icons/fa";
 import "./Nosotros.css";
+import { h1, img } from "framer-motion/client";
 
 const integrantes = [
   {
@@ -37,6 +38,7 @@ const integrantes = [
     {
     id: 5,
     nombre: "Patricio Romero",
+    imagen: "/Nosotros/foto_32x43mm_300dpi.jpg",
     rol: "Fullstack Developer",
     descripcion:
       "Colaboro en el desarrollo de nuevas funcionalidades, conectando diseño y código para mejorar la experiencia del usuario. Aporte constante a la evolución técnica y funcional",
@@ -54,6 +56,7 @@ const integrantes = [
           <div className="tarjeta-integrante" key={persona.id}>
 
             <h3>{persona.nombre}</h3>
+            <img src={Nosotros} className="foto" />
             <p className="rol-integrante">{persona.rol}</p>
             <p className="descripcion-integrante">{persona.descripcion}</p>
 
