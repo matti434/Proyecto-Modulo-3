@@ -4,31 +4,31 @@ import "./Nosotros.css";
 const INTEGRANTES = [
   {
     id: 1,
-    nombre: "Integrante 1",
+    nombre: "Matias Lazarte",
     descripcion: "Descripción del primer miembro del equipo.",
     foto: "/equipo/1.jpg",
-    github: "https://github.com",
+    github: "https://github.com/matti434",
   },
   {
     id: 2,
-    nombre: "Integrante 2",
+    nombre: "Alvaro Morillo",
     descripcion: "Descripción del segundo miembro del equipo.",
     foto: "/equipo/2.jpg",
-    github: "https://github.com",
+    github: "https://github.com/alvaro-morillo",
   },
   {
     id: 3,
-    nombre: "Integrante 3",
+    nombre: "Romina Danelutto",
     descripcion: "Descripción del tercer miembro del equipo.",
     foto: "/equipo/3.jpg",
-    github: "https://github.com",
+    github: "https://github.com/RominaDanelutto",
   },
   {
     id: 4,
-    nombre: "Integrante 4",
+    nombre: "Patricio Romero",
     descripcion: "Descripción del cuarto miembro del equipo.",
     foto: "/equipo/4.jpg",
-    github: "https://github.com",
+    github: "https://github.com/pato1404",
   },
 ];
 
