@@ -68,7 +68,19 @@
     inset 0 0 0 1px rgba(212, 40, 17, 0.596);
 }
 
-
+.tarjeta-integrante-imagen-wrapper {
+width: 100%;
+aspect-ratio: 1;
+border-radius: 14px;
+overflow: hidden;
+margin-bottom: 16px;
+background: #eee;
+}
+.tarjeta-integrante-imagen {
+width: 100%;
+height: 100%;
+object-fit: cover;
+}
 
 .nombre-integrante {
   font-size: 1.2rem;
