@@ -28,7 +28,7 @@ const CarritoView = ({
   handleCantidadChange,
   handleVaciarCarrito,
   handleSeguirComprando,
-  handleProcederPago
+  handleProcederPago,
 }) => {
   if (estaVacio) {
     return (
@@ -67,7 +67,8 @@ const CarritoView = ({
           <Card className="shadow-sm border-0 mb-3">
             <Card.Header className="bg-oscuro text-crema py-3">
               <h5 className="mb-0">
-                <i className="bi bi-bicycle me-2"></i>Productos en el carrito ({items.length})
+                <i className="bi bi-bicycle me-2"></i>Productos en el carrito (
+                {items.length})
               </h5>
             </Card.Header>
 
@@ -194,7 +195,9 @@ const CarritoView = ({
                         </div>
 
                         <div className="fs-5 text-dorado fw-bold">
-                          ${totalConDescuento?.toLocaleString() || total.toLocaleString()}
+                          $
+                          {totalConDescuento?.toLocaleString() ||
+                            total.toLocaleString()}
                         </div>
 
                         <small className="text-success">
@@ -215,11 +218,19 @@ const CarritoView = ({
                 <div className="d-flex">
                   <Form.Control
                     type="text"
-                    placeholder="Ingresa tu código"
+                    placeholder="Ej: ABCDE (5 letras)"
                     className="me-2"
                     value={codigoDescuento}
-                    onChange={(e) => setCodigoDescuento(e.target.value)}
+                    onChange={(e) => {
+                      const v = e.target.value
+                        .replace(/[^A-Za-z]/g, "")
+                        .slice(0, 5);
+                      setCodigoDescuento(v);
+                    }}
+                    maxLength={5}
+                    style={{ textTransform: "uppercase" }}
                   />
+                  <Form.Text className="text-muted">Máximo 5 letras.</Form.Text>
 
                   <Button variant="dorado" onClick={aplicarCodigoDescuento}>
                     Aplicar
