@@ -152,6 +152,18 @@ data.mensaje ||
 return data;
 };
 
+export const eliminarIntegranteEquipo = async (id) => {
+  const response = await fetch(`${API_URL}/home/equipo/${id}`, {
+    method: "DELETE",
+    headers: getAuthHeaders(),
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw new Error(data.mensaje || "Error al eliminar integrante");
+  }
+  return data;
+};
+
 export const homeApi = {
   obtenerContenidoHome,
   subirPortada,
@@ -161,4 +173,5 @@ export const homeApi = {
   eliminarImagenGaleria,
   actualizarIntegranteEquipo,
   subirImagenEquipo,
+  eliminarIntegranteEquipo,
 };

@@ -1,23 +1,20 @@
 .home-contenedor {
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: center;
-    gap: 1rem;
-    max-width: 1600px;
+    max-width: 1200px;
     margin: 0 auto;
     padding: 0 1rem;
 }
 
 .home-contenido-principal {
-    flex: 1 1 auto;
-    min-height: 0;
+    width: 100%;
 }
 
-.home-publicidad {
-    flex: 0 0 200px;
+.home-publicidad-centro {
     display: flex;
-    align-items: flex-start;
-    padding-top: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 2rem;
+    padding: 1rem 0;
 }
 
 .home-publicidad-placeholder {
@@ -29,7 +26,8 @@
     border-radius: 8px;
     display: flex;
     align-items: center;
-    justify-content: center;color: rgba(255, 255, 255, 0.5);
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.5);
     font-size: 0.9rem;
 }
 
@@ -41,7 +39,7 @@
 }
 
 @media (max-width: 991px) {
-    .home-publicidad {
+    .home-publicidad-centro {
         display: none;
     }
 }

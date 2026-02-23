@@ -18,7 +18,7 @@ const PaginaProductos = () => {
     if (categoriaSeleccionada) {
       filtrarPorCategoria(categoriaSeleccionada);
     }
-  }, [location, filtrarPorCategoria]);
+  }, [location.state?.categoriaSeleccionada, filtrarPorCategoria]);
 
   const categorias = obtenerCategoriasUnicas();
 

@@ -339,6 +339,25 @@ export const useAdminViewModel = () => {
  }
  }, []);
 
+  const manejarEliminarIntegranteEquipo = useCallback(async (id) => {
+    if (id == null) return;
+    const confirmado = await confirmarAccion(
+      "¿Eliminar este integrante del equipo?",
+      "Se quitará de la sección Nosotros."
+    );
+    if (!confirmado) return;
+    try {
+      await homeApi.eliminarIntegranteEquipo(id);
+      setContenidoHome((prev) => ({
+        ...prev,
+        equipo: prev.equipo.filter((it) => (it.id ?? it._id) !== id),
+      }));
+      toast.success("Integrante eliminado");
+    } catch (err) {
+      toast.error(err?.message || "Error al eliminar");
+    }
+  }, []);
+
   const manejarSubirPortada = useCallback(async (file) => {
     setPortadaSubiendo(true);
     setContenidoHomeError("");
@@ -509,5 +528,6 @@ export const useAdminViewModel = () => {
     onEliminarImagenGaleria: manejarEliminarImagenGaleria,
     onActualizarIntegranteEquipo: manejarActualizarIntegranteEquipo,
     onSubirImagenEquipo: manejarSubirImagenEquipo,
+    onEliminarIntegranteEquipo: manejarEliminarIntegranteEquipo,
   };
 };

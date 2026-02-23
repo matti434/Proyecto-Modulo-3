@@ -24,7 +24,7 @@ function normalizarCategoria(c) {
   const lower = c.trim().toLowerCase();
   if (lower === "motocicletas" || lower === "motos") return "motos";
   if (lower === "accesorios") return "protecciones";
-  return c.trim();
+  return lower;
 }
 
 export const filtrarProductos = (productos, filtros) => {

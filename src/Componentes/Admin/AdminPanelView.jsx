@@ -91,6 +91,7 @@ export const AdminPanelView = ({
   onEliminarImagenGaleria,
   onActualizarIntegranteEquipo,
   onSubirImagenEquipo,
+  onEliminarIntegranteEquipo,
 }) => {
   if (!esAdministrador) {
     return (
@@ -240,6 +241,7 @@ export const AdminPanelView = ({
           equipoActualizandoId={equipoActualizandoId}
           onActualizarIntegranteEquipo={onActualizarIntegranteEquipo}
           onSubirImagenEquipo={onSubirImagenEquipo}
+          onEliminarIntegranteEquipo={onEliminarIntegranteEquipo}
         />
       )}
 
