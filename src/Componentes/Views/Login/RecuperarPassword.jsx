@@ -4,6 +4,10 @@ import { Form, Button, Alert } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import "./RecuperarPassword.css";
 
+const PASSWORD_MIN = 8;
+const PASSWORD_MAX = 50;
+const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\s]).+$/;
+const PASSWORD_MSG = "Mayúscula, minúscula, número y un símbolo";
 const API_URL = import.meta.env.VITE_API_URL || "";
 
 export default function RecuperarPassword() {
@@ -18,6 +22,8 @@ export default function RecuperarPassword() {
   const [cargando, setCargando] = useState(false);
   const [mensaje, setMensaje] = useState(null);
   const [tipoMensaje, setTipoMensaje] = useState("info"); // "info" | "success" | "danger"
+  const [errorNuevaPassword, setErrorNuevaPassword] = useState("");
+  const [errorConfirmarPassword, setErrorConfirmarPassword] = useState("");
 
   const limpiarMensaje = () => {
     setMensaje(null);
@@ -45,15 +51,20 @@ export default function RecuperarPassword() {
         if (res.status === 500) {
           setMensaje(
             data?.message ||
-              "Error en el servidor al enviar el código. Revisa que el backend esté corriendo y configurado (env, email). Intenta más tarde."
+              "Error en el servidor al enviar el código. Revisa que el backend esté corriendo y configurado (env, email). Intenta más tarde.",
           );
         } else {
-          setMensaje(data?.message || "Error al enviar el código. Intenta de nuevo.");
+          setMensaje(
+            data?.message || "Error al enviar el código. Intenta de nuevo.",
+          );
         }
         return;
       }
       setTipoMensaje("info");
-      setMensaje(data?.message || "Si el email está registrado, recibirás un código por correo.");
+      setMensaje(
+        data?.message ||
+          "Si el email está registrado, recibirás un código por correo.",
+      );
       setPaso(2);
     } catch (err) {
       setTipoMensaje("danger");
@@ -61,6 +72,27 @@ export default function RecuperarPassword() {
     } finally {
       setCargando(false);
     }
+  };
+
+  const validarNuevaContrasena = () => {
+    setErrorNuevaPassword("");
+    setErrorConfirmarPassword("");
+    let valido = true;
+    if (nuevaPassword.length < PASSWORD_MIN) {
+      setErrorNuevaPassword("Mínimo 8 caracteres");
+      valido = false;
+    } else if (nuevaPassword.length > PASSWORD_MAX) {
+      setErrorNuevaPassword("Máximo 50 caracteres");
+      valido = false;
+    } else if (!PASSWORD_REGEX.test(nuevaPassword)) {
+      setErrorNuevaPassword(PASSWORD_MSG);
+      valido = false;
+    }
+    if (nuevaPassword !== confirmarPassword) {
+      setErrorConfirmarPassword("Las contraseñas no coinciden");
+      valido = false;
+    }
+    return valido;
   };
 
   // ----- Paso 2: Restablecer contraseña -----
@@ -91,7 +123,9 @@ export default function RecuperarPassword() {
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
         setTipoMensaje("danger");
-        setMensaje(data?.message || "Código inválido o expirado. Intenta de nuevo.");
+        setMensaje(
+          data?.message || "Código inválido o expirado. Intenta de nuevo.",
+        );
         return;
       }
       if (data.exito === true) {
@@ -117,7 +151,12 @@ export default function RecuperarPassword() {
           <h2 className="mb-4">{t("forgotPassword")}</h2>
 
           {mensaje && (
-            <Alert variant={tipoMensaje} dismissible onClose={limpiarMensaje} className="mb-4">
+            <Alert
+              variant={tipoMensaje}
+              dismissible
+              onClose={limpiarMensaje}
+              className="mb-4"
+            >
               {mensaje}
             </Alert>
           )}
@@ -135,7 +174,12 @@ export default function RecuperarPassword() {
                 />
               </Form.Group>
               <div className="d-flex gap-2 flex-wrap">
-                <Button type="button" variant="outline-secondary" onClick={() => navigate(-1)} disabled={cargando}>
+                <Button
+                  type="button"
+                  variant="outline-secondary"
+                  onClick={() => navigate(-1)}
+                  disabled={cargando}
+                >
                   Volver
                 </Button>
                 <Button type="submit" variant="warning" disabled={cargando}>
@@ -162,7 +206,9 @@ export default function RecuperarPassword() {
                 <Form.Control
                   type="text"
                   value={codigo}
-                  onChange={(e) => setCodigo(e.target.value.replace(/\D/g, "").slice(0, 6))}
+                  onChange={(e) =>
+                    setCodigo(e.target.value.replace(/\D/g, "").slice(0, 6))
+                  }
                   placeholder="123456"
                   maxLength={6}
                   required
@@ -189,7 +235,12 @@ export default function RecuperarPassword() {
                 />
               </Form.Group>
               <div className="d-flex gap-2 flex-wrap">
-                <Button type="button" variant="outline-secondary" onClick={() => setPaso(1)} disabled={cargando}>
+                <Button
+                  type="button"
+                  variant="outline-secondary"
+                  onClick={() => setPaso(1)}
+                  disabled={cargando}
+                >
                   Volver al paso 1
                 </Button>
                 <Button type="submit" variant="warning" disabled={cargando}>
