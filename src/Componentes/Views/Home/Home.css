@@ -12,6 +12,7 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+    align-items: stretch;
     gap: 1.5rem;
     margin-top: 2rem;
     padding: 1rem 0;
@@ -20,7 +21,7 @@
 .home-publicidad-placeholder {
     width: 100%;
     aspect-ratio: 1;
-    max-width: 200px;
+    max-width: 380px;
     background: var(--color-fondo-secundario, #1a1a1a);
     border: 1px dashed rgba(255, 193, 7, 0.4);
     border-radius: 8px;
