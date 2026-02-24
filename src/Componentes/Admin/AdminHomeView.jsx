@@ -137,7 +137,6 @@ export const AdminHomeView = ({
                   </td>
                   <td>
                     <label className="boton-accion-admin pequeno">
-                      <label className="boton-accion-admin pequeno dorado"></label>
                       Cambiar imagen
                       <input
                         type="file"
