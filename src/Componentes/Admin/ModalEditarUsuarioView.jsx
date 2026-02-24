@@ -5,9 +5,7 @@ import { editarUsuarioSchema, PAISES_VALIDOS, LIMITES } from "../Utils/Validacio
 
 const L = LIMITES.usuario;
 
-/**
- * Modal de editar usuario con validación (react-hook-form + Zod)
- */
+
 export const ModalEditarUsuarioView = ({ usuario, onGuardar, onCancelar }) => {
   const defaultValues = {
     nombreDeUsuario: usuario?.nombreDeUsuario || "",

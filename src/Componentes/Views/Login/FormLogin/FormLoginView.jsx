@@ -5,29 +5,29 @@ import { useTranslation } from "react-i18next";
 import "./FormLogin.css";
 
 const FormLoginView = ({
-  // Estado
+  
   mostrarContrasena,
   estaEnviando,
   errorGeneral,
   isValid,
   isDirty,
 
-  // Valores observados
+  
   credencial,
   contrasena,
 
-  // Funciones de formulario
+  
   register,
   handleSubmit,
   errors,
 
-  // Funciones de UI
+  
   toggleMostrarContrasena,
   limitarCaracteres,
   limpiarErrorGeneral,
   manejarClickRegistro,
 
-  // Callbacks
+ 
   onClose,
   onRecuperarPassword,
 }) => {

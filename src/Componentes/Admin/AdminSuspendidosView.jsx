@@ -1,7 +1,4 @@
-/**
-  View pura para la sección de Usuarios Suspendidos
-  Solo recibe props y renderiza UI
- */
+
 export const AdminSuspendidosView = ({
   usuariosSuspendidos,
   totalSuspendidos,
@@ -9,7 +6,7 @@ export const AdminSuspendidosView = ({
   onReactivarUsuario,
   onEliminarUsuarioSuspendido,
 }) => {
-  // Función helper para calcular días suspendidos (solo para renderizado)
+ 
   const calcularDiasSuspendido = (fechaSuspension) => {
     const fecha = new Date(fechaSuspension);
     const hoy = new Date();

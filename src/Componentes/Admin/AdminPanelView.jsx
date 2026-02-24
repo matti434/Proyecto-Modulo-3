@@ -12,13 +12,9 @@ import { ModalEditarUsuarioView } from "./ModalEditarUsuarioView";
 
 import "./AdminPanel.css";
 
-/**
- View pura principal del AdminPanel
-  Solo recibe props y renderiza UI
-  NO tiene lógica, NO usa hooks de negocio
- */
+
 export const AdminPanelView = ({
-  // Datos del Context
+  
   usuarios,
   usuariosSuspendidos,
   productos,
@@ -26,7 +22,7 @@ export const AdminPanelView = ({
   cargando,
   estadisticas,
 
-  // Estado local
+
   vistaActiva,
   usuarioEditando,
   productoEditando,
@@ -38,7 +34,7 @@ export const AdminPanelView = ({
   modoPedido,
   mostrarFormPedido,
   enviandoPedido,
-  // Estado del formulario de producto
+
   datosFormularioProducto,
   errorImagenProducto,
   enviandoFormularioProducto,
@@ -47,7 +43,7 @@ export const AdminPanelView = ({
   erroresFormularioProducto,
   erroresPedido,
 
-  // Valores calculados
+ 
   totalAdmins,
   totalUsuarios,
   totalNormales,
@@ -55,7 +51,7 @@ export const AdminPanelView = ({
   suspendidosMas30Dias,
   valorTotalProductos,
 
-  // Funciones
+  
   onCambiarVista,
   onSincronizar,
   onEditarUsuario,

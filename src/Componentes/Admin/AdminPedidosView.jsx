@@ -3,9 +3,7 @@ import { LIMITES } from "../Utils/ValidacionesForm";
 const ESTADOS_PEDIDO = ["pendiente", "procesando", "enviado", "entregado", "cancelado"];
 const { titulo: MAX_TITULO, descripcion: MAX_DESC } = LIMITES.pedido;
 
-/**
- * Vista de pedidos: formulario para crear (admin) y listado con cambio de estado.
- */
+
 export const AdminPedidosView = ({
   pedidos,
   pedidosCargando = false,

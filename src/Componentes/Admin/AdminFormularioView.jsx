@@ -2,10 +2,6 @@ import { LIMITES } from "../Utils/ValidacionesForm";
 
 const L = LIMITES.producto;
 
-/**
- * View pura para el formulario de producto.
- * Los límites de caracteres vienen solo de ValidacionesForm (LIMITES).
- */
 export const AdminFormularioView = ({
   modo,
   datosFormulario,

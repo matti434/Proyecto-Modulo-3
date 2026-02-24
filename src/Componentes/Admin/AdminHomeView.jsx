@@ -1,7 +1,4 @@
-/**
- * View pura para la sección Home del admin: portada y galería.
- * Permite subir/cambiar imagen de portada y gestionar ítems de la galería.
- */
+
 export const AdminHomeView = ({
   portadaImagenUrl,
   galeria,

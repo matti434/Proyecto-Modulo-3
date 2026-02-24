@@ -21,7 +21,7 @@ export default function RecuperarPassword() {
   const [confirmarPassword, setConfirmarPassword] = useState("");
   const [cargando, setCargando] = useState(false);
   const [mensaje, setMensaje] = useState(null);
-  const [tipoMensaje, setTipoMensaje] = useState("info"); // "info" | "success" | "danger"
+  const [tipoMensaje, setTipoMensaje] = useState("info"); 
   const [errorNuevaPassword, setErrorNuevaPassword] = useState("");
   const [errorConfirmarPassword, setErrorConfirmarPassword] = useState("");
 
@@ -29,7 +29,7 @@ export default function RecuperarPassword() {
     setMensaje(null);
   };
 
-  // ----- Paso 1: Enviar código -----
+
   const handleEnviarCodigo = async (e) => {
     e.preventDefault();
     limpiarMensaje();
@@ -96,7 +96,7 @@ export default function RecuperarPassword() {
     return valido;
   };
 
-  // ----- Paso 2: Restablecer contraseña -----
+ 
   const handleRestablecer = async (e) => {
     e.preventDefault();
     limpiarMensaje();

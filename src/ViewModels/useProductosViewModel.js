@@ -5,10 +5,7 @@ import {
   filtrarProductos,
 } from "../Componentes/Context/ContextoProducto";
 
-/**
- * ViewModel para la página de productos
- * Maneja la lógica de filtrado y presentación
- */
+
 export const useProductosViewModel = () => {
   const location = useLocation();
   const {
@@ -26,12 +23,12 @@ export const useProductosViewModel = () => {
     buscarSugerencias,
   } = useProductos();
 
-  // Estado local para búsqueda (sincronizado con filtros)
+
   const [busquedaLocal, setBusquedaLocal] = useState(
     filtros.terminoBusqueda || "",
   );
 
-  // Aplicar categoría desde navegación
+ 
   useEffect(() => {
     const categoriaSeleccionada = location.state?.categoriaSeleccionada;
     if (categoriaSeleccionada) {
@@ -39,15 +36,12 @@ export const useProductosViewModel = () => {
     }
   }, [location.state, filtrarPorCategoria]);
 
-  // Sincronizar búsqueda local con filtros
+  
   useEffect(() => {
     setBusquedaLocal(filtros.terminoBusqueda || "");
   }, [filtros.terminoBusqueda]);
 
-  /**
-   * Productos filtrados - La lógica de filtrado se ejecuta aquí en el ViewModel
-   * El contexto solo provee los datos crudos y los filtros
-   */
+ 
   const productosFiltrados = useMemo(() => {
     return filtrarProductos(productosOriginales, filtros);
   }, [productosOriginales, filtros]);
@@ -75,44 +69,42 @@ export const useProductosViewModel = () => {
     [totalPaginas],
   );
 
-  // Categorías disponibles
+
   const categorias = useMemo(
     () => obtenerCategoriasUnicas(),
     [obtenerCategoriasUnicas],
   );
 
-  // Estadísticas de productos
+
   const estadisticas = useMemo(
     () => obtenerEstadisticas(),
     [obtenerEstadisticas],
   );
 
-  // Rango de precios
+ 
   const rangoPrecios = useMemo(
     () => obtenerRangoPrecios(),
     [obtenerRangoPrecios],
   );
 
-  // Indicador de resultados
+
   const tieneResultados = useMemo(
     () => productosFiltrados.length > 0,
     [productosFiltrados.length],
   );
 
-  // Cantidad de resultados
+ 
   const cantidadResultados = useMemo(
     () => productosFiltrados.length,
     [productosFiltrados.length],
   );
 
-  // Verificar si hay filtros activos
+
   const tieneFiltrosActivos = useMemo(() => {
     return Object.values(filtros).some((valor) => valor !== "");
   }, [filtros]);
 
-  /**
-   * Buscar productos por término
-   */
+
   const buscar = useCallback(
     (termino) => {
       setBusquedaLocal(termino);
@@ -121,25 +113,18 @@ export const useProductosViewModel = () => {
     [actualizarFiltros],
   );
 
-  /**
-   * Limpiar búsqueda
-   */
   const limpiarBusqueda = useCallback(() => {
     setBusquedaLocal("");
     actualizarFiltros({ terminoBusqueda: "" });
   }, [actualizarFiltros]);
 
-  /**
-   * Limpiar todos los filtros
-   */
+
   const resetearFiltros = useCallback(() => {
     setBusquedaLocal("");
     limpiarFiltros();
   }, [limpiarFiltros]);
 
-  /**
-   * Filtrar por rango de precio
-   */
+
   const filtrarPorPrecio = useCallback(
     (min, max) => {
       actualizarFiltros({
@@ -150,9 +135,6 @@ export const useProductosViewModel = () => {
     [actualizarFiltros],
   );
 
-  /**
-   * Filtrar por stock
-   */
   const filtrarPorStock = useCallback(
     (soloDisponibles) => {
       actualizarFiltros({ stock: soloDisponibles ? "true" : "" });
@@ -160,9 +142,7 @@ export const useProductosViewModel = () => {
     [actualizarFiltros],
   );
 
-  /**
-   * Filtrar por destacados
-   */
+ 
   const filtrarPorDestacados = useCallback(
     (soloDestacados) => {
       actualizarFiltros({ destacado: soloDestacados ? "true" : "" });
@@ -170,9 +150,6 @@ export const useProductosViewModel = () => {
     [actualizarFiltros],
   );
 
-  /**
-   * Obtener sugerencias de búsqueda
-   */
   const obtenerSugerencias = useCallback(
     (termino) => {
       return buscarSugerencias(termino);
@@ -180,9 +157,7 @@ export const useProductosViewModel = () => {
     [buscarSugerencias],
   );
 
-  /**
-   * Aplicar categoría desde navegación (útil para re-aplicar)
-   */
+
   const aplicarCategoriaDesdeNavegacion = useCallback(() => {
     const categoriaSeleccionada = location.state?.categoriaSeleccionada;
     if (categoriaSeleccionada) {
@@ -191,7 +166,7 @@ export const useProductosViewModel = () => {
   }, [location.state, filtrarPorCategoria]);
 
   return {
-    // Datos
+  
     productos: productosPaginados,
     productosOriginales,
     categorias,

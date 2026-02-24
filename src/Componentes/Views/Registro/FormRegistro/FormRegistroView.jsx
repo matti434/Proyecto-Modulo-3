@@ -7,7 +7,7 @@ import { PAISES_VALIDOS } from "../../../Utils/ValidacionesForm";
 import "./FormRegistro.css";
 
 const FormRegistroView = ({
-  // Estado
+
   mostrarContrasena,
   mostrarConfirmar,
   estaEnviando,
@@ -15,24 +15,24 @@ const FormRegistroView = ({
   isValid,
   isDirty,
 
-  // Valores observados
+
   nombreDeUsuario,
   email,
   contrasena,
   confirmarContrasena,
 
-  // Funciones de formulario
+
   register,
   handleSubmit,
   errors,
 
-  // Funciones de UI
+
   toggleMostrarContrasena,
   toggleMostrarConfirmar,
   limitarCaracteres,
   limpiarErrorGeneral,
 
-  // Callbacks
+
   onClose,
   onAbrirLogin,
 }) => {

@@ -3,23 +3,23 @@
   backdrop-filter: blur(4px);
 }
 
-/* El modal en sí */
+
 .swal-custom-popup {
-  background-color: #0c0c0c !important; /* El color de fondo de tu editor */
-  border: 1px solid #b77702; /* Borde dorado suave */
+  background-color: #0c0c0c !important; 
+  border: 1px solid #b77702; 
   border-radius: 8px !important;
-  width: 350px !important; /* Tamaño más pequeño y compacto */
+  width: 350px !important; 
   padding: 20px !important;
 }
 
-/* Título */
+
 .swal-custom-title {
-  color: #c69b0c !important; /* Dorado del texto */
+  color: #c69b0c !important; 
   font-size: 1.4rem !important;
   margin-bottom: 10px !important;
 }
 
-/* Botón de Confirmar */
+
 .swal-custom-confirm {
   background-color: #b77702 !important;
   color: #000 !important;
@@ -37,7 +37,7 @@
   transform: scale(1.05);
 }
 
-/* Botón de Cancelar */
+
 .swal-custom-cancel {
   background-color: transparent !important;
   color: #d33 !important;
