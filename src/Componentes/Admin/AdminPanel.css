@@ -641,6 +641,11 @@ button:disabled {
   overflow-y: auto;
 }
 
+.panel-administracion .contenedor-formulario {  
+  background: var(--admin-bg-dark) !important;  
+  border: 1px solid var(--admin-border) !important;  
+}
+
 .contenedor-formulario {
   background: var(--admin-bg-dark) !important;
   border-radius: 16px;

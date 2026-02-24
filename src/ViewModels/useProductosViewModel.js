@@ -52,7 +52,7 @@ export const useProductosViewModel = () => {
     return filtrarProductos(productosOriginales, filtros);
   }, [productosOriginales, filtros]);
 
-  const PRODUCTOS_POR_PAGINA = 10;
+  const PRODUCTOS_POR_PAGINA = 5;
 
   const [paginaActual, setPaginaActual] = useState(1);
   useEffect(() => {
