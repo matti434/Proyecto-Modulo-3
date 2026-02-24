@@ -71,7 +71,7 @@
 
 .contenedor-grid-productos {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 1.5rem;
   padding: 2rem 0;
   align-items: stretch;
@@ -134,13 +134,13 @@ cursor: pointer;
 
 @media (max-width: 1200px) {
   .contenedor-grid-productos {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 1.25rem;
   }
 }
 @media (max-width: 992px) {
   .contenedor-grid-productos {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 1.25rem;
   }
 }
