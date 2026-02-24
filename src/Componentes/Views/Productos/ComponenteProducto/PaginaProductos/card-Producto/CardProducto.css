@@ -339,7 +339,7 @@
 
 @media (min-width: 1200px) {
   .card-moto {
-    max-width: 350px;
+    max-width: 400px;
     margin: 22px 20px;
     width: calc(100% - 40px);
   }
