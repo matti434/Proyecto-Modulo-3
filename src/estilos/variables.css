@@ -1,7 +1,7 @@
 :root {
   --color-crema: #f8f8f8;
   --color-dorado: #c89b2b;
-  --color-oscuro: #f8f8f8;
+  --color-oscuro: #1a1a1a;
   --color-rojo: #6b0000;
   --color-metal: #999999;
   --color-verde-militar: #3b4636;
@@ -36,11 +36,17 @@
 }
 
 [data-theme="dark"] {
-  --color-crema: #f8f8f8;
-  --color-oscuro: #f8f8f8;
+  --color-crema: #2c2c2c;
+  --color-oscuro: #1a1a1a;
+  --color-fondo-primario: #1a1a1a;
+  --color-texto-primario: #f8f8f8;
+  --color-texto-oscuro: #f8f8f8;
 }
 
 [data-theme="light"] {
   --color-crema: #f8f8f8;
-  --color-oscuro: #f8f8f8;
+  --color-oscuro: #1a1a1a;
+  --color-fondo-primario: #f8f8f8;
+  --color-texto-primario: #2c2c2c;
+  --color-texto-oscuro: #2c2c2c;
 }

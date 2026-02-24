@@ -1,5 +1,6 @@
 import { Dropdown } from "react-bootstrap";
 import { useUser } from "../../../../Context/ContextoUsuario";
+import { useCarrito } from "../../../../Context/ContextoCarrito";
 import { useNavigate } from "react-router-dom";
 import { FaUser, FaEnvelope, FaHeadset, FaSignOutAlt } from "react-icons/fa";
 import { useState } from "react";
@@ -8,10 +9,12 @@ import "./MenuUsuario.css";
 
 const MenuUsuario = () => {
   const { usuarioActual, logout } = useUser();
+  const { cargarCarritoInvitado } = useCarrito();
   const navigate = useNavigate();
   const [mostrarModalPerfil, setMostrarModalPerfil] = useState(false);
 
   const manejarCerrarSesion = () => {
+    cargarCarritoInvitado();
     logout();
     navigate("/");
   };

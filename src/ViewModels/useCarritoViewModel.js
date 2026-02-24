@@ -1,7 +1,9 @@
-import { useState, useMemo, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useCarrito } from '../Componentes/Context/ContextoCarrito';
-import { CarritoItem } from '../Models';
+import { useState, useMemo, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
+import { useCarrito } from "../Componentes/Context/ContextoCarrito";
+import { CarritoItem } from "../Models";
+import toast from "react-hot-toast";
+import { confirmarAccion } from "../Componentes/Utils/confirmacion";
 
 export const useCarritoViewModel = () => {
   const navigate = useNavigate();
@@ -11,20 +13,26 @@ export const useCarritoViewModel = () => {
     actualizarCantidad,
     vaciarCarrito,
     calcularSubtotal,
-    calcularTotalProductos
+    calcularTotalProductos,
   } = useCarrito();
 
-  const [codigoDescuento, setCodigoDescuento] = useState('');
+  const [codigoDescuento, setCodigoDescuento] = useState("");
   const [descuentoAplicado, setDescuentoAplicado] = useState(null);
 
   const items = useMemo(() => {
-    return itemsCarrito.map(item => CarritoItem.fromJSON(item));
+    return itemsCarrito.map((item) => CarritoItem.fromJSON(item));
   }, [itemsCarrito]);
 
-  const subtotal = useMemo(() => calcularSubtotal(), [calcularSubtotal, itemsCarrito]);
-  
-  const envio = useMemo(() => itemsCarrito.length > 0 ? 1500 : 0, [itemsCarrito.length]);
-  
+  const subtotal = useMemo(
+    () => calcularSubtotal(),
+    [calcularSubtotal, itemsCarrito],
+  );
+
+  const envio = useMemo(
+    () => (itemsCarrito.length > 0 ? 1500 : 0),
+    [itemsCarrito.length],
+  );
+
   const descuento = useMemo(() => {
     if (!descuentoAplicado) return 0;
     return subtotal * (descuentoAplicado / 100);
@@ -39,37 +47,58 @@ export const useCarritoViewModel = () => {
     return total;
   }, [total, descuentoAplicado]);
 
-  const totalItems = useMemo(() => calcularTotalProductos(), [calcularTotalProductos, itemsCarrito]);
+  const totalItems = useMemo(
+    () => calcularTotalProductos(),
+    [calcularTotalProductos, itemsCarrito],
+  );
 
-  const estaVacio = useMemo(() => itemsCarrito.length === 0, [itemsCarrito.length]);
+  const estaVacio = useMemo(
+    () => itemsCarrito.length === 0,
+    [itemsCarrito.length],
+  );
 
   const aplicarCodigoDescuento = useCallback(() => {
-    if (!codigoDescuento.trim()) {
-      return { exito: false, mensaje: 'Ingresa un código de descuento' };
+    const codigo = codigoDescuento.trim(); 
+    if (!codigo) {
+      return { exito: false, mensaje: "Ingresa un codigo de descuento" };
+    } 
+    if (codigo.length !== 5) {
+      return { exito: false, mensaje: "El codigo debe tener 5 letras" };
     }
 
+    if (!/^[A-Za-z]+$/.test(codigo)) {
+      return { exito: false, mensaje: "Solo se permiten letras" };
+    }
     const porcentajes = [10, 20, 30, 40, 50];
-    const porcentaje = porcentajes[Math.floor(Math.random() * porcentajes.length)];
+    const porcentaje =
+      porcentajes[Math.floor(Math.random() * porcentajes.length)];
     setDescuentoAplicado(porcentaje);
 
     return { exito: true, porcentaje };
   }, [codigoDescuento]);
 
   const limpiarDescuento = useCallback(() => {
-    setCodigoDescuento('');
+    setCodigoDescuento("");
     setDescuentoAplicado(null);
   }, []);
 
-  const handleCantidadChange = useCallback((productoId, nuevaCantidad) => {
-    actualizarCantidad(productoId, parseInt(nuevaCantidad) || 1);
-  }, [actualizarCantidad]);
+  const handleCantidadChange = useCallback(
+    (productoId, nuevaCantidad) => {
+      actualizarCantidad(productoId, parseInt(nuevaCantidad) || 1);
+    },
+    [actualizarCantidad],
+  );
 
-  const handleVaciarCarrito = useCallback(() => {
-    if (window.confirm("¿Estás seguro de que quieres vaciar el carrito?")) {
+  const handleVaciarCarrito = useCallback(async () => {
+    const confirmado = await confirmarAccion(
+      "¿Estas seguro?",
+      "¿Quieres vaciar todos los productos del carrito?",
+    );
+    if (confirmado) {
       limpiarDescuento();
       vaciarCarrito();
     }
-  }, [vaciarCarrito, limpiarDescuento]);
+  }, [vaciarCarrito, limpiarDescuento, confirmarAccion]);
 
   const handleSeguirComprando = useCallback(() => {
     navigate("/");
@@ -77,10 +106,10 @@ export const useCarritoViewModel = () => {
 
   const handleProcederPago = useCallback(() => {
     if (itemsCarrito.length === 0) {
-      alert("El carrito está vacío");
+      toast.warning("El carrito está vacío");
       return;
     }
-    alert("Redirigiendo al proceso de pago...");
+    toast("Redirigiendo al proceso de pago...");
   }, [itemsCarrito.length]);
 
   return {
@@ -101,6 +130,6 @@ export const useCarritoViewModel = () => {
     handleCantidadChange,
     handleVaciarCarrito,
     handleSeguirComprando,
-    handleProcederPago
+    handleProcederPago,
   };
 };

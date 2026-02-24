@@ -1,4 +1,4 @@
-/* ================= GALERIA HOME MODERNA ================= */
+
 
 .galeria-container {
   text-align: center;
@@ -7,7 +7,7 @@
   background-color: #f8f8f8;
 }
 
-/* ================= TITULO ================= */
+
 
 .galeria-titulo {
   font-size: 30px;
@@ -18,7 +18,7 @@
   text-transform: uppercase;
 }
 
-/* ================= WRAPPER ================= */
+
 
 .galeria-wrapper {
   display: flex;
@@ -28,7 +28,7 @@
   position: relative;
 }
 
-/* ================= GALERIA CENTRAL ================= */
+
 
 .galeria-central {
   position: relative;
@@ -57,7 +57,7 @@
   transform: scale(1.05);
 }
 
-/* overlay moderno */
+
 .galeria-central::after {
   content: "";
   position: absolute;
@@ -68,7 +68,7 @@
   pointer-events: none;
 }
 
-/* ================= TEXTO ================= */
+
 
 .galeria-texto {
   position: absolute;
@@ -82,7 +82,7 @@
   z-index: 2;
 }
 
-/* ================= BOTONES ================= */
+
 
 .galeria-btn {
   position: absolute;
@@ -115,7 +115,7 @@
   right: 14px;
 }
 
-/* ================= LATERALES ================= */
+
 
 .galeria-lateral {
   width: 220px;
@@ -141,7 +141,7 @@
   transform: translateX(-20px) scale(0.9);
 }
 
-/* ================= RESPONSIVE ================= */
+
 
 @media (max-width: 992px) {
   .galeria-lateral {

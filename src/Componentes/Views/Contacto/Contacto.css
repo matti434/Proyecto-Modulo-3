@@ -1,17 +1,17 @@
-/* ================= BASE ================= */
+
 
 body {
   background-color: #f8f8f8 !important;
-  color: #2c2c2c !important;
+  color: #1b1a1a !important;
 }
 
-/* ================= ICONOS CONTACTO ================= */
+
 
 .contact-icon-btn {
   width: 88px;
   height: 88px;
   border-radius: 50%;
-  color: #2c2c2c;
+  color: #d0d0d0;
   text-decoration: none;
   background: rgba(200, 155, 43, 0.12);
   backdrop-filter: blur(10px);
@@ -26,12 +26,12 @@ body {
   box-shadow: 0 15px 40px rgba(212, 175, 55, 0.45);
 }
 
-/* ================= TITULOS ================= */
+
 
 .titulo-glow {
   font-size: 38px;
   font-weight: 600;
-  color: #2c2c2c;
+  color: rgba(233, 64, 22, 0.75);
   letter-spacing: 1px;
   text-shadow: none;
 }
@@ -39,11 +39,11 @@ body {
 .titulo-glow2 {
   font-size: 18px;
   font-weight: 400;
-  color: #666666;
+  color: #ffffff;
   text-shadow: none;
 }
 
-/* ================= BOTONES ================= */
+
 
 .boton-animado {
   transition: transform 0.25s ease, box-shadow 0.25s ease;
@@ -58,11 +58,11 @@ body {
   transform: translateY(0) scale(0.97);
 }
 
-/* ================= MAPA ================= */
+
 
 .map-container-custom {
   width: 75%;
-  max-width: 820px;
+  max-width: 830px;
   height: 360px;
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(12px);
@@ -93,7 +93,7 @@ body {
   z-index: 2;
 }
 
-/* ================= ANIMACIONES ================= */
+
 
 @keyframes zoomIn {
   from {
@@ -117,16 +117,16 @@ body {
   }
 }
 
-/* ================= INPUTS ================= */
+
 
 input::placeholder,
 textarea::placeholder {
-  color: rgba(44, 44, 44, 0.5) !important;
+  color: rgba(255, 255, 255, 0.993) !important;
 }
 
 input,
 textarea {
-  background: rgba(255, 255, 255, 0.8) !important;
+  background: rgba(255, 255, 255, 0.993) !important;
   border: none !important;
   border-bottom: 2px solid #d0d0d0 !important;
   color: #2c2c2c !important;
@@ -137,10 +137,10 @@ textarea:focus {
   outline: none !important;
   box-shadow: none !important;
   border-bottom: 2px solid #666 !important;
-  background-color: #ffffff !important;
+  background-color: rgba(214, 55, 16, 0.64) !important;
 }
 
-/* ================= TEXTO AYUDA / ERROR ================= */
+
 
 .texto-input {
   font-size: 0.75rem;
@@ -153,7 +153,7 @@ textarea:focus {
 }
 
 .texto-input.visible {
-  color: #e6d88a;
+  color: #e68a8a;
 }
 
 .error-msg {
@@ -168,7 +168,7 @@ textarea:focus {
   border-left: 3px solid rgba(212, 175, 55, 0.9);
 }
 
-/* ================= RESPONSIVE ================= */
+
 
 @media (max-width: 768px) {
   .map-container-custom {
@@ -185,7 +185,7 @@ textarea:focus {
   }
 }
 
-/* ================= SCROLL ================= */
+
 
 ::-webkit-scrollbar {
   width: 8px;

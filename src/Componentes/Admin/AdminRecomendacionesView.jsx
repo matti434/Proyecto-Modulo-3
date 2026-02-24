@@ -1,9 +1,4 @@
-import React from "react";
 
-/**
-  View pura para la sección de Recomendaciones/Notas
-  Solo recibe props y renderiza UI
- */
 export const AdminRecomendacionesView = ({
   recomendaciones,
   nuevoComentario,

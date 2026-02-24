@@ -1,13 +1,8 @@
-/**
- * Estilos compartidos para formularios
- * Usado por: FormLogin, FormRegistro y otros formularios del proyecto
- */
+
 
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap");
 
-/* ========================================
-   CONTENEDOR PRINCIPAL DEL FORMULARIO
-   ======================================== */
+
 
 .contenedor-formulario {
   font-family: "Montserrat", sans-serif;
@@ -48,9 +43,7 @@
   pointer-events: none;
 }
 
-/* ========================================
-   TEXTOS Y LABELS
-   ======================================== */
+
 
 .texto-dorado {
   color: var(--color-dorado, #d4af37) !important;
@@ -95,9 +88,7 @@ h4.texto-dorado::after {
   background: linear-gradient(90deg, transparent, #d4af37, transparent);
 }
 
-/* ========================================
-   INPUTS Y CAMPOS
-   ======================================== */
+
 
 .entrada-personalizada {
   background: rgba(45, 45, 45, 0.4) !important;
@@ -134,9 +125,7 @@ input[type="date"].entrada-personalizada {
   color-scheme: dark;
 }
 
-/* ========================================
-   BOTONES
-   ======================================== */
+
 
 .boton-personalizado {
   font-family: "Montserrat", sans-serif !important;
@@ -193,9 +182,7 @@ input[type="date"].entrada-personalizada {
   color: #f8f9fa !important;
 }
 
-/* ========================================
-   ENLACES
-   ======================================== */
+
 
 .enlace-dorado {
   color: var(--color-dorado, #d4af37) !important;
@@ -217,9 +204,7 @@ input[type="date"].entrada-personalizada {
   text-decoration: underline;
 }
 
-/* ========================================
-   FEEDBACK Y MENSAJES
-   ======================================== */
+
 
 .retroalimentacion-invalida,
 .feedback-invalido {
@@ -249,9 +234,7 @@ input[type="date"].entrada-personalizada {
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
 }
 
-/* ========================================
-   RESPONSIVE
-   ======================================== */
+
 
 @media (max-width: 768px) {
   .contenedor-formulario {
@@ -290,9 +273,7 @@ input[type="date"].entrada-personalizada {
   }
 }
 
-/* ========================================
-   SOPORTE BACKDROP-FILTER
-   ======================================== */
+
 
 @supports (-webkit-backdrop-filter: none) or (backdrop-filter: none) {
   .contenedor-formulario {

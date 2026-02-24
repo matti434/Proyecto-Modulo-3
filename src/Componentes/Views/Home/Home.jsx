@@ -1,15 +1,83 @@
-import Categorias from '../Productos/ComponenteProducto/Categorias/Categorias';
-import Galeria from './galeria/Galeria';
-import Portada from './inicio/portada';
+import { useState, useEffect } from "react";
+import Categorias from "../Productos/ComponenteProducto/Categorias/Categorias";
+import Galeria from "./galeria/Galeria";
+import Portada from "./inicio/Portada";
+import { homeApi } from "../../../Services/Api/homeApi";
+import "./Home.css";
+
 const Home = () => {
-  return (
-    <div>
-      <Galeria/>
-        <Categorias/> 
-      <Portada/>
-      <div className="mt-5 py-5">
+  const [contenido, setContenido] = useState({
+    galeria: [],
+    portada: { imagenUrl: "" },
+  });
+  const [cargando, setCargando] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    let cancel = false;
+    const cargar = async () => {
+      try {
+        setError(null);
+        const data = await homeApi.obtenerContenidoHome();
+        if (!cancel) {
+          setContenido({
+            galeria: Array.isArray(data.galeria) ? data.galeria : [],
+
+            portada:
+              data.portada && data.portada.imagenUrl
+                ? { imagenUrl: data.portada.imagenUrl }
+                : { imagenUrl: "" },
+
+          });
+        }
+      } catch (e) {
+        if (!cancel) {
+          setError(e?.message || "Error al cargar la home");
+        }
+      } finally {
+        if (!cancel) setCargando(false);
+      }
+    };
+    cargar();
+    return () => {
+      cancel = true;
+    };
+
+  }, []);
+
+  if (cargando) {
+    return (
+      <div className="py-5 text-center">
+        <p>Cargando inicio...</p>
       </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="py-5 text-center">
+        <p role="alert">{error}</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="home-contenedor">
+      <main className="home-contenido-principal">
+        <Galeria imagenes={contenido.galeria} />
+        <Categorias />
+        <Portada imagenUrl={contenido.portada.imagenUrl} />
+        <section className="home-publicidad-centro" aria-hidden="true">
+          <div className="home-publicidad-placeholder">
+            <img src="/publicidad/images.jpg" alt="Publicidad" />
+          </div>
+          <div className="home-publicidad-placeholder">
+            <img src="/publicidad/images%20(2).jpg" alt="Publicidad" />
+          </div>
+        </section>
+      </main>
     </div>
-  )
-}
-export default Home
+  );
+};
+
+export default Home;

@@ -1,47 +1,41 @@
-/* ================================================
-   ADMIN PANEL - ESTILO MODERNO Y HOMOGÉNEO
-   Diseño escalable y tecnológico
-================================================ */
-
-/* =============================================
-   VARIABLES CSS - COLORES OSCUROS MODERNOS
-============================================= */
 :root {
-  /* Fondos */
   --admin-bg-main: #0f1419;
   --admin-bg-secondary: #1a1f2e;
   --admin-bg-hover: #252d3d;
   --admin-bg-input: #161b28;
-
-  /* Textos */
   --admin-text-primary: #e8eaed;
   --admin-text-secondary: #9ca3af;
   --admin-text-muted: #6b7280;
-
-  /* Acentos */
   --admin-accent: #c89b2b;
   --admin-accent-light: rgba(200, 155, 43, 0.15);
   --admin-accent-hover: rgba(200, 155, 43, 0.25);
-
-  /* Bordes */
   --admin-border: #2d3748;
   --admin-border-light: #1f2937;
-
-  /* Estados */
   --admin-success: #10b981;
   --admin-warning: #f59e0b;
   --admin-error: #ef4444;
   --admin-info: #3b82f6;
-
-  /* Sombras */
+  --admin-accent-soft: rgba(200, 155, 43, 0.1);
+  --admin-accent-badge: rgba(200, 155, 43, 0.2);
+  --admin-accent-glow: rgba(200, 155, 43, 0.3);
+  --admin-success-bg: rgba(16, 185, 129, 0.2);
+  --admin-success-bg-hover: rgba(16, 185, 129, 0.1);
+  --admin-warning-bg: rgba(245, 158, 11, 0.2);
+  --admin-warning-bg-hover: rgba(245, 158, 11, 0.1);
+  --admin-error-bg: rgba(239, 68, 68, 0.2);
+  --admin-error-bg-hover: rgba(239, 68, 68, 0.1);
+  --admin-error-focus: rgba(239, 68, 68, 0.15);
+  --admin-info-bg-hover: rgba(59, 130, 246, 0.1);
+  --admin-info-bg-glow: rgba(59, 130, 246, 0.2);
+  --admin-accent-lighter: #e8ab3d;
+  --admin-bg-dark: #0a0a0a;
+  --admin-overlay: rgba(0, 0, 0, 0.85);
+  --admin-border-hover: #3d4758;
   --admin-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
   --admin-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
   --admin-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
 }
 
-/* =============================================
-   PANEL PRINCIPAL
-============================================= */
 .panel-administracion {
   padding: 32px 20px;
   max-width: 1400px;
@@ -52,9 +46,6 @@
   color: var(--admin-text-primary);
 }
 
-/* =============================================
-   ENCABEZADO DEL PANEL
-============================================= */
 .encabezado-administracion {
   margin-bottom: 40px;
   padding: 32px;
@@ -72,16 +63,13 @@
   font-size: 2.2rem;
   font-weight: 800;
   letter-spacing: -0.5px;
-  background: linear-gradient(135deg, var(--admin-accent), #e8ab3d);
+  background: linear-gradient(135deg, var(--admin-accent), var(--admin-accent-lighter));
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   text-align: center;
 }
 
-/* =============================================
-   NAVEGACIÓN / BOTONES DE VISTA
-============================================= */
 .navegacion-administracion {
   display: flex;
   gap: 12px;
@@ -117,12 +105,9 @@
   border-color: var(--admin-accent);
   color: var(--admin-accent);
   font-weight: 700;
-  box-shadow: 0 0 0 3px rgba(200, 155, 43, 0.1);
+  box-shadow: 0 0 0 3px var(--admin-accent-soft);
 }
 
-/* =============================================
-   CONTROLES DEL ENCABEZADO
-============================================= */
 .controles-encabezado {
   display: flex;
   justify-content: center;
@@ -154,9 +139,6 @@
   transform: translateY(0);
 }
 
-/* =============================================
-   CONTENEDOR DE TABLA
-============================================= */
 .contenedor-tabla {
   background: var(--admin-bg-secondary);
   border-radius: 16px;
@@ -194,9 +176,6 @@
   min-width: 200px;
 }
 
-/* =============================================
-   TARJETAS DE RESUMEN
-============================================= */
 .tabla-resumen {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -205,7 +184,7 @@
 }
 
 .tarjeta-resumen {
-  background: linear-gradient(135deg, var(--admin-bg-secondary) 0%, #252d3d 100%);
+  background: linear-gradient(135deg, var(--admin-bg-secondary) 0%, var(--admin-bg-hover) 100%);
   border-radius: 14px;
   padding: 24px;
   border: 1px solid var(--admin-border);
@@ -222,14 +201,14 @@
   left: 0;
   right: 0;
   height: 3px;
-  background: linear-gradient(90deg, var(--admin-accent), #e8ab3d);
+  background: linear-gradient(90deg, var(--admin-accent), var(--admin-accent-lighter));
   opacity: 0;
   transition: opacity 0.3s ease;
 }
 
 .tarjeta-resumen:hover {
   border-color: var(--admin-accent);
-  box-shadow: 0 4px 16px rgba(200, 155, 43, 0.15);
+  box-shadow: 0 4px 16px var(--admin-accent-light);
   transform: translateY(-4px);
 }
 
@@ -255,9 +234,6 @@
   font-weight: 600;
 }
 
-/* =============================================
-   TABLA RESPONSIVE
-============================================= */
 .tabla-responsive {
   overflow-x: auto;
   border-radius: 12px;
@@ -322,9 +298,6 @@
   border-bottom: 1px solid var(--admin-border);
 }
 
-/* =============================================
-   INFORMACIÓN DE USUARIO/PRODUCTO
-============================================= */
 .info-usuario {
   display: flex;
   flex-direction: column;
@@ -377,9 +350,6 @@
   max-width: 250px;
 }
 
-/* =============================================
-   BADGES Y ETIQUETAS
-============================================= */
 .badge-rol,
 .badge-categoria,
 .badge-destacado,
@@ -398,8 +368,9 @@
   transition: all 0.2s ease;
 }
 
-.badge-admin {
-  background: rgba(200, 155, 43, 0.2);
+.badge-admin,
+.badge-categoria {
+  background: var(--admin-accent-badge);
   color: var(--admin-accent);
 }
 
@@ -408,18 +379,13 @@
   color: var(--admin-text-secondary);
 }
 
-.badge-categoria {
-  background: rgba(200, 155, 43, 0.2);
-  color: var(--admin-accent);
-}
-
 .badge-destacado {
-  background: rgba(16, 185, 129, 0.2);
+  background: var(--admin-success-bg);
   color: var(--admin-success);
 }
 
 .badge-sin-stock {
-  background: rgba(239, 68, 68, 0.2);
+  background: var(--admin-error-bg);
   color: var(--admin-error);
 }
 
@@ -430,18 +396,15 @@
 }
 
 .badge-dias.badge-advertencia {
-  background: rgba(245, 158, 11, 0.2);
+  background: var(--admin-warning-bg);
   color: var(--admin-warning);
 }
 
 .badge-dias.badge-peligro {
-  background: rgba(239, 68, 68, 0.2);
+  background: var(--admin-error-bg);
   color: var(--admin-error);
 }
 
-/* =============================================
-   PRECIO Y VALORES
-============================================= */
 .precio-producto {
   font-weight: 700;
   color: var(--admin-accent);
@@ -465,9 +428,6 @@
   color: var(--admin-text-primary);
 }
 
-/* =============================================
-   CONTENEDOR DE IMAGEN
-============================================= */
 .contenedor-imagen-tabla {
   width: 60px;
   height: 60px;
@@ -484,7 +444,7 @@
 
 .contenedor-imagen-tabla:hover {
   border-color: var(--admin-accent);
-  box-shadow: 0 2px 8px rgba(200, 155, 43, 0.2);
+  box-shadow: 0 2px 8px var(--admin-accent-badge);
 }
 
 .contenedor-imagen-tabla img {
@@ -506,9 +466,6 @@
   font-weight: 600;
 }
 
-/* =============================================
-   ACCIONES (BOTONES EN TABLA)
-============================================= */
 .acciones {
   display: flex;
   gap: 8px;
@@ -542,10 +499,10 @@
 }
 
 .boton-editar:hover {
-  background-color: rgba(59, 130, 246, 0.1);
+  background-color: var(--admin-info-bg-hover);
   border-color: var(--admin-info);
   transform: translateY(-2px);
-  box-shadow: 0 2px 6px rgba(59, 130, 246, 0.2);
+  box-shadow: 0 2px 6px var(--admin-info-bg-glow);
 }
 
 .boton-suspender {
@@ -554,10 +511,10 @@
 }
 
 .boton-suspender:hover {
-  background-color: rgba(245, 158, 11, 0.1);
+  background-color: var(--admin-warning-bg-hover);
   border-color: var(--admin-warning);
   transform: translateY(-2px);
-  box-shadow: 0 2px 6px rgba(245, 158, 11, 0.2);
+  box-shadow: 0 2px 6px var(--admin-warning-bg);
 }
 
 .boton-reactivar {
@@ -566,10 +523,10 @@
 }
 
 .boton-reactivar:hover {
-  background-color: rgba(16, 185, 129, 0.1);
+  background-color: var(--admin-success-bg-hover);
   border-color: var(--admin-success);
   transform: translateY(-2px);
-  box-shadow: 0 2px 6px rgba(16, 185, 129, 0.2);
+  box-shadow: 0 2px 6px var(--admin-success-bg);
 }
 
 .boton-eliminar {
@@ -578,10 +535,10 @@
 }
 
 .boton-eliminar:hover {
-  background-color: rgba(239, 68, 68, 0.1);
+  background-color: var(--admin-error-bg-hover);
   border-color: var(--admin-error);
   transform: translateY(-2px);
-  box-shadow: 0 2px 6px rgba(239, 68, 68, 0.2);
+  box-shadow: 0 2px 6px var(--admin-error-bg);
 }
 
 .boton-agregar {
@@ -595,7 +552,7 @@
   border-color: var(--admin-accent);
   background: var(--admin-accent-hover);
   transform: translateY(-2px);
-  box-shadow: 0 2px 8px rgba(200, 155, 43, 0.3);
+  box-shadow: 0 2px 8px var(--admin-accent-glow);
 }
 
 .boton-guardar {
@@ -608,7 +565,7 @@
 .boton-guardar:hover {
   background: var(--admin-accent-hover);
   transform: translateY(-2px);
-  box-shadow: 0 2px 8px rgba(200, 155, 43, 0.3);
+  box-shadow: 0 2px 8px var(--admin-accent-glow);
 }
 
 .boton-cancelar {
@@ -621,16 +578,12 @@
   border-color: var(--admin-text-secondary);
   transform: translateY(-2px);
 }
-
 button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
   transform: none !important;
 }
 
-/* =============================================
-   ESTADOS ESPECIALES
-============================================= */
 .estados-producto {
   display: flex;
   gap: 8px;
@@ -673,16 +626,13 @@ button:disabled {
   font-size: 1.1rem;
 }
 
-/* =============================================
-   FORMULARIOS
-============================================= */
 .superposicion-formulario {
   position: fixed;
   top: 80px;
   left: 0;
   width: 100%;
   height: calc(100% - 80px);
-  background: rgba(0, 0, 0, 0.7);
+  background: var(--admin-overlay);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -691,16 +641,21 @@ button:disabled {
   overflow-y: auto;
 }
 
+.panel-administracion .contenedor-formulario {  
+  background: var(--admin-bg-dark) !important;  
+  border: 1px solid var(--admin-border) !important;  
+}
+
 .contenedor-formulario {
-  background: #1a1f2e !important;
+  background: var(--admin-bg-dark) !important;
   border-radius: 16px;
   padding: 32px;
   width: 100%;
   max-width: 600px;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
-  border: 1px solid #2d3748 !important;
+  box-shadow: var(--admin-shadow-lg);
+  border: 1px solid var(--admin-border) !important;
   animation: slideUpForm 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -709,16 +664,16 @@ button:disabled {
 }
 
 .contenedor-formulario::-webkit-scrollbar-track {
-  background: #1a1f2e;
+  background: var(--admin-bg-dark);
 }
 
 .contenedor-formulario::-webkit-scrollbar-thumb {
-  background: #2d3748;
+  background: var(--admin-border);
   border-radius: 4px;
 }
 
 .contenedor-formulario::-webkit-scrollbar-thumb:hover {
-  background: #3d4758;
+  background: var(--admin-border-hover);
 }
 
 @keyframes slideUpForm {
@@ -726,7 +681,6 @@ button:disabled {
     opacity: 0;
     transform: translateY(40px);
   }
-
   to {
     opacity: 1;
     transform: translateY(0);
@@ -736,7 +690,7 @@ button:disabled {
 .contenedor-formulario h3 {
   margin: 0 0 24px 0;
   font-size: 1.6rem;
-  color: #e8eaed !important;
+  color: var(--admin-text-primary) !important;
   font-weight: 700;
   letter-spacing: -0.3px;
 }
@@ -747,9 +701,6 @@ button:disabled {
   gap: 18px;
 }
 
-/* =============================================
-   CAMPOS DE FORMULARIO
-============================================= */
 .campo-formulario {
   display: flex;
   flex-direction: column;
@@ -758,7 +709,7 @@ button:disabled {
 
 .campo-formulario label {
   font-weight: 600;
-  color: #e8eaed !important;
+  color: var(--admin-text-primary) !important;
   font-size: 0.95rem;
 }
 
@@ -766,34 +717,34 @@ button:disabled {
 .campo-formulario textarea,
 .campo-formulario select {
   padding: 12px 14px;
-  border: 1px solid #2d3748;
+  border: 1px solid var(--admin-border);
   border-radius: 10px;
   font-size: 0.95rem;
-  color: #e8eaed !important;
-  background: #161b28 !important;
+  color: var(--admin-text-primary) !important;
+  background: var(--admin-bg-input) !important;
   font-family: inherit;
   transition: all 0.3s ease;
 }
 
 .campo-formulario input::placeholder,
 .campo-formulario textarea::placeholder {
-  color: #6b7280;
+  color: var(--admin-text-secondary);
 }
 
 .campo-formulario input:focus,
 .campo-formulario textarea:focus,
 .campo-formulario select:focus {
   outline: none;
-  border-color: #c89b2b;
-  box-shadow: 0 0 0 3px rgba(200, 155, 43, 0.15);
-  background: #161b28 !important;
+  border-color: var(--admin-border-light);
+  box-shadow: 0 0 0 3px var(--admin-accent-light);
+  background: var(--admin-bg-input) !important;
 }
 
 .campo-formulario input:disabled,
 .campo-formulario textarea:disabled,
 .campo-formulario select:disabled {
-  background: #252d3d !important;
-  color: #9ca3af !important;
+  background: var(--admin-bg-hover) !important;
+  color: var(--admin-text-secondary) !important;
   cursor: not-allowed;
 }
 
@@ -802,15 +753,38 @@ button:disabled {
   min-height: 100px;
 }
 
+.mensaje-error-formulario {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.85rem;
+  color: var(--admin-error);
+  font-weight: 500;
+} 
+
+
+.input-invalido,
+.campo-formulario input.input-invalido,
+.campo-formulario textarea.input-invalido,
+.campo-formulario select.input-invalido,
+.input-textarea.input-invalido {
+  border-color: var(--admin-error) !important;
+  box-shadow: 0 0 0 2px var(--admin-error-focus);
+}
+
+.input-invalido:focus,
+.campo-formulario input.input-invalido:focus,
+.campo-formulario textarea.input-invalido:focus,
+.campo-formulario select.input-invalido:focus {
+  border-color: var(--admin-error) !important;
+  box-shadow: 0 0 0 3px var(--admin-error-bg);
+}
+
 .grid-campos {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 18px;
 }
 
-/* =============================================
-   CHECKBOX LABEL
-============================================= */
 .checkbox-label {
   display: flex;
   align-items: center;
@@ -827,19 +801,16 @@ button:disabled {
   accent-color: var(--admin-accent);
 }
 
-/* =============================================
-   VISTA PREVIA DE IMAGEN
-============================================= */
 .vista-previa-imagen {
   margin-top: 12px;
   border-radius: 10px;
   overflow: hidden;
-  border: 2px dashed #2d3748;
+  border: 2px dashed var(--admin-border);
   max-height: 250px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #161b28;
+  background: var(--admin-bg-input);
 }
 
 .vista-previa-imagen img {
@@ -852,14 +823,11 @@ button:disabled {
   width: 100%;
   padding: 40px 20px;
   text-align: center;
-  color: #ef4444;
+  color: var(--admin-error);
   font-weight: 600;
-  background: rgba(239, 68, 68, 0.1);
+  background: var(--admin-error-bg-hover);
 }
 
-/* =============================================
-   BOTONES FORMULARIO
-============================================= */
 .botones-formulario {
   display: flex;
   gap: 12px;
@@ -879,32 +847,29 @@ button:disabled {
 }
 
 .botones-formulario .boton-guardar {
-  background: rgba(200, 155, 43, 0.2) !important;
-  color: #c89b2b !important;
-  border: 1px solid #c89b2b !important;
+  background: var(--admin-accent-badge) !important;
+  color: var(--admin-accent) !important;
+  border: 1px solid var(--admin-accent) !important;
 }
 
 .botones-formulario .boton-guardar:hover {
-  background: rgba(200, 155, 43, 0.3) !important;
-  box-shadow: 0 2px 8px rgba(200, 155, 43, 0.3);
+  background: var(--admin-accent-glow) !important;
+  box-shadow: 0 2px 8px var(--admin-accent-glow);
   transform: translateY(-2px);
 }
 
 .botones-formulario .boton-cancelar {
-  background: #252d3d !important;
-  color: #9ca3af !important;
-  border: 1px solid #2d3748 !important;
+  background: var(--admin-bg-hover) !important;
+  color: var(--admin-text-secondary) !important;
+  border: 1px solid var(--admin-border) !important;
 }
 
 .botones-formulario .boton-cancelar:hover {
-  background: #2d3748 !important;
-  color: #e8eaed !important;
+  background: var(--admin-border) !important;
+  color: var(--admin-text-primary) !important;
   transform: translateY(-2px);
 }
 
-/* =============================================
-   FORMULARIO DE COMENTARIOS
-============================================= */
 .form-comentario {
   display: flex;
   flex-direction: column;
@@ -932,7 +897,7 @@ button:disabled {
 .input-textarea:focus {
   outline: none;
   border-color: var(--admin-accent);
-  box-shadow: 0 0 0 3px rgba(200, 155, 43, 0.15);
+  box-shadow: 0 0 0 3px var(--admin-accent-light);
 }
 
 .input-textarea:disabled {
@@ -940,50 +905,45 @@ button:disabled {
   cursor: not-allowed;
 }
 
-/* =============================================
-   RESPONSIVE DESIGN
-============================================= */
+.placeholder-blanco::placeholder,
+.placeholder-blanco::-webkit-input-placeholder,
+.placeholder-blanco::-ms-input-placeholder {
+  color: var(--admin-text-primary) !important;
+  opacity: 0.95;
+}
+
 @media (max-width: 1024px) {
   .panel-administracion {
     padding: 24px 16px;
   }
-
   .encabezado-administracion {
     padding: 24px;
     gap: 20px;
   }
-
   .encabezado-administracion h1 {
     font-size: 1.8rem;
   }
-
   .navegacion-administracion {
     gap: 8px;
   }
-
   .navegacion-administracion button {
     padding: 10px 16px;
     font-size: 0.8rem;
   }
-
   .contenedor-tabla {
     padding: 24px;
   }
-
   .tabla-resumen {
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     gap: 16px;
   }
-
   .grid-campos {
     grid-template-columns: 1fr;
   }
-
   .encabezado-productos {
     flex-direction: column;
     align-items: stretch;
   }
-
   .encabezado-productos button {
     width: 100%;
   }
@@ -993,74 +953,60 @@ button:disabled {
   .panel-administracion {
     padding: 20px 12px;
   }
-
   .encabezado-administracion {
     padding: 20px;
     gap: 16px;
   }
-
   .encabezado-administracion h1 {
     font-size: 1.5rem;
   }
-
   .navegacion-administracion {
     gap: 6px;
     justify-content: flex-start;
     overflow-x: auto;
     padding-bottom: 8px;
   }
-
   .navegacion-administracion button {
     padding: 10px 14px;
     font-size: 0.75rem;
     flex-shrink: 0;
   }
-
   .contenedor-tabla {
     padding: 20px;
     margin-bottom: 24px;
   }
-
   .tabla-resumen {
     grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
     gap: 12px;
   }
-
   .tabla-administracion th,
   .tabla-administracion td {
     padding: 12px;
     font-size: 0.85rem;
   }
-
   .numero-resumen {
     font-size: 1.8rem;
   }
-
   .texto-resumen {
     font-size: 0.7rem;
   }
-
   .contenedor-formulario {
     padding: 24px;
     max-width: 90vw;
   }
-
   .acciones {
     flex-direction: column;
     width: 100%;
   }
-
   .boton-editar,
   .boton-suspender,
   .boton-reactivar,
   .boton-eliminar {
     width: 100%;
   }
-
   .botones-formulario {
     flex-direction: column;
   }
-
   .botones-formulario button {
     width: 100%;
   }
@@ -1070,53 +1016,169 @@ button:disabled {
   .panel-administracion {
     padding: 16px 10px;
   }
-
   .encabezado-administracion {
     padding: 16px;
     gap: 14px;
   }
-
   .encabezado-administracion h1 {
     font-size: 1.3rem;
   }
-
   .navegacion-administracion {
     gap: 4px;
   }
-
   .navegacion-administracion button {
     padding: 8px 10px;
     font-size: 0.7rem;
   }
-
   .contenedor-tabla {
     padding: 16px;
   }
-
   .tabla-resumen {
     grid-template-columns: 1fr;
     gap: 10px;
   }
-
   .numero-resumen {
     font-size: 1.6rem;
   }
-
   .tabla-administracion {
     min-width: 100%;
   }
-
   .tabla-administracion th {
     padding: 10px 8px;
     font-size: 0.7rem;
   }
-
   .tabla-administracion td {
     padding: 10px 8px;
     font-size: 0.8rem;
   }
-
   .encabezado-productos {
     gap: 10px;
   }
+}
+
+.seccion-home-admin {
+  margin-top: 1rem;
+}
+.texto-ayuda-admin {
+  color: #666;
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+}
+.portada-admin-preview {
+  margin-bottom: 0.75rem;
+}
+.acciones-portada-admin,
+.acciones-galeria-admin {
+  margin-bottom: 1rem;
+}
+.boton-subir-imagen-admin {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background: #0d6efd;
+  color: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+.boton-subir-imagen-admin:has(input:disabled) {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+.boton-accion-admin {
+  padding: 0.35rem 0.6rem;  
+  margin-right: 0.5rem;  
+  font-size: 0.85rem;  
+  border-radius: 4px;  
+  cursor: pointer;  
+  border: 1px solid var(--admin-border);  
+  background: var(--admin-bg-hover);  
+  color: var(--admin-text-primary);  
+}
+
+.boton-accion-admin.peligro {
+  background: #dc3545;
+  color: #fff;
+  border-color: #dc3545;
+}
+.boton-accion-admin.dorado {
+background: #c9a227;
+color: #000;
+border-color: #b8921f;
+}
+.boton-accion-admin.dorado:hover {
+background: #d4ad2e;
+color: #000;
+}
+.input-texto-galeria-admin {
+  padding: 0.35rem 0.5rem;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+}
+
+/* Formulario nuevo pedido (admin) */
+.formulario-pedido-admin {
+  padding: 1.25rem;
+  background: var(--admin-bg-secondary);
+  border-radius: 12px;
+  border: 1px solid var(--admin-border);
+}
+.formulario-pedido-admin h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1.1rem;
+  color: var(--admin-text-primary);
+}
+.formulario-pedido-campos {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 480px;
+}
+.campo-form-pedido label {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-size: 0.9rem;
+  color: var(--admin-text-secondary);
+}
+.campo-form-pedido input,
+.campo-form-pedido textarea {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  border: 1px solid var(--admin-border);
+  background: var(--admin-bg-hover);
+  color: #e8eaed;
+  font-size: 0.95rem;
+}
+.campo-form-pedido input::placeholder,
+.campo-form-pedido textarea::placeholder {
+  color: var(--admin-text-muted);
+}
+.campo-form-pedido input:-webkit-autofill,
+.campo-form-pedido textarea:-webkit-autofill {
+  -webkit-text-fill-color: #e8eaed;
+  box-shadow: 0 0 0 1000px var(--admin-bg-hover) inset;
+}
+.campo-form-pedido input.input-error,
+.campo-form-pedido textarea.input-error {
+  border-color: var(--admin-error);
+  box-shadow: 0 0 0 2px var(--admin-error-focus);
+}
+.campo-form-pedido .mensaje-error-formulario {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.85rem;
+}
+.formulario-pedido-botones {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+.boton-accion-admin.boton-primario {
+  background: var(--admin-accent);
+  color: #0a0a0a;
+  border-color: var(--admin-accent);
+}
+.boton-accion-admin.boton-primario:hover:not(:disabled) {
+  background: var(--admin-accent-lighter);
+  border-color: var(--admin-accent-lighter);
 }

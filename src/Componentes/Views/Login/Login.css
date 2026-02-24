@@ -1,4 +1,4 @@
-/* ================= MODAL BASE ================= */
+
 
 .modal-login-moderno {
   max-width: none !important;
@@ -32,7 +32,7 @@
   padding: 0;
 }
 
-/* ================= OVERLAY ================= */
+
 
 .modal-overlay {
   position: fixed;
@@ -45,7 +45,7 @@
   z-index: 1;
 }
 
-/* ================= CONTAINER ================= */
+
 
 .modal-container {
   position: relative;
@@ -55,7 +55,7 @@
   padding: 0;
   max-width: 500px;
   width: 90%;
-  max-height: 85vh;
+  max-height: 95vh;
   overflow-y: auto;
   box-shadow: var(--sombra-fuerte), 0 25px 50px rgba(0, 0, 0, 0.3);
   animation: modalSlideUp 0.4s ease-out;
@@ -71,7 +71,7 @@
       var(--color-rojo));
 }
 
-/* ================= BOTÓN CERRAR ================= */
+
 
 .btn-cerrar-moderno {
   position: absolute;
@@ -95,10 +95,10 @@
   transform: rotate(90deg);
 }
 
-/* ================= HEADER ================= */
+
 
 .encabezado-login {
-  padding: 1.6rem 1.8rem 0.8rem;
+  padding: 1rem 1.8rem 0.8rem;
   text-align: center;
   background: var(--color-fondo-secundario);
   flex-shrink: 0;
@@ -108,7 +108,7 @@
   font-size: 1.3rem;
   font-weight: 800;
   line-height: 1.35;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.2rem;
   background: linear-gradient(45deg,
       var(--color-texto-oscuro),
       var(--color-dorado));
@@ -124,10 +124,10 @@
   margin: 0;
 }
 
-/* ================= BODY (SCROLL INTERNO) ================= */
+
 
 .cuerpo-login {
-  padding: 1rem 1.8rem 1.6rem;
+  padding: 1rem 1rem 1.6rem;
   overflow-y: auto;
   flex: 1;
   display: flex;
@@ -136,7 +136,7 @@
   background: var(--color-fondo-secundario);
 }
 
-/* Scroll limpio */
+
 .cuerpo-login::-webkit-scrollbar {
   width: 6px;
 }
@@ -146,7 +146,7 @@
   border-radius: 6px;
 }
 
-/* ================= ANIMACIÓN ================= */
+
 
 @keyframes modalSlideUp {
   from {
@@ -172,7 +172,7 @@
   }
 }
 
-/* ================= RESPONSIVE ================= */
+
 
 @media (max-width: 768px) {
   .modal-container {

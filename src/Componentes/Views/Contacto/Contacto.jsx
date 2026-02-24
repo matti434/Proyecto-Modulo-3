@@ -114,7 +114,7 @@ const Contacto = () => {
             <Toaster position="top-right" />
 
             <div style={{
-                backgroundColor: "#000000",
+                backgroundColor: "#2c2c2c",
                 minHeight: "100vh",
                 width: "100%",
                 position: "relative"
@@ -122,19 +122,20 @@ const Contacto = () => {
                 <div className="container d-flex justify-content-center align-items-center min-vh-100" style={{ 
                     backgroundSize: "cover", 
                     backgroundPosition: "center", 
-                    padding: "20px"
+                    padding: "20px",
+                    marginTop: "50px",
                 }}>
                     <div className="row shadow-lg rounded-4 overflow-hidden" style={{ 
                         width: "75%", 
                         maxWidth: "800px", 
-                        background: "rgba(0, 0, 0, 0.7)", 
+                        background: "rgba(214, 55, 16, 0.64)", 
                         backdropFilter: "blur(6px)", 
                         border: "1px solid yellow", 
                         borderRadius: "15px",
-                        boxShadow: "0 0 20px rgba(255, 255, 0, 0.2)"
+                        boxShadow: "0 0 20px rgba(255, 255, 0, 0.3)"
                     }}>
                         <div className="col-12 col-md-6 text-white d-flex flex-column justify-content-center p-5" style={{ 
-                            background: "rgba(0, 0, 0, 0.6)", 
+                            background: "rgb(0, 0, 0)", 
                             backdropFilter: "blur(6px)", 
                             color: "white",
                             borderRight: "1px solid rgba(255, 255, 0, 0.3)"
@@ -145,7 +146,7 @@ const Contacto = () => {
                             </p>
                         </div>
                         <form ref={form} onSubmit={sendEmail} className="col-12 col-md-6 d-flex flex-column justify-content-center p-5" style={{ 
-                            background: "rgba(0, 0, 0, 0.6)", 
+                            background: "rgba(88, 1, 1, 0.6)", 
                             backdropFilter: "blur(6px)", 
                             color: "white"
                         }}>
@@ -300,7 +301,7 @@ const Contacto = () => {
                                         }}>
                                             Mensaje Enviado
                                         </h3>
-                                        <p style={{ color: "#ccc", lineHeight: "1.5" }}>
+                                        <p style={{ color: "#fff", lineHeight: "1.5" }}>
                                             Gracias por contactarnos. Te responderemos a la brevedad.
                                         </p>
                                         <button 
@@ -355,26 +356,27 @@ const Contacto = () => {
                         maxWidth: "800px", 
                         color: "white", 
                         textAlign: "center",
-                        background: "rgba(0, 0, 0, 0.6)",
+                        background: "rgb(0, 0, 0)",
                         backdropFilter: "blur(6px)",
+                        border: "1px solid yellow",
                         borderRadius: "15px",
                         padding: "30px",
-                        border: "1px solid rgba(255, 255, 0, 0.3)"
+                        boxShadow: "0 0 20px rgba(255, 255, 0, 0.1)"
                     }}>
-                        <h3 className="fw-bold mb-4" style={{ color: "#eee605" }}>HORARIOS DE ATENCIÓN</h3>
+                        <h3 className="fw-bold mb-4" style={{ color: "rgba(233, 64, 22, 0.75)" }}>HORARIOS DE ATENCIÓN</h3>
                         <div className="row">
                             <div className="col-md-6 mb-4">
                                 <h5 className="fw-semibold mb-3" style={{ color: "#fff" }}>Lunes a Viernes</h5>
-                                <p className="m-0" style={{ color: "#ccc" }}>09:00 a 12:00</p>
-                                <p className="m-0" style={{ color: "#ccc" }}>17:00 a 20:00</p>
+                                <p className="m-0" style={{ color: "#fff" }}>09:00 a 12:00</p>
+                                <p className="m-0" style={{ color: "#fff" }}>17:00 a 20:00</p>
                             </div>
                             <div className="col-md-6 mb-4">
                                 <h5 className="fw-semibold mb-3" style={{ color: "#fff" }}>Sábados</h5>
-                                <p className="m-0" style={{ color: "#ccc" }}>09:00 a 13:00</p>
+                                <p className="m-0" style={{ color: "#fff" }}>09:00 a 13:00</p>
                             </div>
                         </div>
 
-                        <h4 className="fw-bold mt-4 mb-4" style={{ color: "#eee605" }}>CONTACTO</h4>
+                        <h4 className="fw-bold mt-4 mb-4" style={{ color: "rgba(233, 64, 22, 0.75)" }}>CONTACTO</h4>
                         <div className="d-flex flex-column align-items-center">
                             <div style={{
                                 background: "rgba(255, 255, 255, 0.9)",
@@ -393,13 +395,13 @@ const Contacto = () => {
                                     }}
                                 />
                             </div>
-                            <p className="mb-2 pt-3" style={{ color: "#ccc" }}>
+                            <p className="mb-2 pt-3" style={{ color: "#fff" }}>
                                 Escaneá el QR para contactarnos por WhatsApp
                             </p>
-                            <p className="mb-0" style={{ color: "#ccc" }}>
+                            <p className="mb-0" style={{ color: "#fff" }}>
                                 📩 <strong style={{ color: "#fff" }}>Email:</strong> RollingMotor@gmail.com
                             </p>
-                            <p className="mt-2" style={{ color: "#ccc" }}>
+                            <p className="mt-2" style={{ color: "#fff" }}>
                                 📞 <strong style={{ color: "#fff" }}>Teléfono:</strong> +54 9 381 3905024
                             </p>
                         </div>
