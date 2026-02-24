@@ -1084,14 +1084,16 @@ button:disabled {
   cursor: not-allowed;
 }
 .boton-accion-admin {
-  padding: 0.35rem 0.6rem;
-  margin-right: 0.5rem;
-  font-size: 0.85rem;
-  border-radius: 4px;
-  cursor: pointer;
-  border: 1px solid #ddd;
-  background: #f8f9fa;
+  padding: 0.35rem 0.6rem;  
+  margin-right: 0.5rem;  
+  font-size: 0.85rem;  
+  border-radius: 4px;  
+  cursor: pointer;  
+  border: 1px solid var(--admin-border);  
+  background: var(--admin-bg-hover);  
+  color: var(--admin-text-primary);  
 }
+
 .boton-accion-admin.peligro {
   background: #dc3545;
   color: #fff;
