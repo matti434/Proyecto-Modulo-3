@@ -759,7 +759,8 @@ button:disabled {
   font-size: 0.85rem;
   color: var(--admin-error);
   font-weight: 500;
-}
+} 
+
 
 .input-invalido,
 .campo-formulario input.input-invalido,
