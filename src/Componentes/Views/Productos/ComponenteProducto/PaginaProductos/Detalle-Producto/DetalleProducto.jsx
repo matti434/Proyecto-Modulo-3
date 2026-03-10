@@ -1,5 +1,6 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useCarrito } from '../../../../../Context/ContextoCarrito';
+import { useUser } from '../../../../../Context/ContextoUsuario';
 
 import { crearProductoData, validarStock, PRODUCTO_DEFAULT } from '../../../../../Utils/productoUtils';
 import toast from 'react-hot-toast';
@@ -10,11 +11,23 @@ const DetalleProducto = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { agregarAlCarrito } = useCarrito();
+  const { estaAutenticado, esAdministrador } = useUser();
 
   // Usar producto de navegación o valores por defecto
   const productoData = location.state?.producto || PRODUCTO_DEFAULT;
 
   const handleComprarAhora = () => {
+
+    if (!estaAutenticado) {
+      toast.error('Debes iniciar sesión para agregar productos al carrito');
+      return;
+    }
+
+    if (esAdministrador) {
+      toast.error('Los administradores no pueden usar el carrito');
+      return;
+    }
+
     if (!validarStock(productoData)) {
       toast.error('Este producto no está disponible');
       return;
@@ -26,6 +39,17 @@ const DetalleProducto = () => {
   };
 
   const handleAgregarAlCarrito = () => {
+
+    if (!estaAutenticado) {
+      toast.error('Debes iniciar sesión para agregar productos al carrito');
+      return;
+    }
+
+    if (esAdministrador) {
+      toast.error('Los administradores no pueden usar el carrito');
+      return;
+    }
+
     if (!validarStock(productoData)) {
       toast.error('Este producto no está disponible');
       return;
@@ -100,15 +124,16 @@ const DetalleProducto = () => {
 
             <div className="detalle-actions">
               <button
-                className={`detalle-btn detalle-btn-primary ${!productoData.stock ? 'detalle-btn-disabled' : ''}`}
-                disabled={!productoData.stock}
+                className={`detalle-btn detalle-btn-primary ${!productoData.stock || !estaAutenticado || esAdministrador ? 'detalle-btn-disabled' : ''}`}
+                disabled={!productoData.stock || !estaAutenticado || esAdministrador}
                 onClick={handleComprarAhora}
               >
                 💳 Comprar Ahora
               </button>
+
               <button
-                className={`detalle-btn detalle-btn-secondary ${!productoData.stock ? 'detalle-btn-disabled' : ''}`}
-                disabled={!productoData.stock}
+                className={`detalle-btn detalle-btn-secondary ${!productoData.stock || !estaAutenticado || esAdministrador ? 'detalle-btn-disabled' : ''}`}
+                disabled={!productoData.stock || !estaAutenticado || esAdministrador}
                 onClick={handleAgregarAlCarrito}
               >
                 🛒 Agregar al Carrito
