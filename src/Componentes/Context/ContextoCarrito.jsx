@@ -16,6 +16,7 @@ const normalizarItemBackend = (item) => {
   const prod = item.producto || {};
   const nombre =
     prod.nombre || [prod.marca, prod.modelo].filter(Boolean).join(" ").trim() || "Producto";
+
   return {
     id: item._id || item.id,
     nombre,
@@ -68,20 +69,23 @@ export const CarritoProvider = ({ children }) => {
   const agregarAlCarrito = useCallback(
     async (producto, cantidad = 1) => {
 
-      // No permitir a invitados
+      // 🚫 Bloquear invitados
       if (!estaAutenticado) {
         return;
       }
 
-      // No permitir a administradores
+      // 🚫 Bloquear administradores
       if (esAdministrador) {
         return;
       }
 
       const productoId = producto.id || producto._id;
+
       const productoConId = {
         ...producto,
-        id: productoId || `producto-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
+        id:
+          productoId ||
+          `producto-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
       };
 
       if (estaAutenticado && productoId) {
@@ -92,7 +96,9 @@ export const CarritoProvider = ({ children }) => {
         } catch {
           setItemsCarrito((prev) => {
             const idx = prev.findIndex(
-              (i) => (i.productoOriginal?.id || i.productoOriginal?._id) === productoId
+              (i) =>
+                (i.productoOriginal?.id || i.productoOriginal?._id) ===
+                productoId
             );
 
             if (idx !== -1) {
@@ -108,7 +114,10 @@ export const CarritoProvider = ({ children }) => {
               ...prev,
               {
                 id: `local-${Date.now()}`,
-                nombre: `${productoConId.marca || ""} ${productoConId.modelo || ""}`.trim() || "Producto",
+                nombre:
+                  `${productoConId.marca || ""} ${
+                    productoConId.modelo || ""
+                  }`.trim() || "Producto",
                 precio: parseFloat(productoConId.precio) || 0,
                 cantidad,
                 imagen: productoConId.imagen || "",
