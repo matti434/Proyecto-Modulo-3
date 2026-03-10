@@ -68,11 +68,13 @@ export const CarritoProvider = ({ children }) => {
   const agregarAlCarrito = useCallback(
     async (producto, cantidad = 1) => {
 
-      if (esAdministrador) {
+      // No permitir a invitados
+      if (!estaAutenticado) {
         return;
       }
 
-      if (!estaAutenticado) {
+      // No permitir a administradores
+      if (esAdministrador) {
         return;
       }
 
@@ -89,12 +91,19 @@ export const CarritoProvider = ({ children }) => {
           return;
         } catch {
           setItemsCarrito((prev) => {
-            const idx = prev.findIndex((i) => (i.productoOriginal?.id || i.productoOriginal?._id) === productoId);
+            const idx = prev.findIndex(
+              (i) => (i.productoOriginal?.id || i.productoOriginal?._id) === productoId
+            );
+
             if (idx !== -1) {
               const next = [...prev];
-              next[idx] = { ...next[idx], cantidad: next[idx].cantidad + cantidad };
+              next[idx] = {
+                ...next[idx],
+                cantidad: next[idx].cantidad + cantidad,
+              };
               return next;
             }
+
             return [
               ...prev,
               {
@@ -109,36 +118,38 @@ export const CarritoProvider = ({ children }) => {
               },
             ];
           });
+
           return;
         }
       }
-
-      setItemsCarrito((prev) => {
-        const productoExistenteIndex = prev.findIndex(
-          (item) => (item.productoOriginal?.id || item.productoOriginal?._id || item.id) === productoConId.id
-        );
-        if (productoExistenteIndex !== -1) {
-          const next = [...prev];
-          next[productoExistenteIndex] = {
-            ...next[productoExistenteIndex],
-            cantidad: next[productoExistenteIndex].cantidad + cantidad,
-          };
-          return next;
-        }
-        return [
-          ...prev,
-          {
-            id: productoConId.id,
-            nombre: `${productoConId.marca || ""} ${productoConId.modelo || ""}`.trim() || "Producto",
-            precio: parseFloat(productoConId.precio) || 0,
-            cantidad,
-            imagen: productoConId.imagen || "",
-            productoOriginal: productoConId,
-            marca: productoConId.marca || "",
-            modelo: productoConId.modelo || "",
-          },
-        ];
-      });
     },
     [estaAutenticado, esAdministrador, cargarCarritoDesdeApi]
   );
+
+  const quitarDelCarrito = useCallback((id) => {
+    setItemsCarrito((prev) => prev.filter((item) => item.id !== id));
+  }, []);
+
+  const vaciarCarrito = useCallback(() => {
+    setItemsCarrito([]);
+  }, []);
+
+  const valorTotal = itemsCarrito.reduce(
+    (total, item) => total + item.precio * item.cantidad,
+    0
+  );
+
+  return (
+    <CarritoContext.Provider
+      value={{
+        itemsCarrito,
+        agregarAlCarrito,
+        quitarDelCarrito,
+        vaciarCarrito,
+        valorTotal,
+      }}
+    >
+      {children}
+    </CarritoContext.Provider>
+  );
+};
