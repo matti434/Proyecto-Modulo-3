@@ -172,34 +172,32 @@ const CarritoView = ({
                 </ListGroup.Item>
 
                 <ListGroup.Item className="d-flex justify-content-between py-2">
-                  <span>Envío</span>
-                  <span>${envio.toLocaleString()}</span>
+                 <span>Envío</span>
+                 <span>{formatearPrecio(envio)}</span>
                 </ListGroup.Item>
 
                 <ListGroup.Item className="py-3 total-item">
                   <div className="d-flex justify-content-between">
                     <strong className="fs-5">Total</strong>
 
-                    {!descuentoAplicado ? (
-                      <strong className="fs-5 text-dorado">
-                        ${total.toLocaleString()}
-                      </strong>
-                    ) : (
-                      <div className="text-end">
-                        <div
-                          style={{
-                            textDecoration: "line-through",
-                            color: "#888",
-                          }}
-                        >
-                          ${(subtotal + envio).toLocaleString()}
-                        </div>
-
-                        <div className="fs-5 text-dorado fw-bold">
-                          $
-                          {totalConDescuento?.toLocaleString() ||
-                            total.toLocaleString()}
-                        </div>
+                     {!descuentoAplicado ? (
+                       <strong className="fs-5 text-dorado">
+                         {formatearPrecio(total)}
+                       </strong>
+                       ) : (
+                        <div className="text-end">
+                         <div
+                           style={{
+                             textDecoration: "line-through",
+                             color: "#888",
+                           }}
+                          >
+                          {formatearPrecio(subtotal + envio)}
+                          </div>
+                          
+                          <div className="fs-5 text-dorado fw-bold">
+                            {formatearPrecio(totalConDescuento ?? total)}
+                          </div>
 
                         <small className="text-success">
                           Descuento aplicado: {descuentoAplicado}%
