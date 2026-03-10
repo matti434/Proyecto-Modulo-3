@@ -67,6 +67,15 @@ export const CarritoProvider = ({ children }) => {
 
   const agregarAlCarrito = useCallback(
     async (producto, cantidad = 1) => {
+
+      if (!estaAutenticado) {
+        return;
+      }
+
+      if (esAdministrador) {
+        return;
+      }
+
       const productoId = producto.id || producto._id;
       const productoConId = {
         ...producto,
@@ -161,7 +170,7 @@ export const CarritoProvider = ({ children }) => {
           await carritoApi.actualizarCantidad(itemId, nuevaCantidad);
           await cargarCarritoDesdeApi();
           return;
-        } catch {}
+        } catch { }
       }
       setItemsCarrito((prev) =>
         prev.map((item) => (item.id === itemId ? { ...item, cantidad: nuevaCantidad } : item))
@@ -174,7 +183,7 @@ export const CarritoProvider = ({ children }) => {
     if (estaAutenticado) {
       try {
         await carritoApi.vaciar();
-      } catch {}
+      } catch { }
     }
     setItemsCarrito([]);
   }, [estaAutenticado]);
