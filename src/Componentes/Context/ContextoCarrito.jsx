@@ -29,7 +29,7 @@ const normalizarItemBackend = (item) => {
 };
 
 export const CarritoProvider = ({ children }) => {
-  const { estaAutenticado } = useUser();
+  const { estaAutenticado, esAdministrador } = useUser();
   const [itemsCarrito, setItemsCarrito] = useState([]);
 
   const cargarCarritoDesdeApi = useCallback(async () => {
