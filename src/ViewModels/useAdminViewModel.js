@@ -5,13 +5,18 @@ import { pedidosApi } from "../Services/Api";
 import { homeApi } from "../Services/Api/homeApi";
 import toast from "react-hot-toast";
 import { confirmarAccion } from "../Componentes/Utils/confirmacion";
-import { pedidoSchema, PEDIDO_FECHA_MIN, PEDIDO_FECHA_MAX } from "../Componentes/Utils/ValidacionesForm";
+import {
+  pedidoSchema,
+  PEDIDO_FECHA_MIN,
+  PEDIDO_FECHA_MAX,
+} from "../Componentes/Utils/ValidacionesForm";
 import { useAdminProductoForm } from "./useAdminProductoForm";
 
 export const useAdminViewModel = () => {
   const {
     usuarios,
     usuariosSuspendidos,
+    usuarioActual,
     esAdministrador,
     suspenderUsuario,
     reactivarUsuario,
@@ -32,7 +37,8 @@ export const useAdminViewModel = () => {
   const [usuarioEditando, setUsuarioEditando] = useState(null);
   const [productoEditando, setProductoEditando] = useState(null);
   const [mostrarFormProducto, setMostrarFormProducto] = useState(false);
-  const [modoFormularioProducto, setModoFormularioProducto] = useState("agregar");
+  const [modoFormularioProducto, setModoFormularioProducto] =
+    useState("agregar");
 
   const [recomendaciones, setRecomendaciones] = useState([]);
   const [nuevoComentario, setNuevoComentario] = useState("");
@@ -41,7 +47,12 @@ export const useAdminViewModel = () => {
 
   const [pedidos, setPedidos] = useState([]);
   const [pedidosCargando, setPedidosCargando] = useState(false);
-  const [pedidoActual, setPedidoActual] = useState({ id: null, titulo: "", descripcion: "", fecha: "" });
+  const [pedidoActual, setPedidoActual] = useState({
+    id: null,
+    titulo: "",
+    descripcion: "",
+    fecha: "",
+  });
   const [mostrarFormPedido, setMostrarFormPedido] = useState(false);
   const [enviandoPedido, setEnviandoPedido] = useState(false);
   const [modoPedido, setModoPedido] = useState("agregar");
@@ -66,7 +77,7 @@ export const useAdminViewModel = () => {
   const formProducto = useAdminProductoForm(
     productoEditando,
     modoFormularioProducto,
-    cerrarFormularioProducto
+    cerrarFormularioProducto,
   );
   const {
     datosFormularioProducto,
@@ -93,7 +104,11 @@ export const useAdminViewModel = () => {
         setPedidosCargando(true);
         try {
           const data = await pedidosApi.obtenerTodos();
-          const lista = Array.isArray(data) ? data : Array.isArray(data?.pedidos) ? data.pedidos : [];
+          const lista = Array.isArray(data)
+            ? data
+            : Array.isArray(data?.pedidos)
+              ? data.pedidos
+              : [];
           setPedidos(lista);
         } catch {
           toast.error("Error al cargar pedidos");
@@ -143,6 +158,13 @@ export const useAdminViewModel = () => {
   );
 
   const totalUsuarios = useMemo(() => usuarios.length, [usuarios]);
+
+  const usuariosFiltrados = useMemo(() => {
+    const idActual = usuarioActual?.id || usuarioActual?._id;
+    return usuarios.filter(
+      (u) => u.role !== "admin" && u.id !== idActual && i._id !== idActual,
+    );
+  }, [usuarios, usuarioActual]);
 
   const totalSuspendidos = useMemo(
     () => usuariosSuspendidos.length,
@@ -256,17 +278,22 @@ export const useAdminViewModel = () => {
     setNuevoComentario("");
   }, []);
 
-  const manejarActualizarEstadoPedido = useCallback(async (pedidoId, estado) => {
-    try {
-      await pedidosApi.actualizarEstado(pedidoId, estado);
-      setPedidos((prev) =>
-        prev.map((p) => (p._id === pedidoId || p.id === pedidoId ? { ...p, estado } : p))
-      );
-      toast.success("Estado actualizado");
-    } catch (err) {
-      toast.error(err?.message || "Error al actualizar estado");
-    }
-  }, []);
+  const manejarActualizarEstadoPedido = useCallback(
+    async (pedidoId, estado) => {
+      try {
+        await pedidosApi.actualizarEstado(pedidoId, estado);
+        setPedidos((prev) =>
+          prev.map((p) =>
+            p._id === pedidoId || p.id === pedidoId ? { ...p, estado } : p,
+          ),
+        );
+        toast.success("Estado actualizado");
+      } catch (err) {
+        toast.error(err?.message || "Error al actualizar estado");
+      }
+    },
+    [],
+  );
 
   const manejarGuardarPedido = useCallback(async () => {
     const resultado = pedidoSchema.safeParse({
@@ -299,7 +326,11 @@ export const useAdminViewModel = () => {
       setPedidoActual({ id: null, titulo: "", descripcion: "", fecha: "" });
       setMostrarFormPedido(false);
       const data = await pedidosApi.obtenerTodos();
-      const lista = Array.isArray(data) ? data : Array.isArray(data?.pedidos) ? data.pedidos : [];
+      const lista = Array.isArray(data)
+        ? data
+        : Array.isArray(data?.pedidos)
+          ? data.pedidos
+          : [];
       setPedidos(lista);
     } catch (err) {
       toast.error(err?.message || "Error al crear el pedido");
@@ -311,8 +342,15 @@ export const useAdminViewModel = () => {
   const manejarPedidoCampoChange = useCallback((campo, valor) => {
     if (campo === "fecha" && valor) {
       const d = new Date(valor);
-      if (Number.isNaN(d.getTime()) || d < PEDIDO_FECHA_MIN || d > PEDIDO_FECHA_MAX) {
-        setErroresPedido((prev) => ({ ...prev, fecha: "La fecha debe estar entre 1930 y 2025." }));
+      if (
+        Number.isNaN(d.getTime()) ||
+        d < PEDIDO_FECHA_MIN ||
+        d > PEDIDO_FECHA_MAX
+      ) {
+        setErroresPedido((prev) => ({
+          ...prev,
+          fecha: "La fecha debe estar entre 1930 y 2025.",
+        }));
         setPedidoActual((prev) => ({ ...prev, fecha: "" }));
         return;
       }
@@ -378,20 +416,23 @@ export const useAdminViewModel = () => {
     }
   }, []);
 
-  const manejarAgregarImagenGaleria = useCallback(async (file, texto) => {
-    setGaleriaSubiendo(true);
-    setContenidoHomeError("");
-    try {
-      await homeApi.agregarImagenGaleria(file, texto || "");
-      await cargarContenidoHome();
-      toast.success("Imagen agregada a la galería");
-    } catch (err) {
-      setContenidoHomeError(err?.message || "Error al agregar imagen");
-      toast.error(err?.message || "Error al agregar imagen");
-    } finally {
-      setGaleriaSubiendo(false);
-    }
-  }, [cargarContenidoHome]);
+  const manejarAgregarImagenGaleria = useCallback(
+    async (file, texto) => {
+      setGaleriaSubiendo(true);
+      setContenidoHomeError("");
+      try {
+        await homeApi.agregarImagenGaleria(file, texto || "");
+        await cargarContenidoHome();
+        toast.success("Imagen agregada a la galería");
+      } catch (err) {
+        setContenidoHomeError(err?.message || "Error al agregar imagen");
+        toast.error(err?.message || "Error al agregar imagen");
+      } finally {
+        setGaleriaSubiendo(false);
+      }
+    },
+    [cargarContenidoHome],
+  );
 
   const manejarActualizarTextoGaleria = useCallback(async (id, texto) => {
     if (id == null) return;
@@ -400,7 +441,7 @@ export const useAdminViewModel = () => {
       setContenidoHome((prev) => ({
         ...prev,
         galeria: prev.galeria.map((it) =>
-          (it.id ?? it._id) === id ? { ...it, texto: texto ?? "" } : it
+          (it.id ?? it._id) === id ? { ...it, texto: texto ?? "" } : it,
         ),
       }));
       toast.success("Texto actualizado");
@@ -409,27 +450,30 @@ export const useAdminViewModel = () => {
     }
   }, []);
 
-  const manejarReemplazarImagenGaleria = useCallback(async (id, file) => {
-    if (id == null) return;
-    setGaleriaActualizandoId(id);
-    setContenidoHomeError("");
-    try {
-      await homeApi.reemplazarImagenGaleria(id, file);
-      await cargarContenidoHome();
-      toast.success("Imagen reemplazada");
-    } catch (err) {
-      setContenidoHomeError(err?.message || "Error al reemplazar imagen");
-      toast.error(err?.message || "Error al reemplazar imagen");
-    } finally {
-      setGaleriaActualizandoId(null);
-    }
-  }, [cargarContenidoHome]);
+  const manejarReemplazarImagenGaleria = useCallback(
+    async (id, file) => {
+      if (id == null) return;
+      setGaleriaActualizandoId(id);
+      setContenidoHomeError("");
+      try {
+        await homeApi.reemplazarImagenGaleria(id, file);
+        await cargarContenidoHome();
+        toast.success("Imagen reemplazada");
+      } catch (err) {
+        setContenidoHomeError(err?.message || "Error al reemplazar imagen");
+        toast.error(err?.message || "Error al reemplazar imagen");
+      } finally {
+        setGaleriaActualizandoId(null);
+      }
+    },
+    [cargarContenidoHome],
+  );
 
   const manejarEliminarImagenGaleria = useCallback(async (id) => {
     if (id == null) return;
     const confirmado = await confirmarAccion(
       "¿Eliminar esta imagen de la galería?",
-      "Se quitará del carrusel de la página de inicio."
+      "Se quitará del carrusel de la página de inicio.",
     );
     if (!confirmado) return;
     try {
@@ -445,7 +489,8 @@ export const useAdminViewModel = () => {
   }, []);
 
   return {
-    usuarios,
+    usuarios: usuariosFiltrados,
+    usuariosCompletos: usuario,
     usuariosSuspendidos,
     productos,
     esAdministrador,
