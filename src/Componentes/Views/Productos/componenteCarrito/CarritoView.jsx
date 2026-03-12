@@ -10,6 +10,7 @@ import {
 
 import "../../../../estilos/variables.css";
 import "./Carrito.css";
+import { formatearPrecio } from '../../../../Utils/productoUtils';
 
 const CarritoView = ({
   items,
@@ -86,9 +87,9 @@ const CarritoView = ({
 
                     <Col xs={9} md={5}>
                       <h6 className="mb-1 nombre-producto">{item.nombre}</h6>
-                      <span className="text-dorado fw-bold">
-                        ${item.precio.toLocaleString()}
-                      </span>
+                       <span className="text-dorado fw-bold">
+                         {formatearPrecio(item.precio)}
+                       </span>
                     </Col>
 
                     <Col xs={6} md={3}>
@@ -127,7 +128,7 @@ const CarritoView = ({
 
                     <Col xs={6} md={2} className="text-end">
                       <div className="fw-bold">
-                        ${item.subtotal.toLocaleString()}
+                       {formatearPrecio(item.subtotal)}
                       </div>
 
                       <Button
@@ -166,39 +167,37 @@ const CarritoView = ({
             <Card.Body>
               <ListGroup variant="flush" className="mb-3">
                 <ListGroup.Item className="d-flex justify-content-between py-2">
-                  <span>Subtotal ({totalItems} items)</span>
-                  <span>${subtotal.toLocaleString()}</span>
+                 <span>Subtotal ({totalItems} items)</span>
+                 <span>{formatearPrecio(subtotal)}</span>
                 </ListGroup.Item>
 
                 <ListGroup.Item className="d-flex justify-content-between py-2">
-                  <span>Envío</span>
-                  <span>${envio.toLocaleString()}</span>
+                 <span>Envío</span>
+                 <span>{formatearPrecio(envio)}</span>
                 </ListGroup.Item>
 
                 <ListGroup.Item className="py-3 total-item">
                   <div className="d-flex justify-content-between">
                     <strong className="fs-5">Total</strong>
 
-                    {!descuentoAplicado ? (
-                      <strong className="fs-5 text-dorado">
-                        ${total.toLocaleString()}
-                      </strong>
-                    ) : (
-                      <div className="text-end">
-                        <div
-                          style={{
-                            textDecoration: "line-through",
-                            color: "#888",
-                          }}
-                        >
-                          ${(subtotal + envio).toLocaleString()}
-                        </div>
-
-                        <div className="fs-5 text-dorado fw-bold">
-                          $
-                          {totalConDescuento?.toLocaleString() ||
-                            total.toLocaleString()}
-                        </div>
+                     {!descuentoAplicado ? (
+                       <strong className="fs-5 text-dorado">
+                         {formatearPrecio(total)}
+                       </strong>
+                       ) : (
+                        <div className="text-end">
+                         <div
+                           style={{
+                             textDecoration: "line-through",
+                             color: "#888",
+                           }}
+                          >
+                          {formatearPrecio(subtotal + envio)}
+                          </div>
+                          
+                          <div className="fs-5 text-dorado fw-bold">
+                            {formatearPrecio(totalConDescuento ?? total)}
+                          </div>
 
                         <small className="text-success">
                           Descuento aplicado: {descuentoAplicado}%
