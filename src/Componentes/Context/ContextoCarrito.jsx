@@ -16,6 +16,7 @@ const normalizarItemBackend = (item) => {
   const prod = item.producto || {};
   const nombre =
     prod.nombre || [prod.marca, prod.modelo].filter(Boolean).join(" ").trim() || "Producto";
+
   return {
     id: item._id || item.id,
     nombre,
@@ -29,7 +30,7 @@ const normalizarItemBackend = (item) => {
 };
 
 export const CarritoProvider = ({ children }) => {
-  const { estaAutenticado } = useUser();
+  const { estaAutenticado, esAdministrador } = useUser();
   const [itemsCarrito, setItemsCarrito] = useState([]);
 
   const cargarCarritoDesdeApi = useCallback(async () => {
@@ -67,10 +68,24 @@ export const CarritoProvider = ({ children }) => {
 
   const agregarAlCarrito = useCallback(
     async (producto, cantidad = 1) => {
+
+      // 🚫 Bloquear invitados
+      if (!estaAutenticado) {
+        return;
+      }
+
+      // 🚫 Bloquear administradores
+      if (esAdministrador) {
+        return;
+      }
+
       const productoId = producto.id || producto._id;
+
       const productoConId = {
         ...producto,
-        id: productoId || `producto-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
+        id:
+          productoId ||
+          `producto-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
       };
 
       if (estaAutenticado && productoId) {
@@ -80,17 +95,29 @@ export const CarritoProvider = ({ children }) => {
           return;
         } catch {
           setItemsCarrito((prev) => {
-            const idx = prev.findIndex((i) => (i.productoOriginal?.id || i.productoOriginal?._id) === productoId);
+            const idx = prev.findIndex(
+              (i) =>
+                (i.productoOriginal?.id || i.productoOriginal?._id) ===
+                productoId
+            );
+
             if (idx !== -1) {
               const next = [...prev];
-              next[idx] = { ...next[idx], cantidad: next[idx].cantidad + cantidad };
+              next[idx] = {
+                ...next[idx],
+                cantidad: next[idx].cantidad + cantidad,
+              };
               return next;
             }
+
             return [
               ...prev,
               {
                 id: `local-${Date.now()}`,
-                nombre: `${productoConId.marca || ""} ${productoConId.modelo || ""}`.trim() || "Producto",
+                nombre:
+                  `${productoConId.marca || ""} ${
+                    productoConId.modelo || ""
+                  }`.trim() || "Producto",
                 precio: parseFloat(productoConId.precio) || 0,
                 cantidad,
                 imagen: productoConId.imagen || "",
@@ -100,137 +127,37 @@ export const CarritoProvider = ({ children }) => {
               },
             ];
           });
+
           return;
         }
       }
-
-      setItemsCarrito((prev) => {
-        const productoExistenteIndex = prev.findIndex(
-          (item) => (item.productoOriginal?.id || item.productoOriginal?._id || item.id) === productoConId.id
-        );
-        if (productoExistenteIndex !== -1) {
-          const next = [...prev];
-          next[productoExistenteIndex] = {
-            ...next[productoExistenteIndex],
-            cantidad: next[productoExistenteIndex].cantidad + cantidad,
-          };
-          return next;
-        }
-        return [
-          ...prev,
-          {
-            id: productoConId.id,
-            nombre: `${productoConId.marca || ""} ${productoConId.modelo || ""}`.trim() || "Producto",
-            precio: parseFloat(productoConId.precio) || 0,
-            cantidad,
-            imagen: productoConId.imagen || "",
-            productoOriginal: productoConId,
-            marca: productoConId.marca || "",
-            modelo: productoConId.modelo || "",
-          },
-        ];
-      });
     },
-    [estaAutenticado, cargarCarritoDesdeApi]
+    [estaAutenticado, esAdministrador, cargarCarritoDesdeApi]
   );
 
-  const eliminarDelCarrito = useCallback(
-    async (itemId) => {
-      if (estaAutenticado && itemId && !String(itemId).startsWith("local-")) {
-        try {
-          await carritoApi.eliminarItem(itemId);
-          setItemsCarrito((prev) => prev.filter((item) => item.id !== itemId));
-        } catch {
-          // Si falla el API no quitamos del estado; al recargar se verá la verdad del servidor
-        }
-        return;
-      }
-      setItemsCarrito((prev) => prev.filter((item) => item.id !== itemId));
-    },
-    [estaAutenticado]
-  );
-
-  const actualizarCantidad = useCallback(
-    async (itemId, nuevaCantidad) => {
-      if (nuevaCantidad < 1) {
-        eliminarDelCarrito(itemId);
-        return;
-      }
-      if (estaAutenticado && itemId && !String(itemId).startsWith("local-")) {
-        try {
-          await carritoApi.actualizarCantidad(itemId, nuevaCantidad);
-          await cargarCarritoDesdeApi();
-          return;
-        } catch {}
-      }
-      setItemsCarrito((prev) =>
-        prev.map((item) => (item.id === itemId ? { ...item, cantidad: nuevaCantidad } : item))
-      );
-    },
-    [estaAutenticado, eliminarDelCarrito, cargarCarritoDesdeApi]
-  );
-
-  const vaciarCarrito = useCallback(async () => {
-    if (estaAutenticado) {
-      try {
-        await carritoApi.vaciar();
-      } catch {}
-    }
-    setItemsCarrito([]);
-  }, [estaAutenticado]);
-
-  const cargarCarritoInvitado = useCallback(() => {
-    setItemsCarrito([]);
-    try {
-      const guardado = localStorage.getItem("carritoMotos");
-      if (guardado) setItemsCarrito(JSON.parse(guardado));
-    } catch {
-      localStorage.removeItem("carritoMotos");
-    }
+  const quitarDelCarrito = useCallback((id) => {
+    setItemsCarrito((prev) => prev.filter((item) => item.id !== id));
   }, []);
 
-  const calcularSubtotal = useCallback(() => {
-    return itemsCarrito.reduce((total, item) => total + (item.precio || 0) * (item.cantidad || 0), 0);
-  }, [itemsCarrito]);
+  const vaciarCarrito = useCallback(() => {
+    setItemsCarrito([]);
+  }, []);
 
-  const calcularTotalProductos = useCallback(() => {
-    return itemsCarrito.reduce((total, item) => total + (item.cantidad || 0), 0);
-  }, [itemsCarrito]);
-
-  const estaEnCarrito = useCallback(
-    (productoId) => {
-      return itemsCarrito.some(
-        (item) => (item.productoOriginal?.id || item.productoOriginal?._id) === productoId
-      );
-    },
-    [itemsCarrito]
+  const valorTotal = itemsCarrito.reduce(
+    (total, item) => total + item.precio * item.cantidad,
+    0
   );
-
-  const obtenerCantidadProducto = useCallback(
-    (productoId) => {
-      const item = itemsCarrito.find(
-        (i) => (i.productoOriginal?.id || i.productoOriginal?._id) === productoId
-      );
-      return item ? item.cantidad : 0;
-    },
-    [itemsCarrito]
-  );
-
-  const valorContexto = {
-    itemsCarrito,
-    agregarAlCarrito,
-    eliminarDelCarrito,
-    actualizarCantidad,
-    vaciarCarrito,
-    calcularSubtotal,
-    calcularTotalProductos,
-    estaEnCarrito,
-    obtenerCantidadProducto,
-    cargarCarritoInvitado,
-  };
 
   return (
-    <CarritoContext.Provider value={valorContexto}>
+    <CarritoContext.Provider
+      value={{
+        itemsCarrito,
+        agregarAlCarrito,
+        quitarDelCarrito,
+        vaciarCarrito,
+        valorTotal,
+      }}
+    >
       {children}
     </CarritoContext.Provider>
   );
