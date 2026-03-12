@@ -31,14 +31,20 @@ export const AdminFormularioView = ({
               type="text"
               placeholder="Ejm: Motocicleta Yamaha MT-07"
               value={datosFormulario.nombre}
-              onChange={(e) => onCambioCampo("nombre", e.target.value.slice(0, L.nombre))}
+              onChange={(e) =>
+                onCambioCampo("nombre", e.target.value.slice(0, L.nombre))
+              }
               maxLength={L.nombre}
               required
               disabled={enviando}
               className={errores.nombre ? "input-invalido" : ""}
               aria-invalid={!!errores.nombre}
             />
-            {errores.nombre && <span className="mensaje-error-formulario" role="alert">{errores.nombre}</span>}
+            {errores.nombre && (
+              <span className="mensaje-error-formulario" role="alert">
+                {errores.nombre}
+              </span>
+            )}
           </div>
 
           <div className="campo-formulario">
@@ -60,7 +66,11 @@ export const AdminFormularioView = ({
               className={errores.precio ? "input-invalido" : ""}
               aria-invalid={!!errores.precio}
             />
-            {errores.precio && <span className="mensaje-error-formulario" role="alert">{errores.precio}</span>}
+            {errores.precio && (
+              <span className="mensaje-error-formulario" role="alert">
+                {errores.precio}
+              </span>
+            )}
           </div>
 
           <div className="campo-formulario">
@@ -80,7 +90,11 @@ export const AdminFormularioView = ({
               <option value="indumentaria">Indumentaria</option>
               <option value="repuestos">Repuestos</option>
             </select>
-            {errores.categoria && <span className="mensaje-error-formulario" role="alert">{errores.categoria}</span>}
+            {errores.categoria && (
+              <span className="mensaje-error-formulario" role="alert">
+                {errores.categoria}
+              </span>
+            )}
           </div>
 
           <div className="campo-formulario">
@@ -96,9 +110,13 @@ export const AdminFormularioView = ({
                 e.target.value = "";
               }}
             />
-            {subiendoImagen && <p className="estado-subida">Subiendo imagen...</p>}
+            {subiendoImagen && (
+              <p className="estado-subida">Subiendo imagen...</p>
+            )}
             {errorUploadImagen && (
-              <span className="mensaje-error-formulario" role="alert">{errorUploadImagen}</span>
+              <span className="mensaje-error-formulario" role="alert">
+                {errorUploadImagen}
+              </span>
             )}
             <input
               id="imagen"
@@ -115,7 +133,11 @@ export const AdminFormularioView = ({
               className={errores.imagen ? "input-invalido" : ""}
               aria-invalid={!!errores.imagen}
             />
-            {errores.imagen && <span className="mensaje-error-formulario" role="alert">{errores.imagen}</span>}
+            {errores.imagen && (
+              <span className="mensaje-error-formulario" role="alert">
+                {errores.imagen}
+              </span>
+            )}
             {datosFormulario.imagen && (
               <div className="vista-previa-imagen">
                 {errorImagen ? (
@@ -142,14 +164,20 @@ export const AdminFormularioView = ({
                 type="text"
                 placeholder="Ejm: Yamaha, Honda"
                 value={datosFormulario.marca}
-                onChange={(e) => onCambioCampo("marca", e.target.value.slice(0, L.marca))}
+                onChange={(e) =>
+                  onCambioCampo("marca", e.target.value.slice(0, L.marca))
+                }
                 maxLength={L.marca}
                 required
                 disabled={enviando}
                 className={errores.marca ? "input-invalido" : ""}
                 aria-invalid={!!errores.marca}
               />
-              {errores.marca && <span className="mensaje-error-formulario" role="alert">{errores.marca}</span>}
+              {errores.marca && (
+                <span className="mensaje-error-formulario" role="alert">
+                  {errores.marca}
+                </span>
+              )}
             </div>
 
             <div className="campo-formulario">
@@ -159,14 +187,20 @@ export const AdminFormularioView = ({
                 type="text"
                 placeholder="Ejm: MT-07, CBR 600RR"
                 value={datosFormulario.modelo}
-                onChange={(e) => onCambioCampo("modelo", e.target.value.slice(0, L.modelo))}
+                onChange={(e) =>
+                  onCambioCampo("modelo", e.target.value.slice(0, L.modelo))
+                }
                 maxLength={L.modelo}
                 required
                 disabled={enviando}
                 className={errores.modelo ? "input-invalido" : ""}
                 aria-invalid={!!errores.modelo}
               />
-              {errores.modelo && <span className="mensaje-error-formulario" role="alert">{errores.modelo}</span>}
+              {errores.modelo && (
+                <span className="mensaje-error-formulario" role="alert">
+                  {errores.modelo}
+                </span>
+              )}
             </div>
           </div>
 
@@ -178,13 +212,22 @@ export const AdminFormularioView = ({
                 type="text"
                 placeholder="Ejm: 2023"
                 value={datosFormulario.año}
-                onChange={(e) => onCambioCampo("año", e.target.value.slice(0, L.año).replace(/\D/g, ""))}
+                onChange={(e) =>
+                  onCambioCampo(
+                    "año",
+                    e.target.value.slice(0, L.año).replace(/\D/g, ""),
+                  )
+                }
                 maxLength={L.año}
                 disabled={enviando}
                 className={errores.año ? "input-invalido" : ""}
                 aria-invalid={!!errores.año}
               />
-              {errores.año && <span className="mensaje-error-formulario" role="alert">{errores.año}</span>}
+              {errores.año && (
+                <span className="mensaje-error-formulario" role="alert">
+                  {errores.año}
+                </span>
+              )}
             </div>
 
             <div className="campo-formulario">
@@ -194,13 +237,22 @@ export const AdminFormularioView = ({
                 type="text"
                 placeholder="Ejm: 15,000 km"
                 value={datosFormulario.kilometros}
-                onChange={(e) => onCambioCampo("kilometros", e.target.value.slice(0, L.kilometros))}
+                onChange={(e) =>
+                  onCambioCampo(
+                    "kilometros",
+                    e.target.value.slice(0, L.kilometros),
+                  )
+                }
                 maxLength={L.kilometros}
                 disabled={enviando}
                 className={errores.kilometros ? "input-invalido" : ""}
                 aria-invalid={!!errores.kilometros}
               />
-              {errores.kilometros && <span className="mensaje-error-formulario" role="alert">{errores.kilometros}</span>}
+              {errores.kilometros && (
+                <span className="mensaje-error-formulario" role="alert">
+                  {errores.kilometros}
+                </span>
+              )}
             </div>
           </div>
 
@@ -211,13 +263,19 @@ export const AdminFormularioView = ({
               type="text"
               placeholder="Ejm: Buenos Aires, Argentina"
               value={datosFormulario.ubicacion}
-              onChange={(e) => onCambioCampo("ubicacion", e.target.value.slice(0, L.ubicacion))}
+              onChange={(e) =>
+                onCambioCampo("ubicacion", e.target.value.slice(0, L.ubicacion))
+              }
               maxLength={L.ubicacion}
               disabled={enviando}
               className={errores.ubicacion ? "input-invalido" : ""}
               aria-invalid={!!errores.ubicacion}
             />
-            {errores.ubicacion && <span className="mensaje-error-formulario" role="alert">{errores.ubicacion}</span>}
+            {errores.ubicacion && (
+              <span className="mensaje-error-formulario" role="alert">
+                {errores.ubicacion}
+              </span>
+            )}
           </div>
 
           <div className="campo-formulario">
@@ -226,7 +284,12 @@ export const AdminFormularioView = ({
               id="descripcion"
               placeholder="Descripción detallada del producto..."
               value={datosFormulario.descripcion}
-              onChange={(e) => onCambioCampo("descripcion", e.target.value.slice(0, L.descripcion))}
+              onChange={(e) =>
+                onCambioCampo(
+                  "descripcion",
+                  e.target.value.slice(0, L.descripcion),
+                )
+              }
               maxLength={L.descripcion}
               required
               rows="4"
@@ -234,7 +297,11 @@ export const AdminFormularioView = ({
               className={errores.descripcion ? "input-invalido" : ""}
               aria-invalid={!!errores.descripcion}
             />
-            {errores.descripcion && <span className="mensaje-error-formulario" role="alert">{errores.descripcion}</span>}
+            {errores.descripcion && (
+              <span className="mensaje-error-formulario" role="alert">
+                {errores.descripcion}
+              </span>
+            )}
           </div>
 
           <div className="grid-campos">
@@ -252,21 +319,38 @@ export const AdminFormularioView = ({
             </div>
 
             <div className="campo-formulario">
-              <label htmlFor="stock" className="checkbox-label">
-                <input
-                  id="stock"
-                  type="checkbox"
-                  checked={datosFormulario.stock}
-                  onChange={(e) => onCambioCampo("stock", e.target.checked)}
-                  disabled={enviando}
-                />
-                <span>En stock</span>
-              </label>
+              <label htmlFor="stockDisponible">Stock disponible</label>
+              <input
+                id="stockDisponible"
+                type="number"
+                min="0"
+                step="1"
+                placeholder="Ej: 10"
+                value={datosFormulario.stockDisponible ?? ""}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  const num = val === "" ? 0 : parseInt(val, 10);
+                  onCambioCampo("stockDisponible", isNaN(num) ? 0 : num);
+                  onCambioCampo("stock", (isNaN(num) ? 0 : num) > 0);
+                }}
+                disabled={enviando}
+                className={errores.stockDisponible ? "input-invalido" : ""}
+                aria-invalid={!!errores.stockDisponible}
+              />
+              {errores.stockDisponible && (
+                <span className="mensaje-error-formulario" role="alert">
+                  {errores.stockDisponible}
+                </span>
+              )}
             </div>
           </div>
 
           <div className="botones-formulario">
-            <button type="submit" className="boton-guardar" disabled={enviando || subiendoImagen}>
+            <button
+              type="submit"
+              className="boton-guardar"
+              disabled={enviando || subiendoImagen}
+            >
               {enviando
                 ? "Procesando..."
                 : subiendoImagen
