@@ -50,6 +50,13 @@ const MenuUsuario = () => {
             Perfil
           </Dropdown.Item>
 
+          {esAdministrador && (
+            <Dropdown.Item as={Link} to="/admin" className="item-menu-usuario">
+              <FaCog className="me-2" />
+              Panel de Administración
+            </Dropdown.Item>
+          )}
+
           <Dropdown.Item onClick={manejarContacto} className="item-menu-usuario">
             <FaEnvelope className="me-2" />
             Contacto
