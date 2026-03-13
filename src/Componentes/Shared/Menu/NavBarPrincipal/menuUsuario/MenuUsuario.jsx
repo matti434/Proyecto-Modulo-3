@@ -1,4 +1,5 @@
 import { Dropdown } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import { useUser } from "../../../../Context/ContextoUsuario";
 import { useCarrito } from "../../../../Context/ContextoCarrito";
 import { useNavigate } from "react-router-dom";
@@ -48,19 +49,19 @@ const MenuUsuario = () => {
             <FaUser className="me-2" />
             Perfil
           </Dropdown.Item>
-          
+
           <Dropdown.Item onClick={manejarContacto} className="item-menu-usuario">
             <FaEnvelope className="me-2" />
             Contacto
           </Dropdown.Item>
-          
+
           <Dropdown.Item onClick={manejarSoporte} className="item-menu-usuario">
             <FaHeadset className="me-2" />
             Soporte
           </Dropdown.Item>
-          
+
           <Dropdown.Divider className="divisor-menu" />
-          
+
           <Dropdown.Item onClick={manejarCerrarSesion} className="item-menu-usuario item-salir">
             <FaSignOutAlt className="me-2" />
             Cerrar Sesión
