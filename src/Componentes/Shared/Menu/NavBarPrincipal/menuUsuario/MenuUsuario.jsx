@@ -9,7 +9,7 @@ import ModalPerfil from "./Perfil/ModalPerfil";
 import "./MenuUsuario.css";
 
 const MenuUsuario = () => {
-  const { usuarioActual, logout } = useUser();
+  const { usuarioActual, logout, esAdministrador } = useUser();
   const { cargarCarritoInvitado } = useCarrito();
   const navigate = useNavigate();
   const [mostrarModalPerfil, setMostrarModalPerfil] = useState(false);
@@ -76,7 +76,5 @@ const MenuUsuario = () => {
     </>
   );
 };
-
-
 
 export default MenuUsuario;
