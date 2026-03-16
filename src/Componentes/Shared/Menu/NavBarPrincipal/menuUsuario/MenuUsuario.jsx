@@ -1,14 +1,15 @@
 import { Dropdown } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import { useUser } from "../../../../Context/ContextoUsuario";
 import { useCarrito } from "../../../../Context/ContextoCarrito";
 import { useNavigate } from "react-router-dom";
-import { FaUser, FaEnvelope, FaHeadset, FaSignOutAlt } from "react-icons/fa";
+import { FaUser, FaEnvelope, FaHeadset, FaSignOutAlt, FaCog } from "react-icons/fa";
 import { useState } from "react";
 import ModalPerfil from "./Perfil/ModalPerfil";
 import "./MenuUsuario.css";
 
 const MenuUsuario = () => {
-  const { usuarioActual, logout } = useUser();
+  const { usuarioActual, logout, esAdministrador } = useUser();
   const { cargarCarritoInvitado } = useCarrito();
   const navigate = useNavigate();
   const [mostrarModalPerfil, setMostrarModalPerfil] = useState(false);
@@ -48,19 +49,26 @@ const MenuUsuario = () => {
             <FaUser className="me-2" />
             Perfil
           </Dropdown.Item>
-          
+
+          {esAdministrador && (
+            <Dropdown.Item as={Link} to="/admin" className="item-menu-usuario">
+              <FaCog className="me-2" />
+              Panel de Administración
+            </Dropdown.Item>
+          )}
+
           <Dropdown.Item onClick={manejarContacto} className="item-menu-usuario">
             <FaEnvelope className="me-2" />
             Contacto
           </Dropdown.Item>
-          
+
           <Dropdown.Item onClick={manejarSoporte} className="item-menu-usuario">
             <FaHeadset className="me-2" />
             Soporte
           </Dropdown.Item>
-          
+
           <Dropdown.Divider className="divisor-menu" />
-          
+
           <Dropdown.Item onClick={manejarCerrarSesion} className="item-menu-usuario item-salir">
             <FaSignOutAlt className="me-2" />
             Cerrar Sesión
