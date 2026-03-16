@@ -4,6 +4,9 @@ import { useCarrito } from "../Componentes/Context/ContextoCarrito";
 import { CarritoItem } from "../Models";
 import toast from "react-hot-toast";
 import { confirmarAccion } from "../Componentes/Utils/confirmacion";
+import { useUser } from "../Componentes/Context/ContextoUsuario";
+import { pagosApi } from "../Services/Api";
+import { pedidosApi } from "../Services/Api";
 
 export const useCarritoViewModel = () => {
   const navigate = useNavigate();
@@ -104,13 +107,43 @@ export const useCarritoViewModel = () => {
     navigate("/");
   }, [navigate]);
 
-  const handleProcederPago = useCallback(() => {
-    if (itemsCarrito.length === 0) {
-      toast.warning("El carrito está vacío");
-      return;
+  const handleProcederPago = useCallback(async () => {
+  if (itemsCarrito.length === 0) {
+    toast.warning("El carrito está vacío");
+    return;
+  }
+
+  const payload = {
+    items: itemsCarrito.map((item) => ({
+      productoId: item.productoOriginal?.id || item.productoOriginal?._id,
+      cantidad: item.cantidad,
+      precioUnitario: item.precio,
+    })),
+    subtotal: calcularSubtotal(),
+    envio: 1500,
+  };
+
+  try {
+    toast.loading("Procesando pago...", { id: "pago" });
+
+    // Opción A: Si existe endpoint de pagos
+    const resultado = await pagosApi.crearTransaccion(payload);
+
+    if (resultado?.exito && resultado?.transaccionId) {
+      toast.success("Pago procesado correctamente", { id: "pago" });
+      vaciarCarrito();
+      navigate("/");
+    } else {
+      toast.error(resultado?.mensaje || "Error al procesar el pago", { id: "pago" });
     }
-    toast("Redirigiendo al proceso de pago...");
-  }, [itemsCarrito.length]);
+
+    // Opción B: Si se usa pedidosApi para crear pedido desde carrito
+    // const resultado = await pedidosApi.crear(payload);
+    // Validar respuesta y manejar éxito/error
+  } catch (err) {
+    toast.error(err?.message || "Error al conectar con el servidor de pagos", { id: "pago" });
+  }
+}, [itemsCarrito, calcularSubtotal, vaciarCarrito, navigate]);
 
   return {
     items,
