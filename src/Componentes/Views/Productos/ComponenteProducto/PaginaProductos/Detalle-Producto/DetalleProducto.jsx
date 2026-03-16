@@ -2,7 +2,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useCarrito } from '../../../../../Context/ContextoCarrito';
 import { useUser } from '../../../../../Context/ContextoUsuario';
 
-import { crearProductoData, validarStock, PRODUCTO_DEFAULT } from '../../../../../Utils/productoUtils';
+import { crearProductoData, validarStock, PRODUCTO_DEFAULT, formatearPrecio } from '../../../../../Utils/productoUtils';
 import toast from 'react-hot-toast';
 import '../../../../../../estilos/variables.css';
 import './DetalleProducto.css';
@@ -114,7 +114,7 @@ const DetalleProducto = () => {
 
             <div className="detalle-price-box">
               <span className="detalle-price-label">Precio</span>
-              <span className="detalle-price-value">${productoData.precio}</span>
+              <span className="detalle-price-value">{formatearPrecio(productoData.precio)}</span>
             </div>
 
             <div className="detalle-description">

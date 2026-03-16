@@ -12,6 +12,7 @@ export class Producto {
     this.kilometros = data.kilometros;
     this.ubicacion = data.ubicacion;
     this.stock = data.stock !== undefined ? data.stock : true;
+    this.stockDisponible = data.stockDisponible ?? data.stockCantidad ?? (this.stock ? 1 : 0);
     this.destacado = data.destacado || false;
     this.esFavorito = data.esFavorito || false;
     this.fechaCreacion = data.fechaCreacion;

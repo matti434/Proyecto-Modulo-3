@@ -43,13 +43,14 @@ const MAX_DIGITOS_PRECIO = 14;
 
 export const formatearPrecio = (precioStr) => {
   if (!precioStr) return "0";
-  const numero = parseInt(String(precioStr).replace(/\D/g, ""), 10);
+  const numero = parseFloat(String(precioStr).replace(/[^\d,.]/g, "").replace(",", ".")) || 0;
   if (Number.isNaN(numero)) return "0";
-  const str = numero.toLocaleString("es-ES");
-  if (str.length > MAX_DIGITOS_PRECIO) {
-    return str.slice(0, MAX_DIGITOS_PRECIO) + "...";
-  }
-  return str;
+  return new Intl.NumberFormat("es-AR", {
+    style: "currency",
+    currency: "ARS",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(numero);
 };
 
 export const formatearKilometros = (kmStr) => {
