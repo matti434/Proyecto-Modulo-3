@@ -120,6 +120,7 @@ export const LIMITES = {
   producto: {
     nombre: 20,
     precio: 15,
+    stockDisponible: 6,
     imagen: 1000,
     marca: 20,
     modelo: 20,
@@ -203,6 +204,12 @@ export const productoSchema = z.object({
   descripcion: z.string().min(1, "Descripción obligatoria").max(P.descripcion, `Máximo ${P.descripcion} caracteres`),
   destacado: z.boolean(),
   stock: z.boolean(),
+  stockDisponible: z
+  .union([z.string(), z.number()])
+  .transform((v) => (typeof v === "string" ? parseInt(v, 10) : v))
+  .pipe(z.number().int().min(0, "Stock debe ser ≥ 0"))
+  .optional()
+  .default(0),
 });
 
 export const editarUsuarioSchema = z.object({
