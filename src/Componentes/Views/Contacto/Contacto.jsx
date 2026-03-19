@@ -1,8 +1,9 @@
 import Form from 'react-bootstrap/Form';
 import { useRef, useState } from "react";
-import emailjs from '@emailjs/browser';
+import { contactoApi } from "../../../Services/Api";
 import './Contacto.css';
 import { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 
 const Contacto = () => {
 
@@ -40,7 +41,7 @@ const Contacto = () => {
 
 
 
-    const sendEmail = (e) => {
+    const sendEmail = async (e) => {
 
         e.preventDefault();
 
@@ -111,33 +112,23 @@ const Contacto = () => {
 
         setErrorGeneral("");
 
-
-
-        emailjs
-            .sendForm(
-                "service_2huncds",
-                "template_wt8nir8",
-                form.current,
-                { publicKey: "4NhIAIqJh5mY2AI9S" }
-            )
-            .then(() => {
-
-                setMensajeEnviado(true);
-
-                form.current.reset();
-
-                setErrores({
-                    nombre: "",
-                    apellido: "",
-                    telefono: "",
-                    email: "",
-                    mensaje: ""
-                });
-
-            })
-
-            .catch((error) => console.error(error));
-
+        try {
+            await contactoApi.enviarMensaje({
+                nombre,
+                apellido,
+                telefono,
+                email,
+                mensaje,
+            });
+            setMensajeEnviado(true);
+            form.current.reset();
+            setErrores({ nombre: "", apellido: "", telefono: "", email: "", mensaje: "" });
+            toast.success("Mensaje enviado correctamente");
+        } catch (error) {
+            console.error(error);
+            setErrorGeneral("Error al enviar el mensaje. Intenta de nuevo más tarde.");
+            toast.error("Error al enviar el mensaje");
+        }
     };
 
 
@@ -162,14 +153,7 @@ const Contacto = () => {
 
             <Toaster position="top-right" />
 
-            <div
-                style={{
-                    backgroundColor: "#2c2c2c",
-                    minHeight: "100vh",
-                    width: "100%",
-                    position: "relative"
-                }}
-            >
+            <div className="contacto-contenedor">
 
                 <div
                     className="container d-flex justify-content-center align-items-center min-vh-100"
@@ -181,18 +165,7 @@ const Contacto = () => {
                     }}
                 >
 
-                    <div
-                        className="row shadow-lg rounded-4 overflow-hidden"
-                        style={{
-                            width: "75%",
-                            maxWidth: "800px",
-                            background: "rgba(214, 55, 16, 0.64)",
-                            backdropFilter: "blur(6px)",
-                            border: "1px solid yellow",
-                            borderRadius: "15px",
-                            boxShadow: "0 0 20px rgba(255, 255, 0, 0.3)"
-                        }}
-                    >
+                    <div className="row shadow-lg rounded-4 overflow-hidden contacto-card">
 
                         <div
                             className="col-12 col-md-6 text-white d-flex flex-column justify-content-center p-5"

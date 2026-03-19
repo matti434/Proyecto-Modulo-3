@@ -3,7 +3,7 @@ import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../../Context/ContextoUsuario';
 
-export const useLoginViewModel = ({ onClose }) => {
+export const useLoginViewModel = ({ onClose, redirect = "/" }) => {
   const navigate = useNavigate();
   const { login } = useUser();
 
@@ -13,12 +13,12 @@ export const useLoginViewModel = ({ onClose }) => {
 
       if (resultado.login) {
         toast.success("Login exitoso ✔");
-        onClose();
+        onClose?.();
 
         if (resultado.usuario.role === "admin") {
           navigate("/admin");
         } else {
-          navigate("/");
+          navigate(redirect);
         }
 
         return { exito: true };

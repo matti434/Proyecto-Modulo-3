@@ -128,7 +128,7 @@ const CarritoView = ({
 
                     <Col xs={6} md={2} className="text-end">
                       <div className="fw-bold">
-                       {formatearPrecio(item.subtotal)}
+                       {formatearPrecio((item.precio || 0) * (item.cantidad || 1))}
                       </div>
 
                       <Button

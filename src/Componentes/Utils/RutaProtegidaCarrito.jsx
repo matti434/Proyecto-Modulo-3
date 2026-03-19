@@ -1,7 +1,11 @@
 import { useUser } from '../Context/ContextoUsuario';
 import { Navigate } from 'react-router-dom';
 
-const RutaProtegida = ({ children }) => {
+/**
+ * Protege la ruta del carrito: solo usuarios autenticados que NO sean admin.
+ * Invitados y admin son redirigidos.
+ */
+const RutaProtegidaCarrito = ({ children }) => {
   const { usuarioActual, esAdministrador, cargando } = useUser();
 
   if (cargando) {
@@ -15,13 +19,14 @@ const RutaProtegida = ({ children }) => {
   }
 
   if (!usuarioActual) {
-    return <Navigate to="/login?redirect=/admin" replace />;
+    return <Navigate to="/login?redirect=/carrito" replace />;
   }
-  if (!esAdministrador) {
+
+  if (esAdministrador) {
     return <Navigate to="/" replace />;
   }
 
   return children;
 };
 
-export default RutaProtegida;
+export default RutaProtegidaCarrito;

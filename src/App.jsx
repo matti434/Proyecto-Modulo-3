@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useNavigate, useSearchParams } from "react-router-dom";
 
 import { CarritoProvider } from "./Componentes/Context/ContextoCarrito";
 import { FavoritosProvider } from "./Componentes/Context/ContextoFavoritos";
@@ -11,6 +11,7 @@ import Footer from "./Componentes/Shared/Footer/Footer";
 import Menu from "./Componentes/Shared/Menu/Menu";
 import SplashScreen from "./Componentes/Shared/SplashScreen/SplashScreen";
 import RutaProtegida from "./Componentes/Utils/RutaProtegida";
+import RutaProtegidaCarrito from "./Componentes/Utils/RutaProtegidaCarrito";
 import Contacto from "./Componentes/Views/Contacto/Contacto";
 import Favoritos from "./Componentes/Views/Favoritos/Favoritos";
 import Home from "./Componentes/Views/Home/Home";
@@ -30,9 +31,13 @@ import "./App.css";
 
 function LoginPage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const redirect = searchParams.get("redirect") || "/";
   return (
     <Login
-      onClose={() => navigate("/")}
+      esPagina={true}
+      redirect={redirect}
+      onClose={() => navigate(redirect)}
       onAbrirRegistro={() => navigate("/registro")}
     />
   );
@@ -70,7 +75,14 @@ function App() {
                 <Route path="/productos" element={<PaginaProductos />} />
                 <Route path="/productos-todos" element={<div className="mt-5 py-5"><Categorias /></div>} />
                 <Route path="/detalle-producto" element={<DetalleProducto />} />
-                <Route path="/carrito" element={<CarritoContainer />} />
+                <Route
+                  path="/carrito"
+                  element={
+                    <RutaProtegidaCarrito>
+                      <CarritoContainer />
+                    </RutaProtegidaCarrito>
+                  }
+                />
                   <Route path="/recuperar-password" element={ <RecuperarPassword />} />
                 <Route path="/favoritos" element={<Favoritos />} />
                 <Route

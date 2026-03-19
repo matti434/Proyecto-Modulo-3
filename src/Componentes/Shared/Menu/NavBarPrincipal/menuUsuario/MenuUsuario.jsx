@@ -10,12 +10,12 @@ import "./MenuUsuario.css";
 
 const MenuUsuario = () => {
   const { usuarioActual, logout, esAdministrador } = useUser();
-  const { cargarCarritoInvitado } = useCarrito();
+  const { vaciarCarrito } = useCarrito();
   const navigate = useNavigate();
   const [mostrarModalPerfil, setMostrarModalPerfil] = useState(false);
 
   const manejarCerrarSesion = () => {
-    cargarCarritoInvitado();
+    vaciarCarrito();
     logout();
     navigate("/");
   };

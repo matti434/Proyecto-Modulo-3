@@ -42,14 +42,15 @@ export const validarStock = (producto) => {
 const MAX_DIGITOS_PRECIO = 14;
 
 export const formatearPrecio = (precioStr) => {
-  if (!precioStr) return "0";
+  if (!precioStr) return "$ 0,00";
   const numero = parseFloat(String(precioStr).replace(/[^\d,.]/g, "").replace(",", ".")) || 0;
-  if (Number.isNaN(numero)) return "0";
+  if (Number.isNaN(numero)) return "$ 0,00";
   return new Intl.NumberFormat("es-AR", {
     style: "currency",
     currency: "ARS",
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
+    currencyDisplay: "symbol",
   }).format(numero);
 };
 

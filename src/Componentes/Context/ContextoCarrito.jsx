@@ -139,9 +139,51 @@ export const CarritoProvider = ({ children }) => {
     setItemsCarrito((prev) => prev.filter((item) => item.id !== id));
   }, []);
 
-  const vaciarCarrito = useCallback(() => {
-    setItemsCarrito([]);
-  }, []);
+  const eliminarDelCarrito = useCallback(async (itemId) => {
+    if (estaAutenticado && !esAdministrador) {
+      try {
+        await carritoApi.eliminarItem(itemId);
+        await cargarCarritoDesdeApi();
+      } catch {
+        setItemsCarrito((prev) => prev.filter((item) => item.id !== itemId));
+      }
+    } else {
+      setItemsCarrito((prev) => prev.filter((item) => item.id !== itemId));
+    }
+  }, [estaAutenticado, esAdministrador, cargarCarritoDesdeApi]);
+
+  const actualizarCantidad = useCallback(async (itemId, cantidad) => {
+    const cant = Math.max(1, parseInt(cantidad, 10) || 1);
+    if (estaAutenticado && !esAdministrador) {
+      try {
+        await carritoApi.actualizarCantidad(itemId, cant);
+        await cargarCarritoDesdeApi();
+      } catch {
+        setItemsCarrito((prev) =>
+          prev.map((item) =>
+            item.id === itemId ? { ...item, cantidad: cant } : item
+          )
+        );
+      }
+    } else {
+      setItemsCarrito((prev) =>
+        prev.map((item) =>
+          item.id === itemId ? { ...item, cantidad: cant } : item
+        )
+      );
+    }
+  }, [estaAutenticado, esAdministrador, cargarCarritoDesdeApi]);
+
+  const calcularSubtotal = useCallback(() => {
+    return itemsCarrito.reduce(
+      (total, item) => total + (parseFloat(item.precio) || 0) * (item.cantidad || 1),
+      0
+    );
+  }, [itemsCarrito]);
+
+  const calcularTotalProductos = useCallback(() => {
+    return itemsCarrito.reduce((total, item) => total + (item.cantidad || 1), 0);
+  }, [itemsCarrito]);
 
   const valorTotal = itemsCarrito.reduce(
     (total, item) => total + item.precio * item.cantidad,
@@ -154,8 +196,12 @@ export const CarritoProvider = ({ children }) => {
         itemsCarrito,
         agregarAlCarrito,
         quitarDelCarrito,
+        eliminarDelCarrito,
+        actualizarCantidad,
         vaciarCarrito,
         valorTotal,
+        calcularSubtotal,
+        calcularTotalProductos,
       }}
     >
       {children}
