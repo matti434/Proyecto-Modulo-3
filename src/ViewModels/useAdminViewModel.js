@@ -162,7 +162,7 @@ export const useAdminViewModel = () => {
   const usuariosFiltrados = useMemo(() => {
     const idActual = usuarioActual?.id || usuarioActual?._id;
     return usuarios.filter(
-      (u) => u.role !== "admin" && u.id !== idActual && i._id !== idActual,
+      (u) => u.role !== "admin" && u.id !== idActual && u._id !== idActual,
     );
   }, [usuarios, usuarioActual]);
 
@@ -490,7 +490,7 @@ export const useAdminViewModel = () => {
 
   return {
     usuarios: usuariosFiltrados,
-    usuariosCompletos: usuario,
+    usuariosCompletos: usuarios,
     usuariosSuspendidos,
     productos,
     esAdministrador,
