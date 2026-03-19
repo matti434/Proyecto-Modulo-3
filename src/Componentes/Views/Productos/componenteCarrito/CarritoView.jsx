@@ -10,7 +10,7 @@ import {
 
 import "../../../../estilos/variables.css";
 import "./Carrito.css";
-import { formatearPrecio } from '../../../../Utils/productoUtils';
+import { formatearPrecio } from '../../../Utils/productoUtils';
 
 const CarritoView = ({
   items,
