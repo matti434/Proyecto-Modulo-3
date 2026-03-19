@@ -185,6 +185,10 @@ export const CarritoProvider = ({ children }) => {
     return itemsCarrito.reduce((total, item) => total + (item.cantidad || 1), 0);
   }, [itemsCarrito]);
 
+  const vaciarCarrito = useCallback(() => {
+    setItemsCarrito([]);
+  }, []);
+
   const valorTotal = itemsCarrito.reduce(
     (total, item) => total + item.precio * item.cantidad,
     0
