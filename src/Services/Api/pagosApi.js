@@ -1,11 +1,11 @@
 import { apiPost, apiGet } from './apiClient';
 
 export const pagosApi = {
-  crearTransaccion: async (datosCarrito) => {
-    return await apiPost('/pagos/crear', datosCarrito);
+  crearPreferencia: async (datos) => {
+    return await apiPost('/pagos/crear-preferencia', datos);
   },
 
-  verificarEstado: async (transaccionId) => {
+  verificarPago: async (transaccionId) => {
     return await apiGet(`/pagos/verificar/${transaccionId}`);
   },
 };

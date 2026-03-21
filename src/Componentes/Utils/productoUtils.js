@@ -2,6 +2,7 @@ export const IMAGEN_PLACEHOLDER = "/Productos/imgCard.jpg";
 
 export const crearProductoData = ({
   id,
+  _id,
   marca = "",
   modelo = "",
   año = "",
@@ -15,7 +16,7 @@ export const crearProductoData = ({
   categoria = "",
   nombre = "",
 } = {}) => ({
-  id: id || Date.now().toString(),
+  id: id || _id || Date.now().toString(),
   marca,
   modelo,
   año,

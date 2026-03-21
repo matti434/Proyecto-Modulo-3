@@ -25,6 +25,9 @@ import DetalleProducto from "./Componentes/Views/Productos/ComponenteProducto/Pa
 import RecuperarPassword from "./Componentes/Views/Login/RecuperarPassword";
 import PaginaProductos from "./Componentes/Views/Productos/ComponenteProducto/PaginaProductos/PaginaProductos";
 import Ofertas from "./Componentes/Views/Productos/Ofertas/Ofertas";
+import PagoExitoso from "./Componentes/Views/Pago/PagoExitoso";
+import PagoFallido from "./Componentes/Views/Pago/PagoFallido";
+import PagoPendiente from "./Componentes/Views/Pago/PagoPendiente";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
@@ -83,7 +86,10 @@ function App() {
                     </RutaProtegidaCarrito>
                   }
                 />
-                  <Route path="/recuperar-password" element={ <RecuperarPassword />} />
+                  <Route path="/recuperar-password" element={<RecuperarPassword />} />
+                <Route path="/pago-exitoso" element={<PagoExitoso />} />
+                <Route path="/pago-fallo" element={<PagoFallido />} />
+                <Route path="/pago-pendiente" element={<PagoPendiente />} />
                 <Route path="/favoritos" element={<Favoritos />} />
                 <Route
                   path="/login"

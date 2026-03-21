@@ -30,6 +30,7 @@ const CarritoView = ({
   handleVaciarCarrito,
   handleSeguirComprando,
   handleProcederPago,
+  procesandoPago = false,
 }) => {
   if (estaVacio) {
     return (
@@ -242,8 +243,18 @@ const CarritoView = ({
                 size="lg"
                 className="w-100 mb-3"
                 onClick={handleProcederPago}
+                disabled={procesandoPago}
               >
-                <i className="bi bi-lock-fill me-2"></i>Proceder al Pago
+                {procesandoPago ? (
+                  <>
+                    <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                    Procesando...
+                  </>
+                ) : (
+                  <>
+                    <i className="bi bi-lock-fill me-2"></i>Proceder al Pago
+                  </>
+                )}
               </Button>
 
               <div className="text-center mt-3">
