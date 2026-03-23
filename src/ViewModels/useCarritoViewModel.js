@@ -124,7 +124,7 @@ export const useCarritoViewModel = () => {
 
     const payload = {
       items: itemsCarrito.map((item) => ({
-        productoId: item.productoOriginal?.id || item.productoOriginal?._id,
+        productoId: item.productoOriginal?._id || item.productoOriginal?.id || item.productoId || item.id,
         nombre: item.nombre || `${item.marca || ""} ${item.modelo || ""}`.trim() || "Producto",
         cantidad: item.cantidad,
         precioUnitario: item.precio,
