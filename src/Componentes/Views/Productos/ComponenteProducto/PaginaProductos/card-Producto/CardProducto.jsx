@@ -32,15 +32,28 @@ const CardProducto = ({
   const { agregarAlCarrito } = useCarrito();
   const { toggleFavorito, esFavorito } = useFavoritos();
 
-  const isFavorito = esFavorito(id);
+  const isFavorito = esFavorito(id || _id);
 
   // Crear objeto producto normalizado
-  const productoBase = { id, marca, modelo, año, precio, imagen, kilometros, ubicacion, descripcion, destacado, stock };
+  const productoBase = {
+  id: id || _id,
+  _id: _id || id,
+  marca,
+  modelo,
+  año,
+  precio,
+  imagen,
+  kilometros,
+  ubicacion,
+  descripcion,
+  destacado,
+  stock
+};
 
   const handleFavoritoClick = (e) => {
     e.stopPropagation();
     const eraFavorito = isFavorito;
-    toggleFavorito(id);
+    toggleFavorito(id || _id);
     
     if (eraFavorito) {
       toast.error(`${marca} ${modelo} eliminado de favoritos`, {
@@ -60,20 +73,39 @@ const CardProducto = ({
   };
 
   const handleAgregarCarrito = (e) => {
-    e.stopPropagation();
+  e.stopPropagation();
 
-    if (!validarStock({ stock })) {
-      toast.error('Este producto no está disponible');
-      return;
-    }
+   if (!estaAutenticado) {
+    toast.error('Debes iniciar sesión para agregar productos al carrito');
+    return;
+   }
 
-    const productoData = crearProductoData({
-      ...productoBase,
-      id: id || generarIdCarrito()
-    });
+   if (esAdministrador) {
+    toast.error('Los administradores no pueden usar el carrito');
+    return;
+   }
 
-    agregarAlCarrito(productoData, 1);
-    toast.success(`${marca} ${modelo} agregado al carrito`);
+   if (!validarStock({ stock })) {
+    toast.error('Este producto no está disponible');
+    return;
+   }
+
+   const mongoId = _id || id;
+
+   if (!mongoId) {
+    toast.error('Producto sin identificador válido');
+    return;
+   }
+
+   const productoData = crearProductoData({
+    ...productoBase,
+    _id: mongoId,
+    id: mongoId,
+   });
+
+   agregarAlCarrito(productoData, 1);
+
+   toast.success(`${marca} ${modelo} agregado al carrito`);
   };
 
   const handleCardClick = (e) => {
