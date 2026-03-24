@@ -2,8 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { useCarrito } from '../../../../../Context/ContextoCarrito';
 import { useFavoritos } from '../../../../../Context/ContextoFavoritos';
 import { 
-  crearProductoData, 
-  generarIdCarrito,
+  crearProductoData,
   validarStock,
   formatearPrecio, 
   formatearKilometros, 
@@ -14,17 +13,18 @@ import toast from 'react-hot-toast';
 import '../../../../../../estilos/variables.css';
 import './CardProducto.css';
 
-const CardProducto = ({ 
+const CardProducto = ({
   id,
+  _id,
   marca = "",
-  modelo = "", 
+  modelo = "",
   año = "",
   precio = "",
   imagen = "",
   kilometros = "",
   ubicacion = "",
   descripcion = "",
-  destacado = false, 
+  destacado = false,
   stock = true
 }) => {
 
