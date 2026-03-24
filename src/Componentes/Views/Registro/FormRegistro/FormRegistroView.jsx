@@ -1,11 +1,13 @@
 import { Form, Button, Row, Col } from "react-bootstrap";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
+
 import { PAISES_VALIDOS } from "../../../Utils/ValidacionesForm";
+
 import "./FormRegistro.css";
 
 const FormRegistroView = ({
-  // Estado
+
   mostrarContrasena,
   mostrarConfirmar,
   estaEnviando,
@@ -13,35 +15,33 @@ const FormRegistroView = ({
   isValid,
   isDirty,
 
-  // Valores observados
+
   nombreDeUsuario,
   email,
   contrasena,
   confirmarContrasena,
 
-  // Funciones de formulario
+
   register,
   handleSubmit,
   errors,
 
-  // Funciones de UI
+
   toggleMostrarContrasena,
   toggleMostrarConfirmar,
   limitarCaracteres,
   limpiarErrorGeneral,
 
-  // Callbacks
+
   onClose,
+  onAbrirLogin,
 }) => {
   const { t } = useTranslation();
 
   return (
     <Form onSubmit={handleSubmit} className="contenedor-formulario" noValidate>
       <div className="text-center mb-4">
-        <h4 className="texto-dorado mb-0">{t("registerTitle")}</h4>
-        <p className="texto-blanco mt-2 mb-0" style={{ fontSize: "0.9rem" }}>
-          {t("registerSubtitle")}
-        </p>
+        <h4 className="texto-dorado mb-0">{t("Registrarse")}</h4>
       </div>
 
       {errorGeneral && (
@@ -61,7 +61,7 @@ const FormRegistroView = ({
 
       <Form.Group className="mb-4">
         <Form.Label className="form-label mb-2 texto-dorado">
-          {t("username")}
+          {t("Usuario")}
         </Form.Label>
         <Form.Control
           type="text"
@@ -69,7 +69,7 @@ const FormRegistroView = ({
           maxLength={20}
           onInput={(e) => limitarCaracteres(e, 20)}
           isInvalid={!!errors.nombreDeUsuario}
-          placeholder={t("usernamePlaceholder")}
+          placeholder={t("usuario123 o ejemplo@correo.com")}
           className="entrada-personalizada"
         />
         <Form.Control.Feedback type="invalid" className="d-block mt-1">
@@ -92,7 +92,7 @@ const FormRegistroView = ({
           maxLength={100}
           onInput={(e) => limitarCaracteres(e, 100)}
           isInvalid={!!errors.email}
-          placeholder={t("emailPlaceholder")}
+          placeholder={t("ejemplo@correo.com")}
           className="entrada-personalizada"
         />
         <Form.Control.Feedback type="invalid" className="d-block mt-1">
@@ -102,14 +102,14 @@ const FormRegistroView = ({
 
       <Form.Group className="mb-4">
         <Form.Label className="form-label mb-2 texto-dorado">
-          {t("country")}
+          {t("Pais")}
         </Form.Label>
         <Form.Select
           {...register("pais")}
           isInvalid={!!errors.pais}
           className="entrada-personalizada"
         >
-          <option value="">{t("selectCountry")}</option>
+          <option value="">{t("Seleccionar pais")}</option>
           {PAISES_VALIDOS.map((pais) => (
             <option key={pais} value={pais}>
               {pais}
@@ -123,7 +123,7 @@ const FormRegistroView = ({
 
       <Form.Group className="mb-4">
         <Form.Label className="form-label mb-2 texto-dorado">
-          {t("birthDate")}
+          {t("Fecha de Nacimiento")}
         </Form.Label>
         <Form.Control
           type="date"
@@ -179,7 +179,7 @@ const FormRegistroView = ({
       <Form.Group className="mb-4">
         <div className="d-flex justify-content-between align-items-center mb-2">
           <Form.Label className="form-label mb-0 texto-dorado">
-            {t("confirmPassword")}
+            {t("Confirmar Contraseña")}
           </Form.Label>
           <small className="texto-blanco">
             {confirmarContrasena?.length || 0}/50
@@ -193,7 +193,7 @@ const FormRegistroView = ({
             maxLength={50}
             onInput={(e) => limitarCaracteres(e, 50)}
             isInvalid={!!errors.confirmarContrasena}
-            placeholder={t("confirmPasswordPlaceholder")}
+            placeholder={t("Ingresa tu contraseña nuevamente")}
             className="entrada-personalizada"
           />
           <button
@@ -247,6 +247,20 @@ const FormRegistroView = ({
           </Button>
         </Col>
       </Row>
+
+      {onAbrirLogin && (
+        <div className="text-center mt-3 pt-3 border-top border-secondary">
+          <Button
+            variant="outline-warning"
+            type="button"
+            onClick={onAbrirLogin}
+            className="w-75 py-1 boton-registro"
+            disabled={estaEnviando}
+          >
+            {t("alreadyHaveAccount")}
+          </Button>
+        </div>
+      )}
     </Form>
   );
 };

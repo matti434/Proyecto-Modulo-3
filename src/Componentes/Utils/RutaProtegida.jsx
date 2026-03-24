@@ -14,7 +14,10 @@ const RutaProtegida = ({ children }) => {
     );
   }
 
-  if (!usuarioActual || !esAdministrador) {
+  if (!usuarioActual) {
+    return <Navigate to="/login?redirect=/admin" replace />;
+  }
+  if (!esAdministrador) {
     return <Navigate to="/" replace />;
   }
 

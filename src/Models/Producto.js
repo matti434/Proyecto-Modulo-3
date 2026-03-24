@@ -1,6 +1,6 @@
 export class Producto {
   constructor(data) {
-    this.id = data.id;
+    this.id = data.id || data._id;
     this.nombre = data.nombre;
     this.precio = parseFloat(data.precio) || 0;
     this.categoria = data.categoria;
@@ -12,6 +12,7 @@ export class Producto {
     this.kilometros = data.kilometros;
     this.ubicacion = data.ubicacion;
     this.stock = data.stock !== undefined ? data.stock : true;
+    this.stockDisponible = data.stockDisponible ?? data.stockCantidad ?? (this.stock ? 1 : 0);
     this.destacado = data.destacado || false;
     this.esFavorito = data.esFavorito || false;
     this.fechaCreacion = data.fechaCreacion;

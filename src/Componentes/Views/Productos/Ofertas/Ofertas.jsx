@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import '../../../../estilos/variables.css';
-import './Ofertas.css';
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+import "../../../../estilos/variables.css";
+import "./Ofertas.css";
+import { formatearPrecio } from '../../../Utils/productoUtils';
 
 const Ofertas = ({
     marca = "Royal Enfield",
@@ -107,13 +109,13 @@ const Ofertas = ({
                 <div className="contenedor-precio">
 
                     {precioOriginal && ofertaActiva && (
-                        <div className="precio-original">
-                            ${precioOriginal}
-                        </div>
+                       <div className="precio-original">
+                          {formatearPrecio(precioOriginal)}
+                       </div>
                     )}
-                    
+
                     <div className="texto-precio-desde">Precio</div>
-                    <div className="valor-precio">${precio}</div>
+                    <div className="valor-precio">{formatearPrecio(precio)}</div>
                     <div className="texto-precio-final">Financiación disponible</div>
                 </div>
                 <div className="contenedor-botones">

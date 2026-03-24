@@ -1,92 +1,189 @@
-import React from "react";
+import { LIMITES } from "../Utils/ValidacionesForm";
 
-/**
-  View pura para la sección de Pedidos
-  Solo recibe props y renderiza UI
- */
+const ESTADOS_PEDIDO = ["pendiente", "procesando", "enviado", "entregado", "cancelado"];
+const { titulo: MAX_TITULO, descripcion: MAX_DESC } = LIMITES.pedido;
+
+
 export const AdminPedidosView = ({
   pedidos,
-  pedidoActual,
-  modoPedido,
-  onPedidoActualChange,
+  pedidosCargando = false,
+  pedidoActual = {},
+  erroresPedido = {},
+  mostrarFormPedido = false,
+  enviandoPedido = false,
+  onActualizarEstadoPedido,
+  onPedidoCampoChange,
   onGuardarPedido,
-  onEditarPedido,
-  onEliminarPedido,
+  onAbrirFormPedido,
+  onCerrarFormPedido,
 }) => {
+  const formatFecha = (fecha) => {
+    if (!fecha) return "-";
+    const d = new Date(fecha);
+    return isNaN(d.getTime()) ? "-" : d.toLocaleDateString("es-AR", { dateStyle: "short" });
+  };
+
+  const usuarioLabel = (pedido) => {
+    const u = pedido.usuario;
+    if (!u) return "-";
+    if (typeof u === "object") return u.nombreDeUsuario || u.email || u._id || "-";
+    return String(u);
+  };
+
+  const tituloPedido = (p) => p.titulo ?? usuarioLabel(p) ?? "-";
+
+  if (pedidosCargando) {
+    return (
+      <div className="contenedor-tabla">
+        <h2>Gestión de Pedidos</h2>
+        <p className="cargando">Cargando pedidos...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="contenedor-tabla">
       <h2>Gestión de Pedidos</h2>
+      <p className="texto-ayuda mb-3">
+        Creá pedidos desde acá (sin checkout). Título máx. {MAX_TITULO} caracteres, descripción máx. {MAX_DESC}, fecha entre 1930 y 2025.
+      </p>
 
-      <form
-        className="form-comentario"
-        onSubmit={(e) => {
-          e.preventDefault();
-          onGuardarPedido();
-        }}
-      >
-        <input
-          type="text"
-          placeholder="Título del pedido"
-          className="input-textarea"
-          value={pedidoActual.titulo}
-          onChange={(e) =>
-            onPedidoActualChange({ ...pedidoActual, titulo: e.target.value })
-          }
-        />
-        <textarea
-          placeholder="Descripción del pedido"
-          className="input-textarea"
-          value={pedidoActual.descripcion}
-          onChange={(e) =>
-            onPedidoActualChange({
-              ...pedidoActual,
-              descripcion: e.target.value,
-            })
-          }
-        />
-
-        <button className="boton-agregar" type="submit">
-          {modoPedido === "agregar" ? "Crear pedido" : "Guardar cambios"}
+      {!mostrarFormPedido ? (
+        <button type="button" className="boton-agregar mb-3" onClick={onAbrirFormPedido}>
+          ➕ Agregar pedido
         </button>
-      </form>
+      ) : (
+        <section className="formulario-pedido-admin mb-4">
+          <h3 className="mb-3">Nuevo pedido</h3>
+          <div className="formulario-pedido-campos">
+            <div className="campo-form-pedido">
+              <label htmlFor="pedido-titulo">Título (máx. {MAX_TITULO})</label>
+              <input
+                id="pedido-titulo"
+                type="text"
+                className={erroresPedido.titulo ? "input-error" : ""}
+                value={pedidoActual.titulo ?? ""}
+                onChange={(e) => onPedidoCampoChange?.("titulo", e.target.value)}
+                maxLength={MAX_TITULO}
+                placeholder="Ej: Pedido repuestos"
+                aria-invalid={!!erroresPedido.titulo}
+                aria-describedby={erroresPedido.titulo ? "error-titulo" : undefined}
+              />
+              {erroresPedido.titulo && (
+                <span id="error-titulo" className="mensaje-error-formulario" role="alert">
+                  {erroresPedido.titulo}
+                </span>
+              )}
+            </div>
+            <div className="campo-form-pedido">
+              <label htmlFor="pedido-descripcion">Descripción (máx. {MAX_DESC})</label>
+              <textarea
+                id="pedido-descripcion"
+                className={erroresPedido.descripcion ? "input-error" : ""}
+                value={pedidoActual.descripcion ?? ""}
+                onChange={(e) => onPedidoCampoChange?.("descripcion", e.target.value)}
+                maxLength={MAX_DESC}
+                rows={3}
+                placeholder="Descripción del pedido"
+                aria-invalid={!!erroresPedido.descripcion}
+                aria-describedby={erroresPedido.descripcion ? "error-descripcion" : undefined}
+              />
+              {erroresPedido.descripcion && (
+                <span id="error-descripcion" className="mensaje-error-formulario" role="alert">
+                  {erroresPedido.descripcion}
+                </span>
+              )}
+            </div>
+            <div className="campo-form-pedido">
+              <label htmlFor="pedido-fecha">Fecha (1930–2025)</label>
+              <input
+                id="pedido-fecha"
+                type="date"
+                className={erroresPedido.fecha ? "input-error" : ""}
+                value={pedidoActual.fecha ?? ""}
+                onChange={(e) => onPedidoCampoChange?.("fecha", e.target.value)}
+                min="1930-01-01"
+                max="2025-12-31"
+                aria-invalid={!!erroresPedido.fecha}
+                aria-describedby={erroresPedido.fecha ? "error-fecha" : undefined}
+              />
+              {erroresPedido.fecha && (
+                <span id="error-fecha" className="mensaje-error-formulario" role="alert">
+                  {erroresPedido.fecha}
+                </span>
+              )}
+            </div>
+            <div className="formulario-pedido-botones">
+              <button
+                type="button"
+                className="boton-accion-admin"
+                onClick={onCerrarFormPedido}
+                disabled={enviandoPedido}
+              >
+                Cancelar
+              </button>
+              <button
+                type="button"
+                className="boton-accion-admin boton-primario"
+                onClick={onGuardarPedido}
+                disabled={enviandoPedido}
+              >
+                {enviandoPedido ? "Guardando..." : "Guardar pedido"}
+              </button>
+            </div>
+          </div>
+        </section>
+      )}
 
       <div className="tabla-responsive">
         <table className="tabla-administracion">
           <thead>
             <tr>
+              <th>ID Transaccion</th>
               <th>Título</th>
-              <th>Descripción</th>
+              <th>Usuario</th>
+              <th>Total</th>
+              <th>Impuestos</th>
+              <th>Estado Envío</th>
+              <th>Fecha Compra</th>
               <th>Acciones</th>
             </tr>
           </thead>
-
           <tbody>
             {pedidos.map((p) => (
-              <tr key={p.id}>
-                <td data-label="Titulo">{p.titulo}</td>
-                <td data-label="Descripción">{p.descripcion}</td>
+              <tr key={p._id || p.id}>
+                <td data-label="ID Transaccion">{(p.transaccionId || p._id || p.id || "-").toString().slice(-12)}</td>
+                <td data-label="Título">{tituloPedido(p)}</td>
+                <td data-label="Usuario">{usuarioLabel(p)}</td>
+                <td data-label="Total">
+                  {typeof p.total === "number" ? new Intl.NumberFormat("es-AR", { style: "currency", currency: "ARS" }).format(p.total) : p.total ?? "-"}
+                </td>
+                <td data-label="Impuestos">
+                  {p.impuestos != null
+                  ? new Intl.NumberFormat("es-AR", { style: "currency", currency: "ARS" }).format(p.impuestos): p.desgloseImpuestos ?? "-"}
+                </td>
+                <td data-label="Estado Envio">{p.estadoEnvio ?? p.estado ?? "pendiente"}</td>
+                <td data-label="Fecha Compra">{formatFecha(p.fechaCompra || p.fecha || p.createdAt)}</td>
                 <td data-label="Acciones">
-                  <div className="acciones">
-                    <button
-                      className="boton-editar"
-                      onClick={() => onEditarPedido(p)}
-                    >
-                      ✏️
-                    </button>
-                    <button
-                      className="boton-eliminar"
-                      onClick={() => onEliminarPedido(p.id)}
-                    >
-                      🗑️
-                    </button>
-                  </div>
+                  <select
+                    className="select-estado-pedido"
+                    value={p.estado || "pendiente"}
+                    onChange={(e) => onActualizarEstadoPedido?.(p._id || p.id, e.target.value)}
+                    aria-label="Cambiar estado del pedido"
+                  >
+                    {ESTADOS_PEDIDO.map((est) => (
+                      <option key={est} value={est}>
+                        {est}
+                      </option>
+                    ))}
+                  </select>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-        {pedidos.length === 0 && (
-          <div className="sin-datos">No hay pedidos creados</div>
+        {pedidos.length === 0 && !mostrarFormPedido && (
+          <div className="sin-datos">No hay pedidos. Usá &quot;Agregar pedido&quot; para crear uno.</div>
         )}
       </div>
     </div>

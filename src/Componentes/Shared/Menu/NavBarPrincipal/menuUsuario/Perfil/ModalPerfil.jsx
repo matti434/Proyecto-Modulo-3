@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useCarrito } from "../../../../../Context/ContextoCarrito";
 import { useUser } from "../../../../../Context/ContextoUsuario";
 import { Modal, Button, Form, Alert, Spinner, Badge } from "react-bootstrap";
 import { 
@@ -11,18 +12,21 @@ import {
   FaCrown 
 } from "react-icons/fa";
 import toast from "react-hot-toast";
-import { usuarioService } from "../../../../../../Services";
+import { usuariosApi } from "../../../../../../Services/Api";
 import "../../../../../../estilos/variables.css";
 import "./ModalPerfil.css";
 
 const ModalPerfil = ({ mostrar, onCerrar }) => {
-  const { usuarioActual, logout } = useUser();
+  const { usuarioActual, logout, editarUsuario } = useUser();
+  const { cargarCarritoInvitado } = useCarrito();
+
   const [editando, setEditando] = useState(false);
   const [cargando, setCargando] = useState(false);
   const [mostrarConfirmacion, setMostrarConfirmacion] = useState(false);
   const [formData, setFormData] = useState({
     nombreDeUsuario: usuarioActual?.nombreDeUsuario || ""
   });
+
   const [contrasenaConfirmacion, setContrasenaConfirmacion] = useState("");
 
   const esAdministrador = usuarioActual?.role === "admin";
@@ -53,74 +57,77 @@ const ModalPerfil = ({ mostrar, onCerrar }) => {
     }
 
     setCargando(true);
+
     try {
-      const respuesta = usuarioService.actualizar(usuarioActual.id, {
+      await editarUsuario(usuarioActual.id, {
         nombreDeUsuario: formData.nombreDeUsuario
       });
 
-      if (respuesta.exito) {
-        toast.success("Nombre de usuario actualizado correctamente");
-        setEditando(false);
+      setEditando(false);
 
-        // Actualizamos localStorage
-        const usuarioJSON = respuesta.usuario.toJSON ? respuesta.usuario.toJSON() : respuesta.usuario;
-        localStorage.setItem("ultimoUsuario", JSON.stringify(usuarioJSON));
-
-        // Actualizamos reload opcional para reflejar cambios
-        setTimeout(() => {
-          window.location.reload();
-        }, 500);
-      } else {
-        throw new Error(respuesta.mensaje || "Error al actualizar usuario");
-      }
     } catch {
+
       toast.error("Error al actualizar el nombre de usuario");
+
     } finally {
+
       setCargando(false);
+
     }
   };
 
-  const manejarEliminarCuenta = () => {
+  const manejarEliminarCuenta = async () => {
+
+    if (esAdministrador) {
+      toast.error("Los administradores no pueden eliminar su cuenta");
+      return;
+    }
+
     if (!contrasenaConfirmacion) {
       toast.error("Por favor ingresa tu contraseña para confirmar");
       return;
     }
 
-    if (contrasenaConfirmacion !== usuarioActual.contrasena) {
+    if (usuarioActual.contrasena && contrasenaConfirmacion !== usuarioActual.contrasena) {
       toast.error("Contraseña incorrecta");
       return;
     }
 
     setCargando(true);
+
     try {
-      const respuesta = usuarioService.eliminar(usuarioActual.id);
 
-      if (respuesta.exito) {
-        localStorage.removeItem("ultimoUsuario");
-        toast.success("Cuenta eliminada correctamente");
+      await usuariosApi.eliminar(usuarioActual.id);
 
-        setTimeout(() => {
-          logout();
-          onCerrar();
-          window.location.href = "/";
-        }, 1000);
-      } else {
-        throw new Error(respuesta.mensaje || "Error al eliminar usuario");
-      }
-    } catch {
-      toast.error("Error al eliminar la cuenta");
+      localStorage.removeItem("ultimoUsuario");
+
+      toast.success("Cuenta eliminada correctamente");
+
+      setTimeout(() => {
+        cargarCarritoInvitado();
+        logout();
+        onCerrar();
+        window.location.href = "/";
+      }, 1000);
+
+    } catch (err) {
+
+      toast.error(err?.message || "Error al eliminar la cuenta");
+
     } finally {
+
       setCargando(false);
       setMostrarConfirmacion(false);
       setContrasenaConfirmacion("");
+
     }
   };
 
   const formatearFecha = (fecha) => {
-    return new Date(fecha).toLocaleDateString('es-ES', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
+    return new Date(fecha).toLocaleDateString("es-ES", {
+      year: "numeric",
+      month: "long",
+      day: "numeric"
     });
   };
 
@@ -128,8 +135,8 @@ const ModalPerfil = ({ mostrar, onCerrar }) => {
 
   return (
     <>
-      <Modal 
-        show={mostrar && !mostrarConfirmacion} 
+      <Modal
+        show={mostrar && !mostrarConfirmacion}
         onHide={onCerrar}
         size="lg"
         centered
@@ -139,32 +146,45 @@ const ModalPerfil = ({ mostrar, onCerrar }) => {
           <Modal.Title>
             <FaUser className="me-2" />
             Mi Perfil
+
             {esAdministrador && (
               <Badge bg="warning" className="ms-2 badge-admin">
                 <FaCrown className="me-1" />
                 Administrador
               </Badge>
             )}
+
           </Modal.Title>
         </Modal.Header>
-        
+
         <Modal.Body className="modal-body-perfil">
+
           <div className="perfil-info">
+
             <div className="info-item">
               <div className="info-icon"><FaUser /></div>
               <div className="info-content">
                 <label>Nombre de Usuario</label>
+
                 {editando ? (
                   <Form.Control
                     type="text"
                     value={formData.nombreDeUsuario}
-                    onChange={(e) => setFormData({ ...formData, nombreDeUsuario: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        nombreDeUsuario: e.target.value
+                      })
+                    }
                     disabled={cargando}
-                    className="text-white"
+                    className="input-perfil"
                   />
                 ) : (
-                  <div className="info-value">{usuarioActual.nombreDeUsuario}</div>
+                  <div className="info-value">
+                    {usuarioActual.nombreDeUsuario}
+                  </div>
                 )}
+
               </div>
             </div>
 
@@ -188,7 +208,9 @@ const ModalPerfil = ({ mostrar, onCerrar }) => {
               <div className="info-icon"><FaCalendarAlt /></div>
               <div className="info-content">
                 <label>Fecha de Nacimiento</label>
-                <div className="info-value">{formatearFecha(usuarioActual.fechaNacimiento)}</div>
+                <div className="info-value">
+                  {formatearFecha(usuarioActual.fechaNacimiento)}
+                </div>
               </div>
             </div>
 
@@ -196,133 +218,102 @@ const ModalPerfil = ({ mostrar, onCerrar }) => {
               <div className="info-icon"><FaKey /></div>
               <div className="info-content">
                 <label>Rol</label>
+
                 <div className="info-value rol-usuario">
+
                   {esAdministrador ? (
                     <span className="texto-admin">
                       <FaCrown className="me-1" />
                       Administrador
                     </span>
-                  ) : "Usuario"}
+                  ) : (
+                    "Usuario"
+                  )}
+
                 </div>
+
               </div>
             </div>
 
             {esAdministrador && (
               <Alert variant="info" className="alert-info-admin">
+
                 <Alert.Heading>
                   <FaCrown className="me-2" />
                   Cuenta de Administrador
                 </Alert.Heading>
+
                 <p className="mb-0">
-                  Como administrador, tu cuenta tiene privilegios especiales y no puede ser eliminada 
-                  a través de esta interfaz por razones de seguridad del sistema.
+                  Como administrador, tu cuenta tiene privilegios especiales y
+                  no puede ser eliminada a través de esta interfaz por razones
+                  de seguridad del sistema.
                 </p>
+
               </Alert>
             )}
+
           </div>
+
         </Modal.Body>
 
         <Modal.Footer className="modal-footer-perfil">
+
           {editando ? (
+
             <div className="botones-edicion">
-              <Button 
-                variant="success" 
+
+              <Button
+                variant="success"
                 onClick={manejarGuardar}
                 disabled={cargando}
-                className="boton-guardar"
               >
-                {cargando ? <Spinner animation="border" size="sm" /> : "Guardar"}
+                {cargando ? (
+                  <Spinner animation="border" size="sm" />
+                ) : (
+                  "Guardar"
+                )}
               </Button>
-              <Button 
-                variant="secondary" 
+
+              <Button
+                variant="secondary"
                 onClick={manejarCancelar}
                 disabled={cargando}
               >
                 Cancelar
               </Button>
+
             </div>
+
           ) : (
+
             <div className="botones-accion">
-              <Button 
-                variant="primary" 
+
+              <Button
+                variant="primary"
                 onClick={manejarEditar}
-                className="boton-editar"
               >
                 Editar Usuario
               </Button>
-              
+
               {!esAdministrador && (
-                <Button 
-                  variant="outline-danger" 
+
+                <Button
+                  variant="outline-danger"
                   onClick={() => setMostrarConfirmacion(true)}
-                  className="boton-eliminar"
                 >
                   <FaExclamationTriangle className="me-1" />
                   Eliminar Cuenta
                 </Button>
+
               )}
+
             </div>
+
           )}
+
         </Modal.Footer>
+
       </Modal>
-
-      {!esAdministrador && (
-        <Modal 
-          show={mostrar && mostrarConfirmacion} 
-          onHide={() => setMostrarConfirmacion(false)}
-          size="md"
-          centered
-          className="modal-confirmacion"
-        >
-          <Modal.Header closeButton className="modal-header-confirmacion">
-            <Modal.Title>
-              <FaExclamationTriangle className="me-2 text-danger" />
-              Confirmar Eliminación
-            </Modal.Title>
-          </Modal.Header>
-          
-          <Modal.Body className="modal-body-confirmacion">
-            <Alert variant="danger" className="alert-eliminacion">
-              <Alert.Heading>¡Atención!</Alert.Heading>
-              <p>Esta acción <strong>no se puede deshacer</strong>. Se eliminarán todos tus datos permanentemente.</p>
-              <hr />
-              <p className="mb-0">Para confirmar, ingresa tu contraseña:</p>
-            </Alert>
-
-            <Form.Group className="mb-3">
-              <Form.Label>Contraseña</Form.Label>
-              <Form.Control
-                type="password"
-                value={contrasenaConfirmacion}
-                onChange={(e) => setContrasenaConfirmacion(e.target.value)}
-                placeholder="Ingresa tu contraseña"
-                disabled={cargando}
-              />
-            </Form.Group>
-          </Modal.Body>
-
-          <Modal.Footer className="modal-footer-confirmacion">
-            <Button 
-              variant="outline-secondary" 
-              onClick={() => {
-                setMostrarConfirmacion(false);
-                setContrasenaConfirmacion("");
-              }}
-              disabled={cargando}
-            >
-              Cancelar
-            </Button>
-            <Button 
-              variant="danger" 
-              onClick={manejarEliminarCuenta}
-              disabled={cargando || !contrasenaConfirmacion}
-              className="boton-confirmar-eliminacion"
-            >
-              {cargando ? <Spinner animation="border" size="sm" /> : "Eliminar Cuenta"}
-            </Button>
-          </Modal.Footer>
-        </Modal>
-      )}
     </>
   );
 };

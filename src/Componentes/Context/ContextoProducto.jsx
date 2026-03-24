@@ -1,11 +1,11 @@
-import React, {
+import {
   createContext,
   useContext,
   useState,
   useEffect,
   useCallback,
 } from "react";
-import { productoService } from "../../Services";
+import { productosApi } from "../../Services/Api";
 
 const ContextoProducto = createContext();
 
@@ -19,20 +19,22 @@ export const useProductos = () => {
   return context;
 };
 
-/**
- * Función de filtrado extraída para ser usada en el ViewModel
- * El contexto la expone para que el ViewModel pueda usarla
- */
+function normalizarCategoria(c) {
+  if (!c || typeof c !== "string") return "";
+  const lower = c.trim().toLowerCase();
+  if (lower === "motocicletas" || lower === "motos") return "motos";
+  if (lower === "accesorios") return "protecciones";
+  return lower;
+}
+
 export const filtrarProductos = (productos, filtros) => {
   return productos.filter((producto) => {
-    // Filtro por categoría
     if (filtros.categoria && producto.categoria) {
-      if (producto.categoria.toLowerCase() !== filtros.categoria.toLowerCase()) {
-        return false;
-      }
+      const catFiltro = normalizarCategoria(filtros.categoria);
+      const catProd = normalizarCategoria(producto.categoria);
+      if (catProd !== catFiltro) return false;
     }
 
-    // Filtro por término de búsqueda
     if (filtros.terminoBusqueda) {
       const termino = filtros.terminoBusqueda.toLowerCase();
       const coincideNombre = producto.nombre?.toLowerCase().includes(termino);
@@ -44,7 +46,6 @@ export const filtrarProductos = (productos, filtros) => {
       }
     }
 
-    // Filtro por precio
     const precioProducto = parseFloat(producto.precio) || 0;
     if (filtros.precioMin && precioProducto < parseFloat(filtros.precioMin)) {
       return false;
@@ -53,24 +54,20 @@ export const filtrarProductos = (productos, filtros) => {
       return false;
     }
 
-    // Filtro por marca
     if (filtros.marca && producto.marca?.toLowerCase() !== filtros.marca.toLowerCase()) {
       return false;
     }
 
-    // Filtro por modelo
     if (filtros.modelo && producto.modelo?.toLowerCase() !== filtros.modelo.toLowerCase()) {
       return false;
     }
 
-    // Filtro por destacado
     if (filtros.destacado !== "") {
       if ((producto.destacado?.toString() || "false") !== filtros.destacado) {
         return false;
       }
     }
 
-    // Filtro por stock
     if (filtros.stock !== "") {
       if ((producto.stock?.toString() || "true") !== filtros.stock) {
         return false;
@@ -96,16 +93,17 @@ export const ProveedorProductos = ({ children }) => {
     stock: "",
   });
 
-  const cargarProductos = useCallback(() => {
+  const cargarProductos = useCallback(async () => {
     try {
       setCargando(true);
       setError(null);
 
-      const productosData = productoService.obtenerTodos();
-      const datos = productosData.map(p => p.toJSON ? p.toJSON() : p);
-      setProductos(datos);
-    } catch {
-      setError("Error al cargar los productos desde LocalStorage");
+      const data = await productosApi.obtenerTodos();
+      const lista = Array.isArray(data) ? data : data?.productos ?? data?.data ?? [];
+      setProductos(lista);
+    } catch (err) {
+      setError(err?.message || "Error al cargar los productos. Verifica que el backend esté disponible.");
+      setProductos([]);
     } finally {
       setCargando(false);
     }
@@ -138,15 +136,16 @@ export const ProveedorProductos = ({ children }) => {
 
   const obtenerCategoriasUnicas = useCallback(() => {
     const categorias = productos
-      .map((p) => p.categoria)
-      .filter((c) => c && c.trim() !== "");
+      .map((p) => normalizarCategoria(p.categoria))
+      .filter((c) => c !== "");
     return [...new Set(categorias)];
   }, [productos]);
 
   const obtenerMarcasPorCategoria = useCallback(
     (categoria) => {
-      const productosCategoria = categoria
-        ? productos.filter((p) => p.categoria === categoria)
+      const catNorm = normalizarCategoria(categoria);
+      const productosCategoria = catNorm
+        ? productos.filter((p) => normalizarCategoria(p.categoria) === catNorm)
         : productos;
       const marcas = productosCategoria
         .map((p) => p.marca)
@@ -159,8 +158,9 @@ export const ProveedorProductos = ({ children }) => {
   const obtenerProductosPorCategoria = useCallback(
     (categoria) => {
       if (!categoria) return productos;
+      const catNorm = normalizarCategoria(categoria);
       return productos.filter(
-        (p) => p.categoria?.toLowerCase() === categoria.toLowerCase()
+        (p) => normalizarCategoria(p.categoria) === catNorm
       );
     },
     [productos]
@@ -171,7 +171,7 @@ export const ProveedorProductos = ({ children }) => {
     const productosPorMarca = {};
 
     productos.forEach((p) => {
-      const categoria = p.categoria || "Sin categoría";
+      const categoria = normalizarCategoria(p.categoria) || "Sin categoría";
       productosPorCategoria[categoria] =
         (productosPorCategoria[categoria] || 0) + 1;
 
@@ -217,83 +217,84 @@ export const ProveedorProductos = ({ children }) => {
     [productos]
   );
 
-  const agregarProducto = useCallback((producto) => {
-    const respuesta = productoService.crear(producto);
-    if (respuesta.exito) {
-      const productoJSON = respuesta.producto.toJSON ? respuesta.producto.toJSON() : respuesta.producto;
-      setProductos((prev) => [...prev, productoJSON]);
+  const agregarProducto = useCallback(async (producto) => {
+    try {
+      const res = await productosApi.crear(producto);
+      if (res.exito && res.producto) {
+        const p = res.producto;
+        setProductos((prev) => [...prev, p]);
+        return { exito: true, producto: p };
+      }
+      return { exito: false, mensaje: res.mensaje || "Error al crear producto" };
+    } catch (err) {
+      return { exito: false, mensaje: err?.message || "Error al crear producto" };
     }
-    return respuesta;
   }, []);
 
-  const editarProducto = useCallback((id, datosActualizados) => {
-    const respuesta = productoService.actualizar(id, datosActualizados);
-    if (respuesta.exito) {
-      const productoJSON = respuesta.producto.toJSON ? respuesta.producto.toJSON() : respuesta.producto;
-      setProductos((prev) =>
-        prev.map((p) => (p.id === id ? productoJSON : p))
-      );
+  const editarProducto = useCallback(async (id, datosActualizados) => {
+    try {
+      const res = await productosApi.actualizar(id, datosActualizados);
+      if (res.exito && res.producto) {
+        const p = res.producto;
+        setProductos((prev) =>
+          prev.map((item) => (item.id === id || item._id === id ? p : item))
+        );
+        return { exito: true, producto: p };
+      }
+      return { exito: false, mensaje: res.mensaje || "Error al actualizar" };
+    } catch (err) {
+      return { exito: false, mensaje: err?.message || "Error al actualizar producto" };
     }
-    return respuesta;
   }, []);
 
-  const eliminarProducto = useCallback((id) => {
-    const respuesta = productoService.eliminar(id);
-    if (respuesta.exito) {
-      setProductos((prev) => prev.filter((p) => p.id !== id));
+  const eliminarProducto = useCallback(async (id) => {
+    try {
+      const res = await productosApi.eliminar(id);
+      if (res.exito) {
+        setProductos((prev) => prev.filter((p) => p.id !== id && p._id !== id));
+        return { exito: true };
+      }
+      return { exito: false, mensaje: res.mensaje || "Error al eliminar" };
+    } catch (err) {
+      return { exito: false, mensaje: err?.message || "Error al eliminar producto" };
     }
-    return respuesta;
   }, []);
 
   const obtenerProductoPorId = useCallback((id) => {
-    const producto = productoService.obtenerPorId(id);
-    return producto ? (producto.toJSON ? producto.toJSON() : producto) : null;
-  }, []);
+    return productos.find((p) => p.id === id || p._id === id) ?? null;
+  }, [productos]);
 
   const obtenerProductosDestacados = useCallback(() => {
-    const productosDestacados = productoService.obtenerDestacados();
-    return productosDestacados.map(p => p.toJSON ? p.toJSON() : p);
-  }, []);
+    return productos.filter((p) => p.destacado);
+  }, [productos]);
 
   const obtenerProductosConStock = useCallback(() => {
-    const productosConStock = productoService.obtenerConStock();
-    return productosConStock.map(p => p.toJSON ? p.toJSON() : p);
-  }, []);
+    return productos.filter((p) => p.stock);
+  }, [productos]);
 
   const obtenerProductosRecientes = useCallback((limite = 5) => {
-    const productosRecientes = productoService.obtenerRecientes(limite);
-    return productosRecientes.map(p => p.toJSON ? p.toJSON() : p);
-  }, []);
+    return [...productos]
+      .sort((a, b) => new Date(b.fechaCreacion || b.createdAt || 0) - new Date(a.fechaCreacion || a.createdAt || 0))
+      .slice(0, limite);
+  }, [productos]);
 
-  const actualizarStockProducto = useCallback((id, tieneStock) => {
-    const respuesta = productoService.actualizarStock(id, tieneStock);
-    if (respuesta.exito) {
-      const productoJSON = respuesta.producto.toJSON ? respuesta.producto.toJSON() : respuesta.producto;
-      setProductos((prev) =>
-        prev.map((p) => (p.id === id ? productoJSON : p))
-      );
-    }
-    return respuesta;
-  }, []);
+  const actualizarStockProducto = useCallback(async (id, tieneStock) => {
+    const product = productos.find((p) => p.id === id || p._id === id);
+    if (!product) return { exito: false, mensaje: "Producto no encontrado" };
+    return editarProducto(id, { ...product, stock: tieneStock });
+  }, [productos, editarProducto]);
 
-  // Productos filtrados para compatibilidad con componentes existentes
-  // La lógica de filtrado también está disponible en useProductosViewModel
   const productosFiltrados = filtrarProductos(productos, filtros);
 
   const valorContexto = {
-    // Datos crudos
     productos,
-    productosFiltrados, // Para compatibilidad con componentes existentes
+    productosFiltrados,
     cargando,
     error,
     filtros,
-
-    // Acciones de filtros
     actualizarFiltros,
     limpiarFiltros,
     filtrarPorCategoria,
-
-    // Funciones de consulta
     obtenerCategoriasUnicas,
     obtenerMarcasPorCategoria,
     obtenerProductosPorCategoria,
@@ -304,8 +305,6 @@ export const ProveedorProductos = ({ children }) => {
     obtenerProductosDestacados,
     obtenerProductosConStock,
     obtenerProductosRecientes,
-
-    // Acciones CRUD
     cargarProductos,
     agregarProducto,
     editarProducto,

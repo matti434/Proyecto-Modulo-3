@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom'; 
 import { useCarrito } from '../../../../../Context/ContextoCarrito';
 import { useFavoritos } from '../../../../../Context/ContextoFavoritos';
+import { useUser } from '../../../../../Context/ContextoUsuario';
 import { 
   crearProductoData, 
   generarIdCarrito,
@@ -31,10 +32,10 @@ const CardProducto = ({
   const navigate = useNavigate(); 
   const { agregarAlCarrito } = useCarrito();
   const { toggleFavorito, esFavorito } = useFavoritos();
+  const { estaAutenticado, esAdministrador } = useUser();
 
   const isFavorito = esFavorito(id);
 
-  // Crear objeto producto normalizado
   const productoBase = { id, marca, modelo, año, precio, imagen, kilometros, ubicacion, descripcion, destacado, stock };
 
   const handleFavoritoClick = (e) => {
@@ -61,6 +62,16 @@ const CardProducto = ({
 
   const handleAgregarCarrito = (e) => {
     e.stopPropagation();
+
+    if (!estaAutenticado) {
+      toast.error('Debes iniciar sesión para agregar productos al carrito');
+      return;
+    }
+
+    if (esAdministrador) {
+      toast.error('Los administradores no pueden usar el carrito');
+      return;
+    }
 
     if (!validarStock({ stock })) {
       toast.error('Este producto no está disponible');
@@ -169,9 +180,9 @@ const CardProducto = ({
           </button>
 
           <button 
-            className={`boton-carrito ${!stock ? 'boton-deshabilitado' : ''}`} 
+            className={`boton-carrito ${!stock || !estaAutenticado || esAdministrador ? 'boton-deshabilitado' : ''}`} 
             onClick={handleAgregarCarrito}
-            disabled={!stock}
+            disabled={!stock || !estaAutenticado || esAdministrador}
           >
             <span className="texto-boton">
               {stock ? 'Agregar' : 'No disponible'}

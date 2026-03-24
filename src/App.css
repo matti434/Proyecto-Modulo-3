@@ -1,9 +1,28 @@
-@import './estilos/variables.css';
-
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f8f8f8;
-  color: #2c2c2c;
+  font-family: 'Montserrat', sans-serif;
+  background-color: var(--color-fondo-primario);
+  color: var(--color-texto-primario);
+}
+
+
+.bg-oscuro { 
+  background-color: var(--color-oscuro) !important; 
+}
+
+.bg-crema { 
+  background-color: var(--color-crema) !important; 
+}
+
+.text-dorado { 
+  color: var(--color-dorado) !important; 
+}
+
+.text-oscuro { 
+  color: var(--color-oscuro) !important; 
+}
+
+.border-dorado { 
+  border-color: var(--color-borde-dorado) !important; 
 }

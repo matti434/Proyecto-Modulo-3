@@ -1,4 +1,4 @@
-/* ================= NAVBAR MODERNO ================= */
+
 .navbar-moderno {
   background: rgba(0, 0, 0, 0.95) !important;
   backdrop-filter: blur(10px);
@@ -14,7 +14,7 @@
   background: rgba(0, 0, 0, 0.98) !important;
 }
 
-/* ================= LOGO MODERNO ================= */
+
 .logo-brand {
   padding: 0;
   margin-right: 2rem;
@@ -71,7 +71,7 @@
   transform: translateY(-1px);
 }
 
-/* ================= SELECTOR DE IDIOMA MODERNO ================= */
+
 .language-selector {
   display: flex;
   align-items: center;
@@ -125,7 +125,7 @@
   font-size: 0.9rem;
 }
 
-/* ================= BOTONES DE AUTENTICACIÓN ================= */
+
 .auth-buttons {
   display: flex;
   align-items: center;
@@ -200,7 +200,7 @@
   box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
 }
 
-/* ================= BOTÓN CARRITO ================= */
+
 .carrito-btn-icon {
   display: flex;
   align-items: center;
@@ -282,12 +282,12 @@
   box-shadow: 0 2px 8px rgba(255, 107, 107, 0.4);
 }
 
-/* Remover estilos antiguos del carrito-btn */
+
 .carrito-btn {
   display: none;
 }
 
-/* ================= MENÚ MÓVIL ================= */
+
 .mobile-menu {
   display: none;
   align-items: center;
@@ -350,7 +350,7 @@
   transform: rotate(-45deg) translate(7px, -6px);
 }
 
-/* ================= RESPONSIVE ================= */
+
 @media (max-width: 991px) {
   .mobile-menu {
     display: flex;
@@ -469,7 +469,7 @@
   }
 }
 
-/* ================= ANIMACIONES ================= */
+
 @keyframes fadeIn {
   from {
     opacity: 0;

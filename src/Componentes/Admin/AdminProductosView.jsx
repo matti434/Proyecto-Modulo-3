@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 const ImagenProducto = ({ imagen, nombre, onError, onClick }) => {
   const [error, setError] = useState(false);

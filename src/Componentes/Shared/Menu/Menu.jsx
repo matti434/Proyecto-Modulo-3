@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+
+import Login from "../../Views/Login/Login";
 import { NavBarPrincipal } from "./NavBarPrincipal/NavBarPrincipal";
 import { Registro } from "../../Views/Registro/Registro";
-import Login from "../../Views/Login/Login";
 
 const Menu = () => {
   const navigate = useNavigate();
@@ -50,7 +51,7 @@ const Menu = () => {
         />
       )}
       {modalAbierto === "registro" && (
-        <Registro onClose={onClose} />
+        <Registro onClose={onClose} onAbrirLogin={abrirLogin} />
       )}
     </>
   );

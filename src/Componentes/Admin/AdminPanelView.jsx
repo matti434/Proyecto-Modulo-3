@@ -1,21 +1,20 @@
-import React from 'react';
 import "../../estilos/variables.css";
-import "./AdminPanel.css";
-import { AdminUsuariosView } from './AdminUsuariosView';
-import { AdminSuspendidosView } from './AdminSuspendidosView';
-import { AdminProductosView } from './AdminProductosView';
-import { AdminPedidosView } from './AdminPedidosView';
-import { AdminFormularioView } from './AdminFormularioView';
-import { ModalEditarUsuarioView } from './ModalEditarUsuarioView';
-import MapaUsuarios from './MapaUsuarios';
 
-/**
- View pura principal del AdminPanel
-  Solo recibe props y renderiza UI
-  NO tiene lógica, NO usa hooks de negocio
- */
+import { AdminFormularioView } from "./AdminFormularioView";
+import { AdminHomeView } from "./AdminHomeView";
+import { AdminPedidosView } from "./AdminPedidosView";
+import { AdminProductosView } from "./AdminProductosView";
+import { AdminRecomendacionesView } from "./AdminRecomendacionesView";
+import { AdminSuspendidosView } from "./AdminSuspendidosView";
+import { AdminUsuariosView } from "./AdminUsuariosView";
+import MapaUsuarios from "./MapaUsuarios";
+import { ModalEditarUsuarioView } from "./ModalEditarUsuarioView";
+
+import "./AdminPanel.css";
+
+
 export const AdminPanelView = ({
-  // Datos del Context
+  
   usuarios,
   usuariosSuspendidos,
   productos,
@@ -23,21 +22,28 @@ export const AdminPanelView = ({
   cargando,
   estadisticas,
 
-  // Estado local
+
   vistaActiva,
   usuarioEditando,
   productoEditando,
   mostrarFormProducto,
   modoFormularioProducto,
   pedidos,
+  pedidosCargando,
   pedidoActual,
   modoPedido,
-  // Estado del formulario de producto
+  mostrarFormPedido,
+  enviandoPedido,
+
   datosFormularioProducto,
   errorImagenProducto,
   enviandoFormularioProducto,
+  subiendoImagenProducto,
+  errorUploadImagen,
+  erroresFormularioProducto,
+  erroresPedido,
 
-  // Valores calculados
+ 
   totalAdmins,
   totalUsuarios,
   totalNormales,
@@ -45,7 +51,7 @@ export const AdminPanelView = ({
   suspendidosMas30Dias,
   valorTotalProductos,
 
-  // Funciones
+  
   onCambiarVista,
   onSincronizar,
   onEditarUsuario,
@@ -61,12 +67,28 @@ export const AdminPanelView = ({
   onCancelarFormularioProducto,
   onCambioCampoFormulario,
   onErrorImagen,
+  onArchivoSeleccionado,
   onPedidoActualChange,
+  onPedidoCampoChange,
   onGuardarPedido,
+  onAbrirFormPedido,
+  onCerrarFormPedido,
   onEditarPedido,
   onEliminarPedido,
+  onActualizarEstadoPedido,
+
+  contenidoHome,
+  contenidoHomeCargando,
+  contenidoHomeError,
+  portadaSubiendo,
+  galeriaSubiendo,
+  galeriaActualizandoId,
+  onSubirPortada,
+  onAgregarImagenGaleria,
+  onActualizarTextoGaleria,
+  onReemplazarImagenGaleria,
+  onEliminarImagenGaleria,
 }) => {
-  
   if (!esAdministrador) {
     return (
       <div className="panel-administracion">
@@ -78,7 +100,6 @@ export const AdminPanelView = ({
     );
   }
 
- 
   if (cargando && vistaActiva === "productos") {
     return (
       <div className="panel-administracion">
@@ -89,9 +110,18 @@ export const AdminPanelView = ({
     );
   }
 
+  if (contenidoHomeCargando && vistaActiva === "home") {
+    return (
+      <div className="panel-administracion">
+        <div className="cargando">
+          <p>Cargando contenido de inicio...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="panel-administracion">
-     
       <header className="encabezado-administracion">
         <h1>Panel de Administración</h1>
         <nav className="navegacion-administracion">
@@ -117,6 +147,13 @@ export const AdminPanelView = ({
           </button>
 
           <button
+            className={vistaActiva === "home" ? "btn-activo" : ""}
+            onClick={() => onCambiarVista("home")}
+          >
+            🏠 Inicio
+          </button>
+
+          <button
             className={vistaActiva === "mapa" ? "btn-activo" : ""}
             onClick={() => onCambiarVista("mapa")}
           >
@@ -128,6 +165,7 @@ export const AdminPanelView = ({
           >
             📦 Pedidos
           </button>
+          
         </nav>
 
         <div className="controles-encabezado">
@@ -137,7 +175,6 @@ export const AdminPanelView = ({
         </div>
       </header>
 
-    
       {vistaActiva === "usuarios" && (
         <AdminUsuariosView
           usuarios={usuarios}
@@ -173,18 +210,37 @@ export const AdminPanelView = ({
       {vistaActiva === "pedidos" && (
         <AdminPedidosView
           pedidos={pedidos}
+          pedidosCargando={pedidosCargando}
           pedidoActual={pedidoActual}
-          modoPedido={modoPedido}
-          onPedidoActualChange={onPedidoActualChange}
+          erroresPedido={erroresPedido}
+          mostrarFormPedido={mostrarFormPedido}
+          enviandoPedido={enviandoPedido}
+          onActualizarEstadoPedido={onActualizarEstadoPedido}
+          onPedidoCampoChange={onPedidoCampoChange}
           onGuardarPedido={onGuardarPedido}
-          onEditarPedido={onEditarPedido}
-          onEliminarPedido={onEliminarPedido}
+          onAbrirFormPedido={onAbrirFormPedido}
+          onCerrarFormPedido={onCerrarFormPedido}
         />
       )}
 
-      {vistaActiva === "mapa" && <MapaUsuarios />}
+      {vistaActiva === "home" && (
+        <AdminHomeView
+          portadaImagenUrl={contenidoHome?.portada?.imagenUrl}
+          galeria={contenidoHome?.galeria ?? []}
+          portadaSubiendo={portadaSubiendo}
+          galeriaSubiendo={galeriaSubiendo}
+          galeriaActualizandoId={galeriaActualizandoId}
+          errorHome={contenidoHomeError}
+          onSubirPortada={onSubirPortada}
+          onAgregarImagenGaleria={onAgregarImagenGaleria}
+          onActualizarTextoGaleria={onActualizarTextoGaleria}
+          onReemplazarImagenGaleria={onReemplazarImagenGaleria}
+          onEliminarImagenGaleria={onEliminarImagenGaleria}
+        />
+      )}
 
-      
+      {vistaActiva === "mapa" && <MapaUsuarios usuarios={usuarios} />}
+
       {usuarioEditando && (
         <ModalEditarUsuarioView
           usuario={usuarioEditando}
@@ -199,10 +255,14 @@ export const AdminPanelView = ({
           datosFormulario={datosFormularioProducto}
           errorImagen={errorImagenProducto}
           enviando={enviandoFormularioProducto}
+          subiendoImagen={subiendoImagenProducto}
+          errorUploadImagen={errorUploadImagen}
+          errores={erroresFormularioProducto}
           onGuardar={onGuardarProducto}
           onCancelar={onCancelarFormularioProducto}
           onCambioCampo={onCambioCampoFormulario}
           onErrorImagen={onErrorImagen}
+          onArchivoSeleccionado={onArchivoSeleccionado}
         />
       )}
     </div>

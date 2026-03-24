@@ -1,29 +1,60 @@
 import { useState } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useNavigate, useSearchParams } from "react-router-dom";
 
-import SplashScreen from "./Componentes/Shared/SplashScreen/SplashScreen";
-import Menu from "./Componentes/Shared/Menu/Menu";
-import Home from "./Componentes/Views/Home/Home";
-import Pagina404 from "./Componentes/Views/Pagina404/Pagina404";
-import Ofertas from "./Componentes/Views/Productos/Ofertas/Ofertas";
-import PaginaProductos from "./Componentes/Views/Productos/ComponenteProducto/PaginaProductos/PaginaProductos";
-import Contacto from "./Componentes/Views/Contacto/Contacto";
-import Nosotros from "./Componentes/Views/Nosotros/Nosotros";
+import { CarritoProvider } from "./Componentes/Context/ContextoCarrito";
+import { FavoritosProvider } from "./Componentes/Context/ContextoFavoritos";
+import { ProveedorProductos } from "./Componentes/Context/ContextoProducto";
+import { UserProvider } from "./Componentes/Context/ContextoUsuario";
+
 import AdminPanelContainer from "./Componentes/Admin/AdminPanelContainer";
+import Footer from "./Componentes/Shared/Footer/Footer";
+import Menu from "./Componentes/Shared/Menu/Menu";
+import SplashScreen from "./Componentes/Shared/SplashScreen/SplashScreen";
 import RutaProtegida from "./Componentes/Utils/RutaProtegida";
+import RutaProtegidaCarrito from "./Componentes/Utils/RutaProtegidaCarrito";
+import Contacto from "./Componentes/Views/Contacto/Contacto";
+import Favoritos from "./Componentes/Views/Favoritos/Favoritos";
+import Home from "./Componentes/Views/Home/Home";
+import Nosotros from "./Componentes/Views/Nosotros/Nosotros";
+import Login from "./Componentes/Views/Login/Login";
+import Pagina404 from "./Componentes/Views/Pagina404/Pagina404";
+import { Registro } from "./Componentes/Views/Registro/Registro";
+import CarritoContainer from "./Componentes/Views/Productos/componenteCarrito/CarritoContainer";
 import Categorias from "./Componentes/Views/Productos/ComponenteProducto/Categorias/Categorias";
 import DetalleProducto from "./Componentes/Views/Productos/ComponenteProducto/PaginaProductos/Detalle-Producto/DetalleProducto";
-import CarritoContainer from "./Componentes/Views/Productos/componenteCarrito/CarritoContainer";
-import Favoritos from "./Componentes/Views/Favoritos/Favoritos";
-import Footer from "./Componentes/Shared/Footer/Footer";
+import RecuperarPassword from "./Componentes/Views/Login/RecuperarPassword";
+import PaginaProductos from "./Componentes/Views/Productos/ComponenteProducto/PaginaProductos/PaginaProductos";
+import Ofertas from "./Componentes/Views/Productos/Ofertas/Ofertas";
+import PagoExitoso from "./Componentes/Views/Pago/PagoExitoso";
+import PagoFallido from "./Componentes/Views/Pago/PagoFallido";
+import PagoPendiente from "./Componentes/Views/Pago/PagoPendiente";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
-import { UserProvider } from "./Componentes/Context/ContextoUsuario";
-import { ProveedorProductos } from "./Componentes/Context/ContextoProducto";
-import { CarritoProvider } from "./Componentes/Context/ContextoCarrito";
-import { FavoritosProvider } from "./Componentes/Context/ContextoFavoritos";
+function LoginPage() {
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const redirect = searchParams.get("redirect") || "/";
+  return (
+    <Login
+      esPagina={true}
+      redirect={redirect}
+      onClose={() => navigate(redirect)}
+      onAbrirRegistro={() => navigate("/registro")}
+    />
+  );
+}
+
+function RegistroPage() {
+  const navigate = useNavigate();
+  return (
+    <Registro
+      onClose={() => navigate("/")}
+      onAbrirLogin={() => navigate("/login")}
+    />
+  );
+}
 
 function App() {
   const [showSplash, setShowSplash] = useState(true);
@@ -34,9 +65,9 @@ function App() {
 
   return (
     <FavoritosProvider>
-      <CarritoProvider>
-        <ProveedorProductos>
-          <UserProvider>
+      <ProveedorProductos>
+        <UserProvider>
+          <CarritoProvider>
             <BrowserRouter>
               <Menu />
               <Routes>
@@ -47,8 +78,31 @@ function App() {
                 <Route path="/productos" element={<PaginaProductos />} />
                 <Route path="/productos-todos" element={<div className="mt-5 py-5"><Categorias /></div>} />
                 <Route path="/detalle-producto" element={<DetalleProducto />} />
-                <Route path="/carrito" element={<CarritoContainer />} />
+                <Route
+                  path="/carrito"
+                  element={
+                    <RutaProtegidaCarrito>
+                      <CarritoContainer />
+                    </RutaProtegidaCarrito>
+                  }
+                />
+                  <Route path="/recuperar-password" element={<RecuperarPassword />} />
+                <Route path="/pago-exitoso" element={<PagoExitoso />} />
+                <Route path="/pago-fallo" element={<PagoFallido />} />
+                <Route path="/pago-pendiente" element={<PagoPendiente />} />
                 <Route path="/favoritos" element={<Favoritos />} />
+                <Route
+                  path="/login"
+                  element={
+                    <LoginPage />
+                  }
+                />
+                <Route
+                  path="/registro"
+                  element={
+                    <RegistroPage />
+                  }
+                />
                 <Route path="*" element={<Pagina404 />} />
                 <Route
                   path="/admin"
@@ -61,9 +115,9 @@ function App() {
               </Routes>
               <Footer />
             </BrowserRouter>
-          </UserProvider>
-        </ProveedorProductos>
-      </CarritoProvider>
+          </CarritoProvider>
+        </UserProvider>
+      </ProveedorProductos>
     </FavoritosProvider>
   );
 }

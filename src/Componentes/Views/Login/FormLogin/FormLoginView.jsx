@@ -1,45 +1,40 @@
 import { Form, Button, Row, Col } from "react-bootstrap";
 import { FaEye, FaEyeSlash, FaUser, FaLock } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
+
 import "./FormLogin.css";
 
 const FormLoginView = ({
-  // Estado
+  
   mostrarContrasena,
   estaEnviando,
   errorGeneral,
   isValid,
   isDirty,
 
-  // Valores observados
+  
   credencial,
   contrasena,
 
-  // Funciones de formulario
+  
   register,
   handleSubmit,
   errors,
 
-  // Funciones de UI
+  
   toggleMostrarContrasena,
   limitarCaracteres,
   limpiarErrorGeneral,
   manejarClickRegistro,
 
-  // Callbacks
+ 
   onClose,
+  onRecuperarPassword,
 }) => {
   const { t } = useTranslation();
 
   return (
     <Form onSubmit={handleSubmit} className="contenedor-formulario" noValidate>
-      <div className="text-center mb-4">
-        <h4 className="texto-dorado mb-0">{t("loginTitle")}</h4>
-        <p className="texto-blanco mt-2 mb-0" style={{ fontSize: "0.9rem" }}>
-          {t("loginSubtitle")}
-        </p>
-      </div>
-
       {errorGeneral && (
         <div
           className="alert alert-danger alert-dismissible fade show mb-4"
@@ -55,8 +50,8 @@ const FormLoginView = ({
         </div>
       )}
 
-      <Form.Group className="mb-4">
-        <Form.Label className="form-label mb-2 texto-dorado">
+      <Form.Group className="mb-2">
+        <Form.Label className="form-label mb-1 texto-dorado">
           {t("usernameOrEmail")}
         </Form.Label>
         <div className="input-group input-group-lg">
@@ -82,7 +77,7 @@ const FormLoginView = ({
       </Form.Group>
 
       <Form.Group className="mb-4">
-        <div className="d-flex justify-content-between align-items-center mb-2">
+        <div className="d-flex justify-content-between align-items-center mb-1">
           <Form.Label className="form-label mb-0 texto-dorado">
             {t("password")}
           </Form.Label>
@@ -125,7 +120,10 @@ const FormLoginView = ({
         <a
           href="#"
           className="enlace-dorado text-decoration-none"
-          onClick={(e) => e.preventDefault()}
+          onClick={(e) => {
+            e.preventDefault();
+            onRecuperarPassword?.(e);
+          }}
         >
           {t("forgotPassword")}
         </a>
@@ -162,11 +160,11 @@ const FormLoginView = ({
         </Col>
       </Row>
 
-      <div className="text-center mt-4 pt-3 border-top border-secondary">
+      <div className="text-center mt-3 pt-3 border-top border-secondary">
         <Button
           variant="outline-warning"
           onClick={manejarClickRegistro}
-          className="w-100 py-2 boton-registro"
+          className="w-75 py-1 boton-registro"
           disabled={estaEnviando}
         >
           {t("createAccount")}

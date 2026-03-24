@@ -1,7 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&display=swap");
 
-/* ================= PAGINA PRODUCTOS MODERNA ================= */
+
 
 .pagina-productos {
   min-height: 100vh;
@@ -11,7 +11,7 @@
   padding-top: 80px;
 }
 
-/* ================= CONTENIDO PRINCIPAL ================= */
+
 
 .contenido-principal {
   max-width: 1200px;
@@ -19,7 +19,7 @@
   padding: 2rem 1.5rem;
 }
 
-/* ================= SECCIONES ================= */
+
 
 .seccion-buscador,
 .seccion-lista-productos {
@@ -75,7 +75,7 @@
   font-size: 1.2em;
 }
 
-/* ================= BADGE CATEGORIA ================= */
+
 
 .categoria-actual-badge {
   margin-top: 1.5rem;
@@ -96,7 +96,7 @@
   letter-spacing: 0.5px;
 }
 
-/* ================= TARJETA INFORMATIVA ================= */
+
 
 .informacion-adicional {
   max-width: 1200px;
@@ -168,7 +168,7 @@
   z-index: 2;
 }
 
-/* ================= BOTON CONTACTO ================= */
+
 
 .boton-contacto {
   background: linear-gradient(45deg, var(--color-dorado), var(--color-rojo));
@@ -224,7 +224,7 @@
   transform: translateX(5px);
 }
 
-/* ================= RESPONSIVE ================= */
+
 
 @media (max-width: 768px) {
   .contenido-principal {
@@ -312,7 +312,7 @@
   }
 }
 
-/* ================= REDUCED MOTION ================= */
+
 
 @media (prefers-reduced-motion: reduce) {
   * {

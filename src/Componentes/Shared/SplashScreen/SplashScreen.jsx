@@ -1,41 +1,48 @@
 import { useState, useEffect } from 'react';
+import Lottie from 'lottie-react';
 import './SplashScreen.css';
 
 const SplashScreen = ({ onFinish }) => {
   const [isVisible, setIsVisible] = useState(true);
+  const [animationData, setAnimationData] = useState(null);
+
+  useEffect(() => {
+    fetch('/Portada/Motorcycle.json')
+      .then((res) => res.json())
+      .then(setAnimationData)
+      .catch(() => setAnimationData(null));
+  }, []);
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsVisible(false);
       setTimeout(() => {
         onFinish();
-      }, 400); 
-    }, 1500); 
+      }, 400);
+    }, 2500);
 
     return () => clearTimeout(timer);
   }, [onFinish]);
 
-  if (!isVisible) {
-    return (
-      <div className="splash-screen fade-out">
-        <div className="splash-content">
-          <div className="splash-logo-text">
-            <span className="splash-logo-primary">Rolling</span>
-            <span className="splash-logo-secondary">Motor</span>
-          </div>
-        </div>
+  const content = (
+    <div className="splash-content">
+      {animationData && (
+        <Lottie
+          animationData={animationData}
+          loop
+          className="splash-lottie"
+        />
+      )}
+      <div className="splash-logo-text">
+        <span className="splash-logo-primary">Rolling</span>
+        <span className="splash-logo-secondary">Motor</span>
       </div>
-    );
-  }
+    </div>
+  );
 
   return (
-    <div className="splash-screen">
-      <div className="splash-content">
-        <div className="splash-logo-text">
-          <span className="splash-logo-primary">Rolling</span>
-          <span className="splash-logo-secondary">Motor</span>
-        </div>
-      </div>
+    <div className={`splash-screen ${!isVisible ? 'fade-out' : ''}`}>
+      {content}
     </div>
   );
 };

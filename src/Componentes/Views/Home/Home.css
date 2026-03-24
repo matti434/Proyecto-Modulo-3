@@ -1,0 +1,46 @@
+.home-contenedor {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.home-contenido-principal {
+    width: 100%;
+}
+
+.home-publicidad-centro {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: stretch;
+    gap: 1.5rem;
+    margin-top: 2rem;
+    padding: 1rem 0;
+}
+
+.home-publicidad-placeholder {
+    width: 100%;
+    aspect-ratio: 1;
+    max-width: 380px;
+    background: var(--color-fondo-secundario, #1a1a1a);
+    border: 1px dashed rgba(255, 193, 7, 0.4);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.9rem;
+}
+
+.home-publicidad-placeholder img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+@media (max-width: 991px) {
+    .home-publicidad-centro {
+        display: none;
+    }
+}

@@ -1,11 +1,10 @@
-import React from "react";
-
 /**
  * View pura para la sección de Usuarios Activos
  * Solo recibe props y renderiza UI
  */
 export const AdminUsuariosView = ({
   usuarios,
+  usuarioActualId,
   totalAdmins,
   totalUsuarios,
   totalNormales,
@@ -72,7 +71,8 @@ export const AdminUsuariosView = ({
                     <button
                       className="boton-editar"
                       onClick={() => onEditarUsuario(u)}
-                      title="Editar usuario"
+                      disabled={usuarioActualId && (u.id === usuarioActualId || u._id === usuarioActualId)}
+                      title={usuarioActualId && (u.id === usuarioActualId || u._id === usuarioActualId) ? "No puedes editar tu propia cuenta" : "Editar usuario"}
                     >
                       ✏️
                     </button>
