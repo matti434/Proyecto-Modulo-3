@@ -6,6 +6,7 @@ import {
   useCallback,
 } from "react";
 import { productosApi } from "../../Services/Api";
+import { validarStock } from "../Utils/productoUtils";
 
 const ContextoProducto = createContext();
 
@@ -68,10 +69,11 @@ export const filtrarProductos = (productos, filtros) => {
       }
     }
 
-    if (filtros.stock !== "") {
-      if ((producto.stock?.toString() || "true") !== filtros.stock) {
-        return false;
-      }
+    const pasaStockCatalogo = validarStock(producto);
+    if (filtros.stock === "false") {
+      if (pasaStockCatalogo) return false;
+    } else {
+      if (!pasaStockCatalogo) return false;
     }
 
     return true;
