@@ -168,9 +168,8 @@ const Contacto = () => {
                     <div className="row shadow-lg rounded-4 overflow-hidden contacto-card">
 
                         <div
-                            className="col-12 col-md-6 text-white d-flex flex-column justify-content-center p-5"
+                            className="sub-container col-12 col-md-6 text-white d-flex flex-column justify-content-center p-5"
                             style={{
-                                background: "rgb(0, 0, 0)",
                                 backdropFilter: "blur(6px)",
                                 color: "white",
                                 borderRight: "1px solid rgba(255, 255, 0, 0.3)"
@@ -203,7 +202,7 @@ const Contacto = () => {
                             onSubmit={sendEmail}
                             className="col-12 col-md-6 d-flex flex-column justify-content-center p-5"
                             style={{
-                                background: "rgba(88, 1, 1, 0.6)",
+                                background: "rgb(38, 36, 0)",
                                 backdropFilter: "blur(6px)",
                                 color: "white"
                             }}
@@ -212,7 +211,7 @@ const Contacto = () => {
                             <h5
                                 className="titulo-glow2 pb-3 mb-4"
                                 style={{
-                                    borderBottom: "1px solid rgba(255, 255, 0, 0.3)"
+                                    borderBottom: "1px solid rgba(159, 159, 7, 0.94)"
                                 }}
                             >
                                 Datos de Contacto
@@ -315,8 +314,7 @@ const Contacto = () => {
                                 className="btn w-100 py-2 mt-2 boton-animado"
                                 type="submit"
                                 style={{
-                                    background: "rgba(0, 0, 0, 0.6)",
-                                    border: "1px solid #eee605",
+                                    border: "1px solid #0a0a0a",
                                     color: "white",
                                     fontWeight: "600",
                                     fontSize: "1.1rem"

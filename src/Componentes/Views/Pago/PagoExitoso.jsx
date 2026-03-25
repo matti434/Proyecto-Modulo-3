@@ -3,11 +3,13 @@ import { useSearchParams, Link } from "react-router-dom";
 import { Card, Button, Spinner } from "react-bootstrap";
 import { pagosApi } from "../../../Services/Api";
 import { useCarrito } from "../../Context/ContextoCarrito";
+import { useProductos } from "../../Context/ContextoProducto";
 import "./PagoResultado.css";
 
 const PagoExitoso = () => {
   const [searchParams] = useSearchParams();
   const { vaciarCarrito } = useCarrito();
+  const { cargarProductos } = useProductos();
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(null);
   const [verificado, setVerificado] = useState(false);
@@ -19,26 +21,29 @@ const PagoExitoso = () => {
       if (!transaccionId) {
         setCargando(false);
         setVerificado(true);
-        vaciarCarrito();
+        await vaciarCarrito();
+        await cargarProductos({});
         return;
       }
       try {
         const resultado = await pagosApi.verificarPago(transaccionId);
         setVerificado(resultado?.exito ?? true);
         if (resultado?.exito) {
-          vaciarCarrito();
+          await vaciarCarrito();
+          await cargarProductos({});
         } else {
           setError(resultado?.mensaje || "No se pudo verificar el pago");
         }
       } catch (err) {
         setError(err?.message || "Error al verificar el pago");
-        vaciarCarrito();
+        await vaciarCarrito();
+        await cargarProductos({});
       } finally {
         setCargando(false);
       }
     };
     verificar();
-  }, [transaccionId, vaciarCarrito]);
+  }, [transaccionId, vaciarCarrito, cargarProductos]);
 
   if (cargando) {
     return (

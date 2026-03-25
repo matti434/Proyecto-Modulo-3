@@ -2,13 +2,15 @@ import { useNavigate } from 'react-router-dom';
 import { useCarrito } from '../../../../../Context/ContextoCarrito';
 import { useFavoritos } from '../../../../../Context/ContextoFavoritos';
 import { useUser } from '../../../../../Context/ContextoUsuario';
-import { 
+
+import {
+
   crearProductoData,
   validarStock,
-  formatearPrecio, 
-  formatearKilometros, 
-  truncarTexto, 
-  acortarUbicacion 
+  formatearPrecio,
+  formatearKilometros,
+  truncarTexto,
+  acortarUbicacion,
 } from '../../../../../Utils/productoUtils';
 import toast from 'react-hot-toast';
 import '../../../../../../estilos/variables.css';
@@ -26,13 +28,16 @@ const CardProducto = ({
   ubicacion = "",
   descripcion = "",
   destacado = false,
+
   stock = true
+
 }) => {
 
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
   const { agregarAlCarrito } = useCarrito();
   const { toggleFavorito, esFavorito } = useFavoritos();
   const { estaAutenticado, esAdministrador } = useUser();
+
 
   const isFavorito = esFavorito(id || _id);
 
@@ -52,10 +57,14 @@ const CardProducto = ({
   stock
 };
 
+
+
   const handleFavoritoClick = (e) => {
     e.stopPropagation();
     const eraFavorito = isFavorito;
+
     toggleFavorito(id || _id);
+
     
     if (eraFavorito) {
       toast.error(`${marca} ${modelo} eliminado de favoritos`, {
@@ -87,12 +96,31 @@ const CardProducto = ({
     return;
   }
 
+
   if (!validarStock({ stock })) {
     toast.error('Este producto no está disponible');
     return;
   }
 
   const mongoId = _id || id;
+
+    if (!validarStock(productoBase)) {
+      toast.error('Este producto no está disponible');
+      return;
+    }
+
+    const mongoId = _id || id;
+    if (!mongoId) {
+      toast.error('Producto sin identificador válido');
+      return;
+    }
+
+    const productoData = crearProductoData({
+      ...productoBase,
+      _id: mongoId,
+      id: mongoId,
+    });
+
 
   if (!mongoId) {
     toast.error('Producto sin identificador válido');

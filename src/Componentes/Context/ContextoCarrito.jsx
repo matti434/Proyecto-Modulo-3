@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect, useCallback } from "react";
+import toast from "react-hot-toast";
 import { carritoApi } from "../../Services/Api";
 import { useUser } from "./ContextoUsuario";
 
@@ -17,20 +18,26 @@ const normalizarItemBackend = (item) => {
   const nombre =
     prod.nombre || [prod.marca, prod.modelo].filter(Boolean).join(" ").trim() || "Producto";
 
+  const pid = prod._id || prod.id;
   return {
     id: item._id || item.id,
     nombre,
     precio: item.precioUnitario ?? prod.precio ?? 0,
     cantidad: item.cantidad ?? 1,
     imagen: prod.imagen || "",
-    productoOriginal: { ...prod, id: prod._id || prod.id },
+    productoOriginal: {
+     ...prod,
+     _id: prod._id || prod.id,
+     id: prod._id || prod.id,
+    },
+
     marca: prod.marca || "",
     modelo: prod.modelo || "",
   };
 };
 
 export const CarritoProvider = ({ children }) => {
-  const { estaAutenticado, esAdministrador } = useUser();
+  const { estaAutenticado, esAdministrador, cargando } = useUser();
   const [itemsCarrito, setItemsCarrito] = useState([]);
 
   const cargarCarritoDesdeApi = useCallback(async () => {
@@ -53,12 +60,15 @@ export const CarritoProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    if (estaAutenticado) {
-      cargarCarritoDesdeApi();
+    if (cargando) return;
+
+
+   if (estaAutenticado) {
+     cargarCarritoDesdeApi();
     } else {
-      cargarDesdeLocalStorage();
+     cargarDesdeLocalStorage();
     }
-  }, [estaAutenticado, cargarCarritoDesdeApi, cargarDesdeLocalStorage]);
+  }, [cargando, estaAutenticado, cargarCarritoDesdeApi, cargarDesdeLocalStorage]);
 
   useEffect(() => {
     if (!estaAutenticado) {
@@ -67,68 +77,60 @@ export const CarritoProvider = ({ children }) => {
   }, [itemsCarrito, estaAutenticado]);
 
   const agregarAlCarrito = useCallback(
-    async (producto, cantidad = 1) => {
+   async (producto, cantidad = 1) => {
+     if (!estaAutenticado || esAdministrador) return;
 
-      // 🚫 Bloquear invitados
-      if (!estaAutenticado) {
-        return;
+     const productoId = producto?._id || producto?.id;
+     const cant = Math.max(1, parseInt(cantidad, 10) || 1);
+
+     if (
+       productoId == null ||
+       productoId === "" ||
+       typeof productoId !== "string"
+      ) {
+       toast.error(
+         "No se pudo identificar el producto. Vuelve a la lista e inténtalo de nuevo."
+        );
+       return;
       }
 
-      // 🚫 Bloquear administradores
-      if (esAdministrador) {
-        return;
-      }
+     try {
+       await carritoApi.agregarItem(productoId, cant);
+       await cargarCarritoDesdeApi();
+      } catch (e) {
+         toast.error(e?.message || "No se pudo agregar al carrito");
+         try {
+           await cargarCarritoDesdeApi();
+          } catch {
+           /* ignorar */
+          }
+        }
+    },
+   [estaAutenticado, esAdministrador, cargarCarritoDesdeApi]
+  );
 
-      const productoId = producto.id || producto._id;
-
-      const productoConId = {
-        ...producto,
-        id:
-          productoId ||
-          `producto-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
-      };
-
-      if (estaAutenticado && productoId) {
+  const eliminarDelCarrito = useCallback(
+    async (itemId) => {
+      if (estaAutenticado && itemId && !String(itemId).startsWith("local-")) {
         try {
-          await carritoApi.agregarItem(productoId, cantidad);
-          await cargarCarritoDesdeApi();
-          return;
+          await carritoApi.eliminarItem(itemId);
+          setItemsCarrito((prev) => prev.filter((item) => item.id !== itemId));
         } catch {
-          setItemsCarrito((prev) => {
-            const idx = prev.findIndex(
-              (i) =>
-                (i.productoOriginal?.id || i.productoOriginal?._id) ===
-                productoId
-            );
+          // Si falla el API no quitamos del estado; al recargar se verá la verdad del servidor
+        }
 
-            if (idx !== -1) {
-              const next = [...prev];
-              next[idx] = {
-                ...next[idx],
-                cantidad: next[idx].cantidad + cantidad,
-              };
-              return next;
-            }
+        return;
+      }
 
-            return [
-              ...prev,
-              {
-                id: `local-${Date.now()}`,
-                nombre:
-                  `${productoConId.marca || ""} ${
-                    productoConId.modelo || ""
-                  }`.trim() || "Producto",
-                precio: parseFloat(productoConId.precio) || 0,
-                cantidad,
-                imagen: productoConId.imagen || "",
-                productoOriginal: productoConId,
-                marca: productoConId.marca || "",
-                modelo: productoConId.modelo || "",
-              },
-            ];
-          });
-
-          return;
+      try {
+        await carritoApi.agregarItem(productoId, cant);
+        await cargarCarritoDesdeApi();
+      } catch (e) {
+        toast.error(e?.message || "No se pudo agregar al carrito");
+        try {
+          await cargarCarritoDesdeApi();
+        } catch {
+          /* ignorar */
         }
       }
     },
@@ -138,20 +140,7 @@ export const CarritoProvider = ({ children }) => {
   const quitarDelCarrito = useCallback((id) => {
     setItemsCarrito((prev) => prev.filter((item) => item.id !== id));
   }, []);
-
-  const eliminarDelCarrito = useCallback(async (itemId) => {
-    if (estaAutenticado && !esAdministrador) {
-      try {
-        await carritoApi.eliminarItem(itemId);
-        await cargarCarritoDesdeApi();
-      } catch {
-        setItemsCarrito((prev) => prev.filter((item) => item.id !== itemId));
-      }
-    } else {
-      setItemsCarrito((prev) => prev.filter((item) => item.id !== itemId));
-    }
-  }, [estaAutenticado, esAdministrador, cargarCarritoDesdeApi]);
-
+ 
   const actualizarCantidad = useCallback(async (itemId, cantidad) => {
     const cant = Math.max(1, parseInt(cantidad, 10) || 1);
     if (estaAutenticado && !esAdministrador) {
@@ -185,14 +174,39 @@ export const CarritoProvider = ({ children }) => {
     return itemsCarrito.reduce((total, item) => total + (item.cantidad || 1), 0);
   }, [itemsCarrito]);
 
-  const vaciarCarrito = useCallback(() => {
+  const vaciarCarrito = useCallback(async () => {
+    if (estaAutenticado && !esAdministrador) {
+      try {
+        await carritoApi.vaciar();
+      } catch {
+        /* seguimos vaciando UI */
+      }
+    }
     setItemsCarrito([]);
-  }, []);
+    if (!estaAutenticado) {
+      localStorage.removeItem("carritoMotos");
+    }
+  }, [estaAutenticado, esAdministrador]);
 
   const valorTotal = itemsCarrito.reduce(
     (total, item) => total + item.precio * item.cantidad,
     0
   );
+
+
+  const valorContexto = {
+    itemsCarrito,
+    agregarAlCarrito,
+    eliminarDelCarrito,
+    actualizarCantidad,
+    vaciarCarrito,
+    calcularSubtotal,
+    calcularTotalProductos,
+    estaEnCarrito,
+    obtenerCantidadProducto,
+    cargarCarritoInvitado: cargarDesdeLocalStorage,
+  };
+
 
   return (
     <CarritoContext.Provider
@@ -206,6 +220,7 @@ export const CarritoProvider = ({ children }) => {
         valorTotal,
         calcularSubtotal,
         calcularTotalProductos,
+        cargarCarritoInvitado: cargarDesdeLocalStorage,
       }}
     >
       {children}

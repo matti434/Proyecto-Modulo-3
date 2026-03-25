@@ -14,9 +14,9 @@ const MenuUsuario = () => {
   const navigate = useNavigate();
   const [mostrarModalPerfil, setMostrarModalPerfil] = useState(false);
 
-  const manejarCerrarSesion = () => {
-    vaciarCarrito();
-    logout();
+  const manejarCerrarSesion = async () => {
+    await vaciarCarrito();
+    await logout();
     navigate("/");
   };
 

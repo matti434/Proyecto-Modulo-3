@@ -13,10 +13,12 @@ export const crearProductoData = ({
   descripcion = "",
   destacado = false,
   stock = true,
+  stockDisponible,
   categoria = "",
   nombre = "",
 } = {}) => ({
   id: id || _id || Date.now().toString(),
+  _id: _id || id,
   marca,
   modelo,
   año,
@@ -27,6 +29,7 @@ export const crearProductoData = ({
   descripcion,
   destacado,
   stock,
+  stockDisponible,
   categoria,
   nombre: nombre || `${marca} ${modelo}`.trim(),
 });
@@ -37,7 +40,12 @@ export const generarIdCarrito = () => {
 
 export const validarStock = (producto) => {
   if (!producto) return false;
-  return producto.stock === true || producto.stock === "true";
+  const stockOk = producto.stock === true || producto.stock === "true";
+  if (!stockOk) return false;
+  const raw = producto.stockDisponible;
+  if (raw === undefined || raw === null || raw === "") return true;
+  const n = Number(raw);
+  return Number.isFinite(n) && n >= 1;
 };
 
 const MAX_DIGITOS_PRECIO = 14;
