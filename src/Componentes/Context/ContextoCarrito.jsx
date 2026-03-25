@@ -18,7 +18,6 @@ const normalizarItemBackend = (item) => {
   const nombre =
     prod.nombre || [prod.marca, prod.modelo].filter(Boolean).join(" ").trim() || "Producto";
 
-  const pid = prod._id || prod.id;
   return {
     id: item._id || item.id,
     nombre,
@@ -122,19 +121,9 @@ export const CarritoProvider = ({ children }) => {
         return;
       }
 
-      try {
-        await carritoApi.agregarItem(productoId, cant);
-        await cargarCarritoDesdeApi();
-      } catch (e) {
-        toast.error(e?.message || "No se pudo agregar al carrito");
-        try {
-          await cargarCarritoDesdeApi();
-        } catch {
-          /* ignorar */
-        }
-      }
+      setItemsCarrito((prev) => prev.filter((item) => item.id !== itemId));
     },
-    [estaAutenticado, esAdministrador, cargarCarritoDesdeApi]
+    [estaAutenticado]
   );
 
   const quitarDelCarrito = useCallback((id) => {
@@ -192,21 +181,6 @@ export const CarritoProvider = ({ children }) => {
     (total, item) => total + item.precio * item.cantidad,
     0
   );
-
-
-  const valorContexto = {
-    itemsCarrito,
-    agregarAlCarrito,
-    eliminarDelCarrito,
-    actualizarCantidad,
-    vaciarCarrito,
-    calcularSubtotal,
-    calcularTotalProductos,
-    estaEnCarrito,
-    obtenerCantidadProducto,
-    cargarCarritoInvitado: cargarDesdeLocalStorage,
-  };
-
 
   return (
     <CarritoContext.Provider
