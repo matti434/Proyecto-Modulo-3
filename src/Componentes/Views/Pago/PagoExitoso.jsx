@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { useSearchParams, Link } from "react-router-dom";
+import { useEffect, useState, useMemo } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { Card, Button, Spinner } from "react-bootstrap";
 import { pagosApi } from "../../../Services/Api";
 import { useCarrito } from "../../Context/ContextoCarrito";
@@ -7,28 +7,45 @@ import { useProductos } from "../../Context/ContextoProducto";
 import "./PagoResultado.css";
 
 const PagoExitoso = () => {
-  const [searchParams] = useSearchParams();
+  const { search } = useLocation();
   const { vaciarCarrito } = useCarrito();
   const { cargarProductos } = useProductos();
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(null);
-  const [verificado, setVerificado] = useState(false);
 
-  const transaccionId = searchParams.get("external_reference") || searchParams.get("payment_id") || searchParams.get("preference_id");
+  const { paymentIdMp, transaccionId, externalReference } = useMemo(() => {
+    const q = new URLSearchParams(search);
+    const payment = q.get("payment_id") || q.get("collection_id") || "";
+    const ext = q.get("external_reference")?.trim() || "";
+    const pref = q.get("preference_id")?.trim() || "";
+    const trans = ext || pref || payment || "";
+    return {
+      paymentIdMp: payment,
+      transaccionId: trans,
+      externalReference: ext,
+    };
+  }, [search]);
 
   useEffect(() => {
     const verificar = async () => {
       if (!transaccionId) {
         setCargando(false);
-        setVerificado(true);
         await vaciarCarrito();
         await cargarProductos({});
         return;
       }
       try {
-        const resultado = await pagosApi.verificarPago(transaccionId);
-        setVerificado(resultado?.exito ?? true);
+        const resultado = await pagosApi.verificarPago(transaccionId, {
+          paymentId: paymentIdMp || undefined,
+        });
+
         if (resultado?.exito) {
+          if (paymentIdMp) {
+            await pagosApi.confirmarPago({
+              payment_id: paymentIdMp,
+              external_reference: externalReference || transaccionId,
+            });
+          }
           await vaciarCarrito();
           await cargarProductos({});
         } else {
@@ -36,14 +53,18 @@ const PagoExitoso = () => {
         }
       } catch (err) {
         setError(err?.message || "Error al verificar el pago");
-        await vaciarCarrito();
-        await cargarProductos({});
       } finally {
         setCargando(false);
       }
     };
     verificar();
-  }, [transaccionId, vaciarCarrito, cargarProductos]);
+  }, [
+    transaccionId,
+    paymentIdMp,
+    externalReference,
+    vaciarCarrito,
+    cargarProductos,
+  ]);
 
   if (cargando) {
     return (
