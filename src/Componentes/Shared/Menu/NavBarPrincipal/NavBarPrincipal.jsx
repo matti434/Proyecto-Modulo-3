@@ -10,7 +10,7 @@ import MenuUsuario from "./menuUsuario/MenuUsuario";
 import "./NavBarPrincipal.css";
 
 export const NavBarPrincipal = ({ onAbrirRegistro, onAbrirLogin }) => {
-  const { usuarioActual } = useUser();
+  const { usuarioActual, esAdministrador } = useUser();
   const { itemsCarrito } = useCarrito();
   const { t, i18n } = useTranslation();
 
@@ -63,8 +63,8 @@ export const NavBarPrincipal = ({ onAbrirRegistro, onAbrirLogin }) => {
         {/* Menú colapsable */}
         <Navbar.Collapse id="navbar-nav" className="justify-content-end">
           <Nav className="align-items-center gap-3 gap-xl-4">
-            {/* Botón Carrito para Desktop */}
-            {usuarioActual && (
+            {/* Botón Carrito para Desktop - solo usuarios autenticados (no admin) */}
+            {usuarioActual && !esAdministrador && (
               <Link
                 to="/carrito"
                 className="carrito-btn-icon d-none d-lg-flex"
@@ -116,7 +116,7 @@ export const NavBarPrincipal = ({ onAbrirRegistro, onAbrirLogin }) => {
             )}
 
             {/* Botones móviles (solo aparecen en móvil) */}
-            {usuarioActual ? (
+            {usuarioActual && !esAdministrador ? (
               <Link
                 to="/carrito"
                 className="carrito-btn-mobile d-lg-none"

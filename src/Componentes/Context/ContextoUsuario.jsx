@@ -23,12 +23,10 @@ export const UserProvider = ({ children }) => {
     try {
       setCargando(true);
 
-      // Primero comprobar si hay sesión (perfil). Si no hay, no llamar a usuarios (evita 401 en primera visita).
       let perfil = null;
       try {
         perfil = await authApi.obtenerPerfil();
       } catch (err) {
-        // Sin sesión (401 o error): tratar como no autenticado para no dejar estado inconsistente.
         setUsuarios([]);
         setUsuariosSuspendidos([]);
         if (err?.status === 401) {
@@ -46,7 +44,13 @@ export const UserProvider = ({ children }) => {
       const usuarioJSON = normalizarUsuario(perfil?.usuario ?? perfil);
       if (usuarioJSON) setUsuarioActual(usuarioJSON);
 
-      // Solo si hay sesión, cargar listas de usuarios (endpoints que requieren auth).
+      if (usuarioJSON?.role !== "admin") {
+        setUsuarios([]);
+        setUsuariosSuspendidos([]);
+        setCargando(false);
+        return;
+      }
+
       const [dataUsuarios, dataSuspendidos] = await Promise.all([
         usuariosApi.obtenerTodos(true),
         usuariosApi.obtenerSuspendidos(),

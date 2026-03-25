@@ -1,46 +1,63 @@
 import { useNavigate } from 'react-router-dom'; 
 import { useCarrito } from '../../../../../Context/ContextoCarrito';
 import { useFavoritos } from '../../../../../Context/ContextoFavoritos';
-import { 
-  crearProductoData, 
-  generarIdCarrito,
+import { useUser } from '../../../../../Context/ContextoUsuario';
+import {
+  crearProductoData,
   validarStock,
-  formatearPrecio, 
-  formatearKilometros, 
-  truncarTexto, 
-  acortarUbicacion 
+  formatearPrecio,
+  formatearKilometros,
+  truncarTexto,
+  acortarUbicacion,
 } from '../../../../../Utils/productoUtils';
 import toast from 'react-hot-toast';
 import '../../../../../../estilos/variables.css';
 import './CardProducto.css';
 
-const CardProducto = ({ 
+const CardProducto = ({
   id,
+  _id,
   marca = "",
-  modelo = "", 
+  modelo = "",
   año = "",
   precio = "",
   imagen = "",
   kilometros = "",
   ubicacion = "",
   descripcion = "",
-  destacado = false, 
-  stock = true
+  destacado = false,
+  stock = true,
+  stockDisponible,
 }) => {
 
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
   const { agregarAlCarrito } = useCarrito();
   const { toggleFavorito, esFavorito } = useFavoritos();
+  const { estaAutenticado, esAdministrador } = useUser();
 
-  const isFavorito = esFavorito(id);
+  const idFavorito = id || _id;
+  const isFavorito = esFavorito(idFavorito);
 
-  // Crear objeto producto normalizado
-  const productoBase = { id, marca, modelo, año, precio, imagen, kilometros, ubicacion, descripcion, destacado, stock };
+  const productoBase = {
+    id: id || _id,
+    _id: _id || id,
+    marca,
+    modelo,
+    año,
+    precio,
+    imagen,
+    kilometros,
+    ubicacion,
+    descripcion,
+    destacado,
+    stock,
+    stockDisponible,
+  };
 
   const handleFavoritoClick = (e) => {
     e.stopPropagation();
     const eraFavorito = isFavorito;
-    toggleFavorito(id);
+    toggleFavorito(idFavorito);
     
     if (eraFavorito) {
       toast.error(`${marca} ${modelo} eliminado de favoritos`, {
@@ -62,14 +79,31 @@ const CardProducto = ({
   const handleAgregarCarrito = (e) => {
     e.stopPropagation();
 
-    if (!validarStock({ stock })) {
+    if (!estaAutenticado) {
+      toast.error('Debes iniciar sesión para agregar productos al carrito');
+      return;
+    }
+
+    if (esAdministrador) {
+      toast.error('Los administradores no pueden usar el carrito');
+      return;
+    }
+
+    if (!validarStock(productoBase)) {
       toast.error('Este producto no está disponible');
+      return;
+    }
+
+    const mongoId = _id || id;
+    if (!mongoId) {
+      toast.error('Producto sin identificador válido');
       return;
     }
 
     const productoData = crearProductoData({
       ...productoBase,
-      id: id || generarIdCarrito()
+      _id: mongoId,
+      id: mongoId,
     });
 
     agregarAlCarrito(productoData, 1);
@@ -169,9 +203,9 @@ const CardProducto = ({
           </button>
 
           <button 
-            className={`boton-carrito ${!stock ? 'boton-deshabilitado' : ''}`} 
+            className={`boton-carrito ${!stock || !estaAutenticado || esAdministrador ? 'boton-deshabilitado' : ''}`} 
             onClick={handleAgregarCarrito}
-            disabled={!stock}
+            disabled={!stock || !estaAutenticado || esAdministrador}
           >
             <span className="texto-boton">
               {stock ? 'Agregar' : 'No disponible'}
