@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect, useCallback } from "react";
+import toast from "react-hot-toast";
 import { carritoApi } from "../../Services/Api";
 import { useUser } from "./ContextoUsuario";
 
@@ -22,7 +23,11 @@ const normalizarItemBackend = (item) => {
     precio: item.precioUnitario ?? prod.precio ?? 0,
     cantidad: item.cantidad ?? 1,
     imagen: prod.imagen || "",
-    productoOriginal: { ...prod, id: prod._id || prod.id },
+    productoOriginal: {
+     ...prod,
+     _id: prod._id || prod.id,
+     id: prod._id || prod.id,
+    },
     marca: prod.marca || "",
     modelo: prod.modelo || "",
   };
@@ -52,12 +57,14 @@ export const CarritoProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    if (estaAutenticado) {
-      cargarCarritoDesdeApi();
+    if (cargando) return;
+
+   if (estaAutenticado) {
+     cargarCarritoDesdeApi();
     } else {
-      cargarDesdeLocalStorage();
+     cargarDesdeLocalStorage();
     }
-  }, [estaAutenticado, cargarCarritoDesdeApi, cargarDesdeLocalStorage]);
+  }, [cargando, estaAutenticado, cargarCarritoDesdeApi, cargarDesdeLocalStorage]);
 
   useEffect(() => {
     if (!estaAutenticado) {
@@ -66,72 +73,36 @@ export const CarritoProvider = ({ children }) => {
   }, [itemsCarrito, estaAutenticado]);
 
   const agregarAlCarrito = useCallback(
-    async (producto, cantidad = 1) => {
-      const productoId = producto.id || producto._id;
-      const productoConId = {
-        ...producto,
-        id: productoId || `producto-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
-      };
+   async (producto, cantidad = 1) => {
+     if (!estaAutenticado || esAdministrador) return;
 
-      if (estaAutenticado && productoId) {
-        try {
-          await carritoApi.agregarItem(productoId, cantidad);
-          await cargarCarritoDesdeApi();
-          return;
-        } catch {
-          setItemsCarrito((prev) => {
-            const idx = prev.findIndex((i) => (i.productoOriginal?.id || i.productoOriginal?._id) === productoId);
-            if (idx !== -1) {
-              const next = [...prev];
-              next[idx] = { ...next[idx], cantidad: next[idx].cantidad + cantidad };
-              return next;
-            }
-            return [
-              ...prev,
-              {
-                id: `local-${Date.now()}`,
-                nombre: `${productoConId.marca || ""} ${productoConId.modelo || ""}`.trim() || "Producto",
-                precio: parseFloat(productoConId.precio) || 0,
-                cantidad,
-                imagen: productoConId.imagen || "",
-                productoOriginal: productoConId,
-                marca: productoConId.marca || "",
-                modelo: productoConId.modelo || "",
-              },
-            ];
-          });
-          return;
-        }
+     const productoId = producto?._id || producto?.id;
+     const cant = Math.max(1, parseInt(cantidad, 10) || 1);
+
+     if (
+       productoId == null ||
+       productoId === "" ||
+       typeof productoId !== "string"
+      ) {
+       toast.error(
+         "No se pudo identificar el producto. Vuelve a la lista e inténtalo de nuevo."
+        );
+       return;
       }
 
-      setItemsCarrito((prev) => {
-        const productoExistenteIndex = prev.findIndex(
-          (item) => (item.productoOriginal?.id || item.productoOriginal?._id || item.id) === productoConId.id
-        );
-        if (productoExistenteIndex !== -1) {
-          const next = [...prev];
-          next[productoExistenteIndex] = {
-            ...next[productoExistenteIndex],
-            cantidad: next[productoExistenteIndex].cantidad + cantidad,
-          };
-          return next;
+     try {
+       await carritoApi.agregarItem(productoId, cant);
+       await cargarCarritoDesdeApi();
+      } catch (e) {
+         toast.error(e?.message || "No se pudo agregar al carrito");
+         try {
+           await cargarCarritoDesdeApi();
+          } catch {
+           /* ignorar */
+          }
         }
-        return [
-          ...prev,
-          {
-            id: productoConId.id,
-            nombre: `${productoConId.marca || ""} ${productoConId.modelo || ""}`.trim() || "Producto",
-            precio: parseFloat(productoConId.precio) || 0,
-            cantidad,
-            imagen: productoConId.imagen || "",
-            productoOriginal: productoConId,
-            marca: productoConId.marca || "",
-            modelo: productoConId.modelo || "",
-          },
-        ];
-      });
     },
-    [estaAutenticado, cargarCarritoDesdeApi]
+   [estaAutenticado, esAdministrador, cargarCarritoDesdeApi]
   );
 
   const eliminarDelCarrito = useCallback(
@@ -226,7 +197,7 @@ export const CarritoProvider = ({ children }) => {
     calcularTotalProductos,
     estaEnCarrito,
     obtenerCantidadProducto,
-    cargarCarritoInvitado,
+    cargarCarritoInvitado: cargarDesdeLocalStorage,
   };
 
   return (
