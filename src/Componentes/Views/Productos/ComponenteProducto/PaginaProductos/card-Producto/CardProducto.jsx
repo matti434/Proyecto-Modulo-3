@@ -4,7 +4,6 @@ import { useFavoritos } from '../../../../../Context/ContextoFavoritos';
 import { useUser } from '../../../../../Context/ContextoUsuario';
 
 import {
-
   crearProductoData,
   validarStock,
   formatearPrecio,
@@ -28,9 +27,7 @@ const CardProducto = ({
   ubicacion = "",
   descripcion = "",
   destacado = false,
-
-  stock = true
-
+  stock = true,
 }) => {
 
   const navigate = useNavigate();
@@ -41,21 +38,20 @@ const CardProducto = ({
 
   const isFavorito = esFavorito(id || _id);
 
-  // Crear objeto producto normalizado
   const productoBase = {
-  id: id || _id,
-  _id: _id || id,
-  marca,
-  modelo,
-  año,
-  precio,
-  imagen,
-  kilometros,
-  ubicacion,
-  descripcion,
-  destacado,
-  stock
-};
+    id: id || _id,
+    _id: _id || id,
+    marca,
+    modelo,
+    año,
+    precio,
+    imagen,
+    kilometros,
+    ubicacion,
+    descripcion,
+    destacado,
+    stock,
+  };
 
 
 
@@ -96,7 +92,7 @@ const CardProducto = ({
       return;
     }
 
-    if (!validarStock(productoBase)) {
+    if (!validarStock({ stock })) {
       toast.error('Este producto no está disponible');
       return;
     }
