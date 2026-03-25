@@ -1,15 +1,15 @@
 import { useState } from "react";
 import { useCarrito } from "../../../../../Context/ContextoCarrito";
 import { useUser } from "../../../../../Context/ContextoUsuario";
-import { Modal, Button, Form, Alert, Spinner, Badge } from "react-bootstrap";
-import { 
-  FaUser, 
-  FaEnvelope, 
-  FaGlobeAmericas, 
-  FaCalendarAlt, 
-  FaKey, 
+import { Modal, Button, Alert, Badge } from "react-bootstrap";
+import {
+  FaUser,
+  FaEnvelope,
+  FaGlobeAmericas,
+  FaCalendarAlt,
+  FaKey,
   FaExclamationTriangle,
-  FaCrown 
+  FaCrown,
 } from "react-icons/fa";
 import toast from "react-hot-toast";
 import { usuariosApi } from "../../../../../../Services/Api";
@@ -25,8 +25,18 @@ const ModalPerfil = ({ mostrar, onCerrar }) => {
 
   const esAdministrador = usuarioActual?.role === "admin";
 
-  const manejarEliminarCuenta = async () => {
+  const cerrarPerfil = () => {
+    setMostrarConfirmacion(false);
+    setContrasenaConfirmacion("");
+    onCerrar();
+  };
 
+  const cerrarConfirmacion = () => {
+    setMostrarConfirmacion(false);
+    setContrasenaConfirmacion("");
+  };
+
+  const manejarEliminarCuenta = async () => {
     if (esAdministrador) {
       toast.error("Los administradores no pueden eliminar su cuenta");
       return;
@@ -37,7 +47,10 @@ const ModalPerfil = ({ mostrar, onCerrar }) => {
       return;
     }
 
-    if (usuarioActual.contrasena && contrasenaConfirmacion !== usuarioActual.contrasena) {
+    if (
+      usuarioActual.contrasena &&
+      contrasenaConfirmacion !== usuarioActual.contrasena
+    ) {
       toast.error("Contraseña incorrecta");
       return;
     }
@@ -45,7 +58,6 @@ const ModalPerfil = ({ mostrar, onCerrar }) => {
     setCargando(true);
 
     try {
-
       await usuariosApi.eliminar(usuarioActual.id);
 
       localStorage.removeItem("ultimoUsuario");
@@ -55,20 +67,15 @@ const ModalPerfil = ({ mostrar, onCerrar }) => {
       setTimeout(() => {
         cargarCarritoInvitado();
         logout();
-        onCerrar();
+        cerrarPerfil();
         window.location.href = "/";
       }, 1000);
-
     } catch (err) {
-
       toast.error(err?.message || "Error al eliminar la cuenta");
-
     } finally {
-
       setCargando(false);
       setMostrarConfirmacion(false);
       setContrasenaConfirmacion("");
-
     }
   };
 
@@ -76,7 +83,7 @@ const ModalPerfil = ({ mostrar, onCerrar }) => {
     return new Date(fecha).toLocaleDateString("es-ES", {
       year: "numeric",
       month: "long",
-      day: "numeric"
+      day: "numeric",
     });
   };
 
@@ -86,7 +93,7 @@ const ModalPerfil = ({ mostrar, onCerrar }) => {
     <>
       <Modal
         show={mostrar && !mostrarConfirmacion}
-        onHide={onCerrar}
+        onHide={cerrarPerfil}
         size="lg"
         centered
         className="modal-perfil"
@@ -102,43 +109,27 @@ const ModalPerfil = ({ mostrar, onCerrar }) => {
                 Administrador
               </Badge>
             )}
-
           </Modal.Title>
         </Modal.Header>
 
         <Modal.Body className="modal-body-perfil">
-
           <div className="perfil-info">
-
             <div className="info-item">
-              <div className="info-icon"><FaUser /></div>
+              <div className="info-icon">
+                <FaUser />
+              </div>
               <div className="info-content">
                 <label>Nombre de Usuario</label>
-
-                {editando ? (
-                  <Form.Control
-                    type="text"
-                    value={formData.nombreDeUsuario}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        nombreDeUsuario: e.target.value
-                      })
-                    }
-                    disabled={cargando}
-                    className="input-perfil"
-                  />
-                ) : (
-                  <div className="info-value">
-                    {usuarioActual.nombreDeUsuario}
-                  </div>
-                )}
-
+                <div className="info-value">
+                  {usuarioActual.nombreDeUsuario}
+                </div>
               </div>
             </div>
 
             <div className="info-item">
-              <div className="info-icon"><FaEnvelope /></div>
+              <div className="info-icon">
+                <FaEnvelope />
+              </div>
               <div className="info-content">
                 <label>Email</label>
                 <div className="info-value">{usuarioActual.email}</div>
@@ -146,7 +137,9 @@ const ModalPerfil = ({ mostrar, onCerrar }) => {
             </div>
 
             <div className="info-item">
-              <div className="info-icon"><FaGlobeAmericas /></div>
+              <div className="info-icon">
+                <FaGlobeAmericas />
+              </div>
               <div className="info-content">
                 <label>País</label>
                 <div className="info-value">{usuarioActual.pais}</div>
@@ -154,7 +147,9 @@ const ModalPerfil = ({ mostrar, onCerrar }) => {
             </div>
 
             <div className="info-item">
-              <div className="info-icon"><FaCalendarAlt /></div>
+              <div className="info-icon">
+                <FaCalendarAlt />
+              </div>
               <div className="info-content">
                 <label>Fecha de Nacimiento</label>
                 <div className="info-value">
@@ -164,12 +159,13 @@ const ModalPerfil = ({ mostrar, onCerrar }) => {
             </div>
 
             <div className="info-item">
-              <div className="info-icon"><FaKey /></div>
+              <div className="info-icon">
+                <FaKey />
+              </div>
               <div className="info-content">
                 <label>Rol</label>
 
                 <div className="info-value rol-usuario">
-
                   {esAdministrador ? (
                     <span className="texto-admin">
                       <FaCrown className="me-1" />
@@ -178,15 +174,12 @@ const ModalPerfil = ({ mostrar, onCerrar }) => {
                   ) : (
                     "Usuario"
                   )}
-
                 </div>
-
               </div>
             </div>
 
             {esAdministrador && (
               <Alert variant="info" className="alert-info-admin">
-
                 <Alert.Heading>
                   <FaCrown className="me-2" />
                   Cuenta de Administrador
@@ -197,39 +190,73 @@ const ModalPerfil = ({ mostrar, onCerrar }) => {
                   no puede ser eliminada a través de esta interfaz por razones
                   de seguridad del sistema.
                 </p>
-
               </Alert>
             )}
-
           </div>
-
         </Modal.Body>
 
         <Modal.Footer className="modal-footer-perfil">
-          <div className="info-item">
-           <div className="info-icon"><FaUser /></div>
-           <div className="info-content">
-             <label>Nombre de Usuario</label>
-             <div className="info-value">
-               {usuarioActual.nombreDeUsuario}
-             </div>
-           </div>
+          <div className="botones-accion">
+            {!esAdministrador && (
+              <Button
+                variant="outline-danger"
+                onClick={() => setMostrarConfirmacion(true)}
+              >
+                <FaExclamationTriangle className="me-1" />
+                Eliminar Cuenta
+              </Button>
+            )}
           </div>
-         (
-           <div className="botones-accion">
-             {!esAdministrador && (
-                <Button
-                  variant="outline-danger"
-                  onClick={() => setMostrarConfirmacion(true)}
-                 >
-                 <FaExclamationTriangle className="me-1" />
-                   Eliminar Cuenta
-               </Button>
-             )}
-            </div>
-          )
         </Modal.Footer>
+      </Modal>
 
+      <Modal
+        show={mostrar && mostrarConfirmacion}
+        onHide={cerrarConfirmacion}
+        centered
+        backdrop={cargando ? "static" : true}
+        keyboard={!cargando}
+      >
+        <Modal.Header closeButton={!cargando}>
+          <Modal.Title>
+            <FaExclamationTriangle className="me-2 text-danger" />
+            Confirmar eliminación
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>
+            Esta acción es permanente. Ingresá tu contraseña para confirmar que
+            deseás eliminar tu cuenta.
+          </p>
+          <label htmlFor="contrasena-eliminar-cuenta" className="form-label">
+            Contraseña
+          </label>
+          <input
+            id="contrasena-eliminar-cuenta"
+            type="password"
+            className="form-control"
+            value={contrasenaConfirmacion}
+            onChange={(e) => setContrasenaConfirmacion(e.target.value)}
+            disabled={cargando}
+            autoComplete="current-password"
+          />
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            variant="secondary"
+            onClick={cerrarConfirmacion}
+            disabled={cargando}
+          >
+            Cancelar
+          </Button>
+          <Button
+            variant="danger"
+            onClick={manejarEliminarCuenta}
+            disabled={cargando}
+          >
+            {cargando ? "Eliminando…" : "Eliminar cuenta"}
+          </Button>
+        </Modal.Footer>
       </Modal>
     </>
   );
