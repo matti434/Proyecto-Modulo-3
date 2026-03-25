@@ -40,7 +40,7 @@ textarea:focus {
   outline: none !important;
   box-shadow: none !important;
   border-bottom: 2px solid var(--color-metal) !important;
-  background-color: var(--color-rojo-claro) !important;
+  background-color: rgba(0, 0, 0, 0.762) !important;
 }
 
 .texto-input {

@@ -211,7 +211,7 @@ const Contacto = () => {
                             <h5
                                 className="titulo-glow2 pb-3 mb-4"
                                 style={{
-                                    borderBottom: "1px solid rgba(255, 255, 0, 0.3)"
+                                    borderBottom: "1px solid rgba(159, 159, 7, 0.94)"
                                 }}
                             >
                                 Datos de Contacto
