@@ -11,7 +11,11 @@ import "./PaginaProductos.css";
 
 const PaginaProductos = () => {
   const location = useLocation();
-  const { filtrarPorCategoria, obtenerCategoriasUnicas } = useProductos();
+  const { filtrarPorCategoria, obtenerCategoriasUnicas, cargarProductos } = useProductos();
+
+  useEffect(() => {
+    cargarProductos({});
+  }, [cargarProductos]);
 
   useEffect(() => {
     const categoriaSeleccionada = location.state?.categoriaSeleccionada;

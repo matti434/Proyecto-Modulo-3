@@ -100,9 +100,9 @@ export const useCarritoViewModel = () => {
     );
     if (confirmado) {
       limpiarDescuento();
-      vaciarCarrito();
+      await vaciarCarrito();
     }
-  }, [vaciarCarrito, limpiarDescuento, confirmarAccion]);
+  }, [vaciarCarrito, limpiarDescuento]);
 
   const handleSeguirComprando = useCallback(() => {
     navigate("/");

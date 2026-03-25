@@ -1,8 +1,10 @@
+import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useCarrito } from '../../../../../Context/ContextoCarrito';
 import { useUser } from '../../../../../Context/ContextoUsuario';
 
 import { crearProductoData, validarStock, PRODUCTO_DEFAULT, formatearPrecio } from '../../../../../Utils/productoUtils';
+import { productosApi } from '../../../../../../Services/Api';
 import toast from 'react-hot-toast';
 import '../../../../../../estilos/variables.css';
 import './DetalleProducto.css';
@@ -13,8 +15,43 @@ const DetalleProducto = () => {
   const { agregarAlCarrito } = useCarrito();
   const { estaAutenticado, esAdministrador } = useUser();
 
-  // Usar producto de navegación o valores por defecto
-  const productoData = location.state?.producto || PRODUCTO_DEFAULT;
+  const idConsulta =
+    location.state?.producto?._id || location.state?.producto?.id || null;
+
+  const [productoData, setProductoData] = useState(() =>
+    crearProductoData(location.state?.producto || PRODUCTO_DEFAULT)
+  );
+
+  useEffect(() => {
+    setProductoData(crearProductoData(location.state?.producto || PRODUCTO_DEFAULT));
+  }, [location.state?.producto]);
+
+  useEffect(() => {
+    if (!idConsulta) return;
+    let cancel = false;
+    (async () => {
+      try {
+        const data = await productosApi.obtenerPorId(idConsulta);
+        const p = data?.producto ?? data;
+        if (!cancel && p && typeof p === 'object' && !Array.isArray(p)) {
+          setProductoData(
+            crearProductoData({
+              ...p,
+              _id: p._id || p.id,
+              id: p.id || p._id,
+            })
+          );
+        }
+      } catch {
+        if (!cancel) toast.error('No se pudo cargar el producto');
+      }
+    })();
+    return () => {
+      cancel = true;
+    };
+  }, [idConsulta]);
+
+  const hayStock = validarStock(productoData);
 
   const handleComprarAhora = () => {
 
@@ -28,12 +65,16 @@ const DetalleProducto = () => {
       return;
     }
 
-    if (!validarStock(productoData)) {
+    if (!hayStock) {
       toast.error('Este producto no está disponible');
       return;
     }
 
-    const productoConId = crearProductoData(productoData);
+    const productoConId = crearProductoData({
+      ...productoData,
+      _id: productoData._id || productoData.id,
+      id: productoData.id || productoData._id,
+    });
     agregarAlCarrito(productoConId, 1);
     navigate('/carrito');
   };
@@ -50,12 +91,16 @@ const DetalleProducto = () => {
       return;
     }
 
-    if (!validarStock(productoData)) {
+    if (!hayStock) {
       toast.error('Este producto no está disponible');
       return;
     }
 
-    const productoConId = crearProductoData(productoData);
+    const productoConId = crearProductoData({
+      ...productoData,
+      _id: productoData._id || productoData.id,
+      id: productoData.id || productoData._id,
+    });
     agregarAlCarrito(productoConId, 1);
 
     toast.success(`${productoData.marca} ${productoData.modelo} agregado al carrito`);
@@ -79,8 +124,8 @@ const DetalleProducto = () => {
                     ★ Destacado
                   </span>
                 )}
-                <span className={`detalle-badge ${productoData.stock ? 'detalle-badge-disponible' : 'detalle-badge-agotado'}`}>
-                  {productoData.stock ? '✓ Disponible' : '✕ Agotado'}
+                <span className={`detalle-badge ${hayStock ? 'detalle-badge-disponible' : 'detalle-badge-agotado'}`}>
+                  {hayStock ? '✓ Disponible' : '✕ No disponible'}
                 </span>
               </div>
             </div>
@@ -124,29 +169,29 @@ const DetalleProducto = () => {
 
             <div className="detalle-actions">
               <button
-                className={`detalle-btn detalle-btn-primary ${!productoData.stock || !estaAutenticado || esAdministrador ? 'detalle-btn-disabled' : ''}`}
-                disabled={!productoData.stock || !estaAutenticado || esAdministrador}
+                className={`detalle-btn detalle-btn-primary ${!hayStock || !estaAutenticado || esAdministrador ? 'detalle-btn-disabled' : ''}`}
+                disabled={!hayStock || !estaAutenticado || esAdministrador}
                 onClick={handleComprarAhora}
               >
                 💳 Comprar Ahora
               </button>
 
               <button
-                className={`detalle-btn detalle-btn-secondary ${!productoData.stock || !estaAutenticado || esAdministrador ? 'detalle-btn-disabled' : ''}`}
-                disabled={!productoData.stock || !estaAutenticado || esAdministrador}
+                className={`detalle-btn detalle-btn-secondary ${!hayStock || !estaAutenticado || esAdministrador ? 'detalle-btn-disabled' : ''}`}
+                disabled={!hayStock || !estaAutenticado || esAdministrador}
                 onClick={handleAgregarAlCarrito}
               >
                 🛒 Agregar al Carrito
               </button>
             </div>
 
-            {!productoData.stock && (
+            {!hayStock && (
               <div className="detalle-stock-message">
-                Producto agotado - Próximo stock disponible pronto
+                Producto no disponible o sin stock.
               </div>
             )}
 
-            {productoData.stock && (
+            {hayStock && (
               <div className="detalle-info-message">
                 Producto disponible para entrega inmediata
               </div>

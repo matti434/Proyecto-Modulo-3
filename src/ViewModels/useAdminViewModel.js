@@ -94,7 +94,7 @@ export const useAdminViewModel = () => {
 
   useEffect(() => {
     if (vistaActiva === "productos") {
-      cargarProductos();
+      cargarProductos({ incluirAgotados: true });
     }
   }, [vistaActiva, cargarProductos]);
 

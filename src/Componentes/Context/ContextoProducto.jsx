@@ -93,12 +93,17 @@ export const ProveedorProductos = ({ children }) => {
     stock: "",
   });
 
-  const cargarProductos = useCallback(async () => {
+  const cargarProductos = useCallback(async (opts = {}) => {
     try {
       setCargando(true);
       setError(null);
 
-      const data = await productosApi.obtenerTodos();
+      const params = { ...opts };
+      if (params.stock != null && params.stock !== "" && params.incluirAgotados !== true) {
+        delete params.stock;
+      }
+
+      const data = await productosApi.obtenerTodos(params);
       const lista = Array.isArray(data) ? data : data?.productos ?? data?.data ?? [];
       setProductos(lista);
     } catch (err) {
@@ -110,7 +115,7 @@ export const ProveedorProductos = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    cargarProductos();
+    cargarProductos({});
   }, [cargarProductos]);
 
   const actualizarFiltros = useCallback((nuevosFiltros) => {
