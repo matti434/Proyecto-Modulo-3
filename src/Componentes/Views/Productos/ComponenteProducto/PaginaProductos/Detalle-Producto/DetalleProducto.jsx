@@ -9,12 +9,6 @@ import toast from 'react-hot-toast';
 import '../../../../../../estilos/variables.css';
 import './DetalleProducto.css';
 
-const productoParaCarrito = crearProductoData({
-  ...productoData,
-  _id: productoData._id || productoData.id,
-  id: productoData.id || productoData._id,
-});
-
 const DetalleProducto = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -76,9 +70,6 @@ const DetalleProducto = () => {
       return;
     }
 
-
-    agregarAlCarrito(productoParaCarrito, 1);
-
     const productoConId = crearProductoData({
       ...productoData,
       _id: productoData._id || productoData.id,
@@ -105,9 +96,6 @@ const DetalleProducto = () => {
       toast.error('Este producto no está disponible');
       return;
     }
-
-
-    agregarAlCarrito(productoParaCarrito, 1);
 
     const productoConId = crearProductoData({
       ...productoData,
