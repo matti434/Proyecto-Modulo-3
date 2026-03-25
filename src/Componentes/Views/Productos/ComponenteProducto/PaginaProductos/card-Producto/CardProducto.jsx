@@ -84,25 +84,17 @@ const CardProducto = ({
   };
 
   const handleAgregarCarrito = (e) => {
-  e.stopPropagation();
+    e.stopPropagation();
 
-  if (!estaAutenticado) {
-    toast.error('Debes iniciar sesión para agregar productos al carrito');
-    return;
-  }
+    if (!estaAutenticado) {
+      toast.error('Debes iniciar sesión para agregar productos al carrito');
+      return;
+    }
 
-  if (esAdministrador) {
-    toast.error('Los administradores no pueden usar el carrito');
-    return;
-  }
-
-
-  if (!validarStock({ stock })) {
-    toast.error('Este producto no está disponible');
-    return;
-  }
-
-  const mongoId = _id || id;
+    if (esAdministrador) {
+      toast.error('Los administradores no pueden usar el carrito');
+      return;
+    }
 
     if (!validarStock(productoBase)) {
       toast.error('Este producto no está disponible');
@@ -121,22 +113,9 @@ const CardProducto = ({
       id: mongoId,
     });
 
-
-  if (!mongoId) {
-    toast.error('Producto sin identificador válido');
-    return;
-  }
-
-  const productoData = crearProductoData({
-    ...productoBase,
-    _id: mongoId,
-    id: mongoId,
-  });
-
-  agregarAlCarrito(productoData, 1);
-
-  toast.success(`${marca} ${modelo} agregado al carrito`);
-};
+    agregarAlCarrito(productoData, 1);
+    toast.success(`${marca} ${modelo} agregado al carrito`);
+  };
 
   const handleCardClick = (e) => {
     if (!e.target.closest('button')) {
