@@ -6,6 +6,12 @@ import toast from 'react-hot-toast';
 import '../../../../../../estilos/variables.css';
 import './DetalleProducto.css';
 
+const productoParaCarrito = crearProductoData({
+  ...productoData,
+  _id: productoData._id || productoData.id,
+  id: productoData.id || productoData._id,
+});
+
 const DetalleProducto = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -20,8 +26,7 @@ const DetalleProducto = () => {
       return;
     }
 
-    const productoConId = crearProductoData(productoData);
-    agregarAlCarrito(productoConId, 1);
+    agregarAlCarrito(productoParaCarrito, 1);
     navigate('/carrito');
   };
 
@@ -31,8 +36,7 @@ const DetalleProducto = () => {
       return;
     }
 
-    const productoConId = crearProductoData(productoData);
-    agregarAlCarrito(productoConId, 1);
+    agregarAlCarrito(productoParaCarrito, 1);
 
     toast.success(`${productoData.marca} ${productoData.modelo} agregado al carrito`);
   };
