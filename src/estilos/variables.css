@@ -26,6 +26,10 @@
   --color-borde-dorado: #c89b2b;
   --color-borde-metal: #d0d0d0;
   --color-borde-oscuro: #d0d0d0;
+
+  --color-amarillo-accento: #eee605;
+  --color-amarillo-rgba: rgba(238, 230, 5, 0.5);
+
   --opacidad-hover: 0.8;
   --opacidad-disabled: 0.5;
   --opacidad-overlay: 0.95;
@@ -41,6 +45,14 @@
   --color-fondo-primario: #1a1a1a;
   --color-texto-primario: #f8f8f8;
   --color-texto-oscuro: #f8f8f8;
+}
+
+[data-theme="light"] {
+  --color-crema: #f8f8f8;
+  --color-oscuro: #1a1a1a;
+  --color-fondo-primario: #f8f8f8;
+  --color-texto-primario: #2c2c2c;
+  --color-texto-oscuro: #2c2c2c;
 }
 
 [data-theme="light"] {

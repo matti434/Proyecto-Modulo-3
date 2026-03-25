@@ -2,6 +2,7 @@ export const IMAGEN_PLACEHOLDER = "/Productos/imgCard.jpg";
 
 export const crearProductoData = ({
   id,
+  _id,
   marca = "",
   modelo = "",
   año = "",
@@ -12,10 +13,12 @@ export const crearProductoData = ({
   descripcion = "",
   destacado = false,
   stock = true,
+  stockDisponible,
   categoria = "",
   nombre = "",
 } = {}) => ({
-  id: id || Date.now().toString(),
+  id: id || _id || Date.now().toString(),
+  _id: _id || id,
   marca,
   modelo,
   año,
@@ -26,6 +29,7 @@ export const crearProductoData = ({
   descripcion,
   destacado,
   stock,
+  stockDisponible,
   categoria,
   nombre: nombre || `${marca} ${modelo}`.trim(),
 });
@@ -36,20 +40,27 @@ export const generarIdCarrito = () => {
 
 export const validarStock = (producto) => {
   if (!producto) return false;
-  return producto.stock === true || producto.stock === "true";
+  const stockOk = producto.stock === true || producto.stock === "true";
+  if (!stockOk) return false;
+  const raw = producto.stockDisponible;
+  if (raw === undefined || raw === null || raw === "") return true;
+  const n = Number(raw);
+  return Number.isFinite(n) && n >= 1;
 };
 
 const MAX_DIGITOS_PRECIO = 14;
 
 export const formatearPrecio = (precioStr) => {
-  if (!precioStr) return "0";
-  const numero = parseInt(String(precioStr).replace(/\D/g, ""), 10);
-  if (Number.isNaN(numero)) return "0";
-  const str = numero.toLocaleString("es-ES");
-  if (str.length > MAX_DIGITOS_PRECIO) {
-    return str.slice(0, MAX_DIGITOS_PRECIO) + "...";
-  }
-  return str;
+  if (!precioStr) return "$ 0,00";
+  const numero = parseFloat(String(precioStr).replace(/[^\d,.]/g, "").replace(",", ".")) || 0;
+  if (Number.isNaN(numero)) return "$ 0,00";
+  return new Intl.NumberFormat("es-AR", {
+    style: "currency",
+    currency: "ARS",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+    currencyDisplay: "symbol",
+  }).format(numero);
 };
 
 export const formatearKilometros = (kmStr) => {

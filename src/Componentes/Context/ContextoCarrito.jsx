@@ -17,6 +17,8 @@ const normalizarItemBackend = (item) => {
   const prod = item.producto || {};
   const nombre =
     prod.nombre || [prod.marca, prod.modelo].filter(Boolean).join(" ").trim() || "Producto";
+
+  const pid = prod._id || prod.id;
   return {
     id: item._id || item.id,
     nombre,
@@ -28,13 +30,14 @@ const normalizarItemBackend = (item) => {
      _id: prod._id || prod.id,
      id: prod._id || prod.id,
     },
+
     marca: prod.marca || "",
     modelo: prod.modelo || "",
   };
 };
 
 export const CarritoProvider = ({ children }) => {
-  const { estaAutenticado } = useUser();
+  const { estaAutenticado, esAdministrador, cargando } = useUser();
   const [itemsCarrito, setItemsCarrito] = useState([]);
 
   const cargarCarritoDesdeApi = useCallback(async () => {
@@ -58,6 +61,7 @@ export const CarritoProvider = ({ children }) => {
 
   useEffect(() => {
     if (cargando) return;
+
 
    if (estaAutenticado) {
      cargarCarritoDesdeApi();
@@ -114,78 +118,81 @@ export const CarritoProvider = ({ children }) => {
         } catch {
           // Si falla el API no quitamos del estado; al recargar se verá la verdad del servidor
         }
+
         return;
       }
-      setItemsCarrito((prev) => prev.filter((item) => item.id !== itemId));
-    },
-    [estaAutenticado]
-  );
 
-  const actualizarCantidad = useCallback(
-    async (itemId, nuevaCantidad) => {
-      if (nuevaCantidad < 1) {
-        eliminarDelCarrito(itemId);
-        return;
-      }
-      if (estaAutenticado && itemId && !String(itemId).startsWith("local-")) {
-        try {
-          await carritoApi.actualizarCantidad(itemId, nuevaCantidad);
-          await cargarCarritoDesdeApi();
-          return;
-        } catch {}
-      }
-      setItemsCarrito((prev) =>
-        prev.map((item) => (item.id === itemId ? { ...item, cantidad: nuevaCantidad } : item))
-      );
-    },
-    [estaAutenticado, eliminarDelCarrito, cargarCarritoDesdeApi]
-  );
-
-  const vaciarCarrito = useCallback(async () => {
-    if (estaAutenticado) {
       try {
-        await carritoApi.vaciar();
-      } catch {}
-    }
-    setItemsCarrito([]);
-  }, [estaAutenticado]);
+        await carritoApi.agregarItem(productoId, cant);
+        await cargarCarritoDesdeApi();
+      } catch (e) {
+        toast.error(e?.message || "No se pudo agregar al carrito");
+        try {
+          await cargarCarritoDesdeApi();
+        } catch {
+          /* ignorar */
+        }
+      }
+    },
+    [estaAutenticado, esAdministrador, cargarCarritoDesdeApi]
+  );
 
-  const cargarCarritoInvitado = useCallback(() => {
-    setItemsCarrito([]);
-    try {
-      const guardado = localStorage.getItem("carritoMotos");
-      if (guardado) setItemsCarrito(JSON.parse(guardado));
-    } catch {
-      localStorage.removeItem("carritoMotos");
-    }
+  const quitarDelCarrito = useCallback((id) => {
+    setItemsCarrito((prev) => prev.filter((item) => item.id !== id));
   }, []);
+ 
+  const actualizarCantidad = useCallback(async (itemId, cantidad) => {
+    const cant = Math.max(1, parseInt(cantidad, 10) || 1);
+    if (estaAutenticado && !esAdministrador) {
+      try {
+        await carritoApi.actualizarCantidad(itemId, cant);
+        await cargarCarritoDesdeApi();
+      } catch {
+        setItemsCarrito((prev) =>
+          prev.map((item) =>
+            item.id === itemId ? { ...item, cantidad: cant } : item
+          )
+        );
+      }
+    } else {
+      setItemsCarrito((prev) =>
+        prev.map((item) =>
+          item.id === itemId ? { ...item, cantidad: cant } : item
+        )
+      );
+    }
+  }, [estaAutenticado, esAdministrador, cargarCarritoDesdeApi]);
 
   const calcularSubtotal = useCallback(() => {
-    return itemsCarrito.reduce((total, item) => total + (item.precio || 0) * (item.cantidad || 0), 0);
+    return itemsCarrito.reduce(
+      (total, item) => total + (parseFloat(item.precio) || 0) * (item.cantidad || 1),
+      0
+    );
   }, [itemsCarrito]);
 
   const calcularTotalProductos = useCallback(() => {
-    return itemsCarrito.reduce((total, item) => total + (item.cantidad || 0), 0);
+    return itemsCarrito.reduce((total, item) => total + (item.cantidad || 1), 0);
   }, [itemsCarrito]);
 
-  const estaEnCarrito = useCallback(
-    (productoId) => {
-      return itemsCarrito.some(
-        (item) => (item.productoOriginal?.id || item.productoOriginal?._id) === productoId
-      );
-    },
-    [itemsCarrito]
+  const vaciarCarrito = useCallback(async () => {
+    if (estaAutenticado && !esAdministrador) {
+      try {
+        await carritoApi.vaciar();
+      } catch {
+        /* seguimos vaciando UI */
+      }
+    }
+    setItemsCarrito([]);
+    if (!estaAutenticado) {
+      localStorage.removeItem("carritoMotos");
+    }
+  }, [estaAutenticado, esAdministrador]);
+
+  const valorTotal = itemsCarrito.reduce(
+    (total, item) => total + item.precio * item.cantidad,
+    0
   );
 
-  const obtenerCantidadProducto = useCallback(
-    (productoId) => {
-      const item = itemsCarrito.find(
-        (i) => (i.productoOriginal?.id || i.productoOriginal?._id) === productoId
-      );
-      return item ? item.cantidad : 0;
-    },
-    [itemsCarrito]
-  );
 
   const valorContexto = {
     itemsCarrito,
@@ -200,8 +207,22 @@ export const CarritoProvider = ({ children }) => {
     cargarCarritoInvitado: cargarDesdeLocalStorage,
   };
 
+
   return (
-    <CarritoContext.Provider value={valorContexto}>
+    <CarritoContext.Provider
+      value={{
+        itemsCarrito,
+        agregarAlCarrito,
+        quitarDelCarrito,
+        eliminarDelCarrito,
+        actualizarCantidad,
+        vaciarCarrito,
+        valorTotal,
+        calcularSubtotal,
+        calcularTotalProductos,
+        cargarCarritoInvitado: cargarDesdeLocalStorage,
+      }}
+    >
       {children}
     </CarritoContext.Provider>
   );

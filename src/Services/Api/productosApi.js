@@ -7,7 +7,12 @@ const buildQuery = (params = {}) => {
   if (params.categoria != null) searchParams.set('categoria', params.categoria);
   if (params.marca != null) searchParams.set('marca', params.marca);
   if (params.destacado != null) searchParams.set('destacado', String(params.destacado));
-  if (params.stock != null) searchParams.set('stock', String(params.stock));
+  if (params.incluirAgotados === true) {
+    searchParams.set('incluirAgotados', 'true');
+    if (params.stock != null && params.stock !== '') {
+      searchParams.set('stock', String(params.stock));
+    }
+  }
   if (params.buscar != null) searchParams.set('buscar', params.buscar);
   if (params.reciente != null) searchParams.set('reciente', String(params.reciente));
   if (params.limite != null) searchParams.set('limite', String(params.limite));

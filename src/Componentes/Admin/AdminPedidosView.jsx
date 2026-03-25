@@ -139,26 +139,31 @@ export const AdminPedidosView = ({
         <table className="tabla-administracion">
           <thead>
             <tr>
-              <th>Id</th>
+              <th>ID Transaccion</th>
               <th>Título</th>
               <th>Usuario</th>
               <th>Total</th>
-              <th>Estado</th>
-              <th>Fecha</th>
+              <th>Impuestos</th>
+              <th>Estado Envío</th>
+              <th>Fecha Compra</th>
               <th>Acciones</th>
             </tr>
           </thead>
           <tbody>
             {pedidos.map((p) => (
               <tr key={p._id || p.id}>
-                <td data-label="Id">{(p._id || p.id || "").toString().slice(-8)}</td>
+                <td data-label="ID Transaccion">{(p.transaccionId || p._id || p.id || "-").toString().slice(-12)}</td>
                 <td data-label="Título">{tituloPedido(p)}</td>
                 <td data-label="Usuario">{usuarioLabel(p)}</td>
                 <td data-label="Total">
-                  {typeof p.total === "number" ? `$${p.total.toLocaleString("es-AR")}` : p.total ?? "-"}
+                  {typeof p.total === "number" ? new Intl.NumberFormat("es-AR", { style: "currency", currency: "ARS" }).format(p.total) : p.total ?? "-"}
                 </td>
-                <td data-label="Estado">{p.estado ?? "pendiente"}</td>
-                <td data-label="Fecha">{formatFecha(p.fecha || p.createdAt)}</td>
+                <td data-label="Impuestos">
+                  {p.impuestos != null
+                  ? new Intl.NumberFormat("es-AR", { style: "currency", currency: "ARS" }).format(p.impuestos): p.desgloseImpuestos ?? "-"}
+                </td>
+                <td data-label="Estado Envio">{p.estadoEnvio ?? p.estado ?? "pendiente"}</td>
+                <td data-label="Fecha Compra">{formatFecha(p.fechaCompra || p.fecha || p.createdAt)}</td>
                 <td data-label="Acciones">
                   <select
                     className="select-estado-pedido"
