@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom'; 
 import { useCarrito } from '../../../../../Context/ContextoCarrito';
 import { useFavoritos } from '../../../../../Context/ContextoFavoritos';
+import { useUser } from '../../../../../Context/ContextoUsuario';
 import { 
   crearProductoData,
   validarStock,
@@ -31,6 +32,7 @@ const CardProducto = ({
   const navigate = useNavigate(); 
   const { agregarAlCarrito } = useCarrito();
   const { toggleFavorito, esFavorito } = useFavoritos();
+  const { estaAutenticado, esAdministrador } = useUser();
 
   const isFavorito = esFavorito(id || _id);
 
@@ -75,38 +77,38 @@ const CardProducto = ({
   const handleAgregarCarrito = (e) => {
   e.stopPropagation();
 
-   if (!estaAutenticado) {
+  if (!estaAutenticado) {
     toast.error('Debes iniciar sesión para agregar productos al carrito');
     return;
-   }
+  }
 
-   if (esAdministrador) {
+  if (esAdministrador) {
     toast.error('Los administradores no pueden usar el carrito');
     return;
-   }
+  }
 
-   if (!validarStock({ stock })) {
+  if (!validarStock({ stock })) {
     toast.error('Este producto no está disponible');
     return;
-   }
+  }
 
-   const mongoId = _id || id;
+  const mongoId = _id || id;
 
-   if (!mongoId) {
+  if (!mongoId) {
     toast.error('Producto sin identificador válido');
     return;
-   }
+  }
 
-   const productoData = crearProductoData({
+  const productoData = crearProductoData({
     ...productoBase,
     _id: mongoId,
     id: mongoId,
-   });
+  });
 
-   agregarAlCarrito(productoData, 1);
+  agregarAlCarrito(productoData, 1);
 
-   toast.success(`${marca} ${modelo} agregado al carrito`);
-  };
+  toast.success(`${marca} ${modelo} agregado al carrito`);
+};
 
   const handleCardClick = (e) => {
     if (!e.target.closest('button')) {
@@ -201,9 +203,9 @@ const CardProducto = ({
           </button>
 
           <button 
-            className={`boton-carrito ${!stock ? 'boton-deshabilitado' : ''}`} 
+            className={`boton-carrito ${!stock || !estaAutenticado || esAdministrador ? 'boton-deshabilitado' : ''}`} 
             onClick={handleAgregarCarrito}
-            disabled={!stock}
+            disabled={!stock || !estaAutenticado || esAdministrador}
           >
             <span className="texto-boton">
               {stock ? 'Agregar' : 'No disponible'}

@@ -10,6 +10,7 @@ import {
 
 import "../../../../estilos/variables.css";
 import "./Carrito.css";
+import { formatearPrecio } from '../../../Utils/productoUtils';
 
 const CarritoView = ({
   items,
@@ -29,6 +30,7 @@ const CarritoView = ({
   handleVaciarCarrito,
   handleSeguirComprando,
   handleProcederPago,
+  procesandoPago = false,
 }) => {
   if (estaVacio) {
     return (
@@ -86,9 +88,9 @@ const CarritoView = ({
 
                     <Col xs={9} md={5}>
                       <h6 className="mb-1 nombre-producto">{item.nombre}</h6>
-                      <span className="text-dorado fw-bold">
-                        ${item.precio.toLocaleString()}
-                      </span>
+                       <span className="text-dorado fw-bold">
+                         {formatearPrecio(item.precio)}
+                       </span>
                     </Col>
 
                     <Col xs={6} md={3}>
@@ -127,7 +129,7 @@ const CarritoView = ({
 
                     <Col xs={6} md={2} className="text-end">
                       <div className="fw-bold">
-                        ${item.subtotal.toLocaleString()}
+                       {formatearPrecio((item.precio || 0) * (item.cantidad || 1))}
                       </div>
 
                       <Button
@@ -166,39 +168,37 @@ const CarritoView = ({
             <Card.Body>
               <ListGroup variant="flush" className="mb-3">
                 <ListGroup.Item className="d-flex justify-content-between py-2">
-                  <span>Subtotal ({totalItems} items)</span>
-                  <span>${subtotal.toLocaleString()}</span>
+                 <span>Subtotal ({totalItems} items)</span>
+                 <span>{formatearPrecio(subtotal)}</span>
                 </ListGroup.Item>
 
                 <ListGroup.Item className="d-flex justify-content-between py-2">
-                  <span>Envío</span>
-                  <span>${envio.toLocaleString()}</span>
+                 <span>Envío</span>
+                 <span>{formatearPrecio(envio)}</span>
                 </ListGroup.Item>
 
                 <ListGroup.Item className="py-3 total-item">
                   <div className="d-flex justify-content-between">
                     <strong className="fs-5">Total</strong>
 
-                    {!descuentoAplicado ? (
-                      <strong className="fs-5 text-dorado">
-                        ${total.toLocaleString()}
-                      </strong>
-                    ) : (
-                      <div className="text-end">
-                        <div
-                          style={{
-                            textDecoration: "line-through",
-                            color: "#888",
-                          }}
-                        >
-                          ${(subtotal + envio).toLocaleString()}
-                        </div>
-
-                        <div className="fs-5 text-dorado fw-bold">
-                          $
-                          {totalConDescuento?.toLocaleString() ||
-                            total.toLocaleString()}
-                        </div>
+                     {!descuentoAplicado ? (
+                       <strong className="fs-5 text-dorado">
+                         {formatearPrecio(total)}
+                       </strong>
+                       ) : (
+                        <div className="text-end">
+                         <div
+                           style={{
+                             textDecoration: "line-through",
+                             color: "#888",
+                           }}
+                          >
+                          {formatearPrecio(subtotal + envio)}
+                          </div>
+                          
+                          <div className="fs-5 text-dorado fw-bold">
+                            {formatearPrecio(totalConDescuento ?? total)}
+                          </div>
 
                         <small className="text-success">
                           Descuento aplicado: {descuentoAplicado}%
@@ -243,8 +243,18 @@ const CarritoView = ({
                 size="lg"
                 className="w-100 mb-3"
                 onClick={handleProcederPago}
+                disabled={procesandoPago}
               >
-                <i className="bi bi-lock-fill me-2"></i>Proceder al Pago
+                {procesandoPago ? (
+                  <>
+                    <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                    Procesando...
+                  </>
+                ) : (
+                  <>
+                    <i className="bi bi-lock-fill me-2"></i>Proceder al Pago
+                  </>
+                )}
               </Button>
 
               <div className="text-center mt-3">

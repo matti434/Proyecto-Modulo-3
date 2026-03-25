@@ -17,6 +17,7 @@ const ESTADO_INICIAL_FORMULARIO = {
   imagen: "",
   destacado: false,
   stock: true,
+  stockDisponible: 0,
 };
 
 function erroresZodAObjeto(errorZod) {
@@ -59,6 +60,7 @@ export function useAdminProductoForm(productoEditando, modoFormularioProducto, o
         imagen: s(productoEditando.imagen, limites.imagen),
         destacado: productoEditando.destacado || false,
         stock: productoEditando.stock !== undefined ? productoEditando.stock : true,
+        stockDisponible: productoEditando.stockDisponible ?? productoEditando.stockCantidad ?? 0,
       });
     } else {
       setDatosFormularioProducto(ESTADO_INICIAL_FORMULARIO);

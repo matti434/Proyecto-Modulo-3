@@ -2,6 +2,7 @@ export const IMAGEN_PLACEHOLDER = "/Productos/imgCard.jpg";
 
 export const crearProductoData = ({
   id,
+  _id,
   marca = "",
   modelo = "",
   año = "",
@@ -15,7 +16,7 @@ export const crearProductoData = ({
   categoria = "",
   nombre = "",
 } = {}) => ({
-  id: id || Date.now().toString(),
+  id: id || _id || Date.now().toString(),
   marca,
   modelo,
   año,
@@ -42,14 +43,16 @@ export const validarStock = (producto) => {
 const MAX_DIGITOS_PRECIO = 14;
 
 export const formatearPrecio = (precioStr) => {
-  if (!precioStr) return "0";
-  const numero = parseInt(String(precioStr).replace(/\D/g, ""), 10);
-  if (Number.isNaN(numero)) return "0";
-  const str = numero.toLocaleString("es-ES");
-  if (str.length > MAX_DIGITOS_PRECIO) {
-    return str.slice(0, MAX_DIGITOS_PRECIO) + "...";
-  }
-  return str;
+  if (!precioStr) return "$ 0,00";
+  const numero = parseFloat(String(precioStr).replace(/[^\d,.]/g, "").replace(",", ".")) || 0;
+  if (Number.isNaN(numero)) return "$ 0,00";
+  return new Intl.NumberFormat("es-AR", {
+    style: "currency",
+    currency: "ARS",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+    currencyDisplay: "symbol",
+  }).format(numero);
 };
 
 export const formatearKilometros = (kmStr) => {

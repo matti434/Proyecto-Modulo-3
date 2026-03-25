@@ -5,3 +5,24 @@ body {
   background-color: var(--color-fondo-primario);
   color: var(--color-texto-primario);
 }
+
+
+.bg-oscuro { 
+  background-color: var(--color-oscuro) !important; 
+}
+
+.bg-crema { 
+  background-color: var(--color-crema) !important; 
+}
+
+.text-dorado { 
+  color: var(--color-dorado) !important; 
+}
+
+.text-oscuro { 
+  color: var(--color-oscuro) !important; 
+}
+
+.border-dorado { 
+  border-color: var(--color-borde-dorado) !important; 
+}

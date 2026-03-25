@@ -4,9 +4,12 @@ import { useCarrito } from "../Componentes/Context/ContextoCarrito";
 import { CarritoItem } from "../Models";
 import toast from "react-hot-toast";
 import { confirmarAccion } from "../Componentes/Utils/confirmacion";
+import { useUser } from "../Componentes/Context/ContextoUsuario";
+import { pagosApi } from "../Services/Api";
 
 export const useCarritoViewModel = () => {
   const navigate = useNavigate();
+  const { estaAutenticado } = useUser();
   const {
     itemsCarrito,
     eliminarDelCarrito,
@@ -18,6 +21,7 @@ export const useCarritoViewModel = () => {
 
   const [codigoDescuento, setCodigoDescuento] = useState("");
   const [descuentoAplicado, setDescuentoAplicado] = useState(null);
+  const [procesandoPago, setProcesandoPago] = useState(false);
 
   const items = useMemo(() => {
     return itemsCarrito.map((item) => CarritoItem.fromJSON(item));
@@ -104,13 +108,46 @@ export const useCarritoViewModel = () => {
     navigate("/");
   }, [navigate]);
 
-  const handleProcederPago = useCallback(() => {
+  const handleProcederPago = useCallback(async () => {
     if (itemsCarrito.length === 0) {
       toast.warning("El carrito está vacío");
       return;
     }
-    toast("Redirigiendo al proceso de pago...");
-  }, [itemsCarrito.length]);
+
+    if (!estaAutenticado) {
+      toast.error("Debes iniciar sesión para proceder al pago");
+      navigate("/login?redirect=/carrito");
+      return;
+    }
+
+    setProcesandoPago(true);
+
+    const payload = {
+      items: itemsCarrito.map((item) => ({
+        productoId: item.productoOriginal?._id || item.productoOriginal?.id || item.productoId || item.id,
+        nombre: item.nombre || `${item.marca || ""} ${item.modelo || ""}`.trim() || "Producto",
+        cantidad: item.cantidad,
+        precioUnitario: item.precio,
+      })),
+      subtotal: calcularSubtotal(),
+      envio: itemsCarrito.length > 0 ? 1500 : 0,
+    };
+
+    try {
+      const resultado = await pagosApi.crearPreferencia(payload);
+      const initPoint = resultado?.initPoint || resultado?.init_point;
+
+      if (resultado?.exito && initPoint) {
+        window.location.href = initPoint;
+      } else {
+        toast.error(resultado?.mensaje || "Error al crear el pago");
+      }
+    } catch (err) {
+      toast.error(err?.message || "Error al conectar con el servidor de pagos");
+    } finally {
+      setProcesandoPago(false);
+    }
+  }, [itemsCarrito, calcularSubtotal, estaAutenticado, navigate]);
 
   return {
     items,
@@ -131,5 +168,6 @@ export const useCarritoViewModel = () => {
     handleVaciarCarrito,
     handleSeguirComprando,
     handleProcederPago,
+    procesandoPago,
   };
 };
