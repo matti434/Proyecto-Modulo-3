@@ -1,6 +1,6 @@
 .detalle-producto-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  background: linear-gradient(135deg, var(--color-crema) 0%, var(--color-fondo-secundario) 100%);
   padding: 40px 20px;
   margin-top: 20px;
 }
@@ -184,9 +184,9 @@
   flex-direction: column;
   gap: 8px;
   padding: 24px;
-  background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+  background: linear-gradient(135deg, var(--color-oscuro) 0%, var(--color-oscuro-claro) 100%);
   border-radius: 12px;
-  color: white;
+  color: var(--color-crema);
 }
 
 .detalle-price-label {
@@ -252,15 +252,15 @@
 }
 
 .detalle-btn-primary {
-  background: linear-gradient(135deg, #0369a1 0%, #0284c7 100%);
-  color: white;
+  background: linear-gradient(135deg, var(--color-dorado) 0%, var(--color-dorado-claro) 100%);
+  color: var(--color-oscuro);
   border: 2px solid transparent;
 }
 
 .detalle-btn-primary:hover:not(.detalle-btn-disabled) {
-  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+  background: linear-gradient(135deg, var(--color-dorado-claro) 0%, var(--color-dorado) 100%);
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(3, 105, 161, 0.3);
+  box-shadow: var(--sombra-dorada);
 }
 
 .detalle-btn-primary:active:not(.detalle-btn-disabled) {
@@ -269,15 +269,15 @@
 
 .detalle-btn-secondary {
   background: white;
-  color: #1f2937;
-  border: 2px solid #0369a1;
+  color: var(--color-oscuro);
+  border: 2px solid var(--color-dorado);
 }
 
 .detalle-btn-secondary:hover:not(.detalle-btn-disabled) {
-  background: #eff6ff;
-  border-color: #0284c7;
+  background: var(--color-fondo-card);
+  border-color: var(--color-dorado-claro);
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(3, 105, 161, 0.15);
+  box-shadow: var(--sombra-dorada);
 }
 
 .detalle-btn-secondary:active:not(.detalle-btn-disabled) {
