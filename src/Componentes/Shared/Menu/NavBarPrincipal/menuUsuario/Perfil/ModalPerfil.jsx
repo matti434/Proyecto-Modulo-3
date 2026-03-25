@@ -163,46 +163,28 @@ const ModalPerfil = ({ mostrar, onCerrar }) => {
         </Modal.Body>
 
         <Modal.Footer className="modal-footer-perfil">
-          {editando ? (
-            <div className="botones-edicion">
-              <Button 
-                variant="success" 
-                onClick={manejarGuardar}
-                disabled={cargando}
-                className="boton-guardar"
-              >
-                {cargando ? <Spinner animation="border" size="sm" /> : "Guardar"}
-              </Button>
-              <Button 
-                variant="secondary" 
-                onClick={manejarCancelar}
-                disabled={cargando}
-              >
-                Cancelar
-              </Button>
-            </div>
-          ) : (
-            <div className="botones-accion">
-              <Button 
-                variant="primary" 
-                onClick={manejarEditar}
-                className="boton-editar"
-              >
-                Editar Usuario
-              </Button>
-              
-              {!esAdministrador && (
-                <Button 
-                  variant="outline-danger" 
+          <div className="info-item">
+           <div className="info-icon"><FaUser /></div>
+           <div className="info-content">
+             <label>Nombre de Usuario</label>
+             <div className="info-value">
+               {usuarioActual.nombreDeUsuario}
+             </div>
+           </div>
+          </div>
+         (
+           <div className="botones-accion">
+             {!esAdministrador && (
+                <Button
+                  variant="outline-danger"
                   onClick={() => setMostrarConfirmacion(true)}
-                  className="boton-eliminar"
-                >
-                  <FaExclamationTriangle className="me-1" />
-                  Eliminar Cuenta
-                </Button>
-              )}
+                 >
+                 <FaExclamationTriangle className="me-1" />
+                   Eliminar Cuenta
+               </Button>
+             )}
             </div>
-          )}
+          )
         </Modal.Footer>
       </Modal>
 
