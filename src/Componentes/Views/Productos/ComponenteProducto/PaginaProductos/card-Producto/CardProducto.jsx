@@ -2,7 +2,9 @@ import { useNavigate } from 'react-router-dom';
 import { useCarrito } from '../../../../../Context/ContextoCarrito';
 import { useFavoritos } from '../../../../../Context/ContextoFavoritos';
 import { useUser } from '../../../../../Context/ContextoUsuario';
+
 import {
+
   crearProductoData,
   validarStock,
   formatearPrecio,
@@ -26,8 +28,9 @@ const CardProducto = ({
   ubicacion = "",
   descripcion = "",
   destacado = false,
-  stock = true,
-  stockDisponible,
+
+  stock = true
+
 }) => {
 
   const navigate = useNavigate();
@@ -35,29 +38,33 @@ const CardProducto = ({
   const { toggleFavorito, esFavorito } = useFavoritos();
   const { estaAutenticado, esAdministrador } = useUser();
 
-  const idFavorito = id || _id;
-  const isFavorito = esFavorito(idFavorito);
 
+  const isFavorito = esFavorito(id || _id);
+
+  // Crear objeto producto normalizado
   const productoBase = {
-    id: id || _id,
-    _id: _id || id,
-    marca,
-    modelo,
-    año,
-    precio,
-    imagen,
-    kilometros,
-    ubicacion,
-    descripcion,
-    destacado,
-    stock,
-    stockDisponible,
-  };
+  id: id || _id,
+  _id: _id || id,
+  marca,
+  modelo,
+  año,
+  precio,
+  imagen,
+  kilometros,
+  ubicacion,
+  descripcion,
+  destacado,
+  stock
+};
+
+
 
   const handleFavoritoClick = (e) => {
     e.stopPropagation();
     const eraFavorito = isFavorito;
-    toggleFavorito(idFavorito);
+
+    toggleFavorito(id || _id);
+
     
     if (eraFavorito) {
       toast.error(`${marca} ${modelo} eliminado de favoritos`, {
@@ -77,17 +84,25 @@ const CardProducto = ({
   };
 
   const handleAgregarCarrito = (e) => {
-    e.stopPropagation();
+  e.stopPropagation();
 
-    if (!estaAutenticado) {
-      toast.error('Debes iniciar sesión para agregar productos al carrito');
-      return;
-    }
+  if (!estaAutenticado) {
+    toast.error('Debes iniciar sesión para agregar productos al carrito');
+    return;
+  }
 
-    if (esAdministrador) {
-      toast.error('Los administradores no pueden usar el carrito');
-      return;
-    }
+  if (esAdministrador) {
+    toast.error('Los administradores no pueden usar el carrito');
+    return;
+  }
+
+
+  if (!validarStock({ stock })) {
+    toast.error('Este producto no está disponible');
+    return;
+  }
+
+  const mongoId = _id || id;
 
     if (!validarStock(productoBase)) {
       toast.error('Este producto no está disponible');
@@ -106,9 +121,22 @@ const CardProducto = ({
       id: mongoId,
     });
 
-    agregarAlCarrito(productoData, 1);
-    toast.success(`${marca} ${modelo} agregado al carrito`);
-  };
+
+  if (!mongoId) {
+    toast.error('Producto sin identificador válido');
+    return;
+  }
+
+  const productoData = crearProductoData({
+    ...productoBase,
+    _id: mongoId,
+    id: mongoId,
+  });
+
+  agregarAlCarrito(productoData, 1);
+
+  toast.success(`${marca} ${modelo} agregado al carrito`);
+};
 
   const handleCardClick = (e) => {
     if (!e.target.closest('button')) {
