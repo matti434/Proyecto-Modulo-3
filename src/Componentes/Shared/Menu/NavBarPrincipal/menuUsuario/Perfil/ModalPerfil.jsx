@@ -17,55 +17,13 @@ import "../../../../../../estilos/variables.css";
 import "./ModalPerfil.css";
 
 const ModalPerfil = ({ mostrar, onCerrar }) => {
-  const { usuarioActual, logout, editarUsuario } = useUser();
+  const { usuarioActual, logout } = useUser();
   const { cargarCarritoInvitado } = useCarrito();
-  const [editando, setEditando] = useState(false);
   const [cargando, setCargando] = useState(false);
   const [mostrarConfirmacion, setMostrarConfirmacion] = useState(false);
-  const [formData, setFormData] = useState({
-    nombreDeUsuario: usuarioActual?.nombreDeUsuario || ""
-  });
   const [contrasenaConfirmacion, setContrasenaConfirmacion] = useState("");
 
   const esAdministrador = usuarioActual?.role === "admin";
-
-  const manejarEditar = () => {
-    setEditando(true);
-    setFormData({
-      nombreDeUsuario: usuarioActual.nombreDeUsuario
-    });
-  };
-
-  const manejarCancelar = () => {
-    setEditando(false);
-    setFormData({
-      nombreDeUsuario: usuarioActual.nombreDeUsuario
-    });
-  };
-
-  const manejarGuardar = async () => {
-    if (!formData.nombreDeUsuario.trim()) {
-      toast.error("El nombre de usuario no puede estar vacío");
-      return;
-    }
-
-    if (formData.nombreDeUsuario === usuarioActual.nombreDeUsuario) {
-      setEditando(false);
-      return;
-    }
-
-    setCargando(true);
-    try {
-      await editarUsuario(usuarioActual.id, {
-        nombreDeUsuario: formData.nombreDeUsuario
-      });
-      setEditando(false);
-    } catch {
-      toast.error("Error al actualizar el nombre de usuario");
-    } finally {
-      setCargando(false);
-    }
-  };
 
   const manejarEliminarCuenta = async () => {
     if (!contrasenaConfirmacion) {
