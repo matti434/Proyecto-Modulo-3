@@ -25,7 +25,12 @@ const normalizarItemBackend = (item) => {
     precio: item.precioUnitario ?? prod.precio ?? 0,
     cantidad: item.cantidad ?? 1,
     imagen: prod.imagen || "",
-    productoOriginal: { ...prod, _id: pid, id: pid },
+    productoOriginal: {
+     ...prod,
+     _id: prod._id || prod.id,
+     id: prod._id || prod.id,
+    },
+
     marca: prod.marca || "",
     modelo: prod.modelo || "",
   };
@@ -57,10 +62,11 @@ export const CarritoProvider = ({ children }) => {
   useEffect(() => {
     if (cargando) return;
 
-    if (estaAutenticado) {
-      cargarCarritoDesdeApi();
+
+   if (estaAutenticado) {
+     cargarCarritoDesdeApi();
     } else {
-      cargarDesdeLocalStorage();
+     cargarDesdeLocalStorage();
     }
   }, [cargando, estaAutenticado, cargarCarritoDesdeApi, cargarDesdeLocalStorage]);
 
@@ -71,18 +77,48 @@ export const CarritoProvider = ({ children }) => {
   }, [itemsCarrito, estaAutenticado]);
 
   const agregarAlCarrito = useCallback(
-    async (producto, cantidad = 1) => {
-      if (!estaAutenticado || esAdministrador) return;
+   async (producto, cantidad = 1) => {
+     if (!estaAutenticado || esAdministrador) return;
 
-      const rawPid = producto?._id ?? producto?.id;
-      const productoId =
-        rawPid != null && rawPid !== "" ? String(rawPid).trim() : "";
-      const cant = Math.max(1, parseInt(cantidad, 10) || 1);
+     const productoId = producto?._id || producto?.id;
+     const cant = Math.max(1, parseInt(cantidad, 10) || 1);
 
-      if (!productoId) {
-        toast.error(
-          "No se pudo identificar el producto. Vuelve a la lista e inténtalo de nuevo."
+     if (
+       productoId == null ||
+       productoId === "" ||
+       typeof productoId !== "string"
+      ) {
+       toast.error(
+         "No se pudo identificar el producto. Vuelve a la lista e inténtalo de nuevo."
         );
+       return;
+      }
+
+     try {
+       await carritoApi.agregarItem(productoId, cant);
+       await cargarCarritoDesdeApi();
+      } catch (e) {
+         toast.error(e?.message || "No se pudo agregar al carrito");
+         try {
+           await cargarCarritoDesdeApi();
+          } catch {
+           /* ignorar */
+          }
+        }
+    },
+   [estaAutenticado, esAdministrador, cargarCarritoDesdeApi]
+  );
+
+  const eliminarDelCarrito = useCallback(
+    async (itemId) => {
+      if (estaAutenticado && itemId && !String(itemId).startsWith("local-")) {
+        try {
+          await carritoApi.eliminarItem(itemId);
+          setItemsCarrito((prev) => prev.filter((item) => item.id !== itemId));
+        } catch {
+          // Si falla el API no quitamos del estado; al recargar se verá la verdad del servidor
+        }
+
         return;
       }
 
@@ -104,20 +140,7 @@ export const CarritoProvider = ({ children }) => {
   const quitarDelCarrito = useCallback((id) => {
     setItemsCarrito((prev) => prev.filter((item) => item.id !== id));
   }, []);
-
-  const eliminarDelCarrito = useCallback(async (itemId) => {
-    if (estaAutenticado && !esAdministrador) {
-      try {
-        await carritoApi.eliminarItem(itemId);
-        await cargarCarritoDesdeApi();
-      } catch {
-        setItemsCarrito((prev) => prev.filter((item) => item.id !== itemId));
-      }
-    } else {
-      setItemsCarrito((prev) => prev.filter((item) => item.id !== itemId));
-    }
-  }, [estaAutenticado, esAdministrador, cargarCarritoDesdeApi]);
-
+ 
   const actualizarCantidad = useCallback(async (itemId, cantidad) => {
     const cant = Math.max(1, parseInt(cantidad, 10) || 1);
     if (estaAutenticado && !esAdministrador) {
@@ -169,6 +192,21 @@ export const CarritoProvider = ({ children }) => {
     (total, item) => total + item.precio * item.cantidad,
     0
   );
+
+
+  const valorContexto = {
+    itemsCarrito,
+    agregarAlCarrito,
+    eliminarDelCarrito,
+    actualizarCantidad,
+    vaciarCarrito,
+    calcularSubtotal,
+    calcularTotalProductos,
+    estaEnCarrito,
+    obtenerCantidadProducto,
+    cargarCarritoInvitado: cargarDesdeLocalStorage,
+  };
+
 
   return (
     <CarritoContext.Provider
