@@ -1,6 +1,30 @@
 input::placeholder,
 textarea::placeholder {
-  color: var(--color-crema-claro) !important;
+  color: rgb(249, 244, 244) !important;
+}
+
+.contacto-contenedor {
+  background-color: #e8eaed !important;
+}
+
+.sub-container {
+  background: linear-gradient(45deg, var(--color-texto-oscuro), var(--color-dorado)) !important;
+}
+
+.boton-animado {
+  background: linear-gradient(45deg, var(--color-texto-oscuro), var(--color-dorado)) !important;
+}
+
+@keyframes pulso {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.boton-animado {
+  animation: pulso 2s infinite;
+  background-color: #222;
+  color: gold;
 }
 
 input,
@@ -8,7 +32,7 @@ textarea {
   background: var(--color-crema-claro) !important;
   border: none !important;
   border-bottom: 2px solid var(--color-borde-metal) !important;
-  color: var(--color-texto-primario) !important;
+  color: black !important;
 }
 
 input:focus,
