@@ -67,12 +67,12 @@ const Home = () => {
         <Galeria imagenes={contenido.galeria} />
         <Categorias />
         <Portada imagenUrl={contenido.portada.imagenUrl} />
-        <section className="home-publicidad-centro" aria-hidden="true">
-          <div className="home-publicidad-placeholder">
-            <img src="/publicidad/images.jpg" alt="Publicidad" />
+        <section className="home-banners-centro" aria-hidden="true">
+          <div className="home-banners-placeholder">
+            <img src="/banners/images.jpg" alt="Publicidad" />
           </div>
-          <div className="home-publicidad-placeholder">
-            <img src="/publicidad/images%20(2).jpg" alt="Publicidad" />
+          <div className="home-banners-placeholder">
+            <img src="/banners/images%20(2).jpg" alt="Publicidad" />
           </div>
         </section>
       </main>
