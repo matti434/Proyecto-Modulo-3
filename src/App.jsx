@@ -8,6 +8,7 @@ import { UserProvider } from "./Componentes/Context/ContextoUsuario";
 
 import AdminPanelContainer from "./Componentes/Admin/AdminPanelContainer";
 import Footer from "./Componentes/Shared/Footer/Footer";
+import ReiniciarScroll from "./Componentes/Utils/ReiniciarScroll"
 import Menu from "./Componentes/Shared/Menu/Menu";
 import SplashScreen from "./Componentes/Shared/SplashScreen/SplashScreen";
 import RutaProtegida from "./Componentes/Utils/RutaProtegida";
@@ -69,6 +70,7 @@ function App() {
         <UserProvider>
           <CarritoProvider>
             <BrowserRouter>
+              <ReiniciarScroll /> 
               <Menu />
               <Routes>
                 <Route path="/" element={<Home />} />
