@@ -15,7 +15,8 @@
   gap: 30px; 
   padding: 40px 20px;
   background-color: #f8f8f8; 
-  flex-wrap: wrap; 
+  flex-wrap: wrap;
+  margin-bottom: 70px;
 }
 
 .home-banners-placeholder {

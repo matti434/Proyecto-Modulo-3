@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Container } from "react-bootstrap";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import { useProductos } from "../../../../Context/ContextoProducto";
 import BuscadorProducto from "./componenteBuscarProducto/BuscadorProducto";
@@ -11,7 +11,9 @@ import "./PaginaProductos.css";
 
 const PaginaProductos = () => {
   const location = useLocation();
-  const { filtrarPorCategoria, obtenerCategoriasUnicas, cargarProductos } = useProductos();
+  const navigate = useNavigate();
+  const { filtrarPorCategoria, obtenerCategoriasUnicas, cargarProductos } =
+    useProductos();
 
   useEffect(() => {
     cargarProductos({});
@@ -31,13 +33,12 @@ const PaginaProductos = () => {
       <div className="contenido-principal">
         <div className="seccion-buscador">
           <div className="encabezado-buscador">
-            <h2 className="titulo-seccion">
-              Encuentra Tu Classic
-            </h2>
+            <h2 className="titulo-seccion">Encuentra Tu Classic</h2>
             <p className="descripcion-seccion">
-              Filtra y encuentra la motocicleta que se adapte a tu estilo de vida
+              Filtra y encuentra la motocicleta que se adapte a tu estilo de
+              vida
             </p>
-            
+
             {location.state?.categoriaSeleccionada && (
               <div className="categoria-actual-badge">
                 <span className="badge bg-primary">
@@ -71,10 +72,13 @@ const PaginaProductos = () => {
           <div className="icono-tarjeta">👨‍🔧</div>
           <h3>Asesoría Especializada</h3>
           <p className="texto-tarjeta">
-            Nuestros expertos en motocicletas clásicas están listos para ayudarte 
-            a encontrar la Royal Enfield perfecta para ti.
+            Nuestros expertos en motocicletas clásicas están listos para
+            ayudarte a encontrar la Royal Enfield perfecta para ti.
           </p>
-          <button className="boton-contacto">
+          <button
+            className="boton-contacto"
+            onClick={() => navigate("/contacto")}
+          >
             <span className="texto-boton">Contactar Concesionario</span>
             <span className="icono-boton">→</span>
           </button>
